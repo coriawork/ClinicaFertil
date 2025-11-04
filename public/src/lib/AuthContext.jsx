@@ -6,7 +6,7 @@ const AuthContext = createContext(undefined)
 const MOCK_USERS = [
     {
         id: "1",
-        email: "paciente@clinic.com",
+        email: "paciente",
         password: "1",
         name: "María González",
         role: "paciente",
@@ -14,7 +14,7 @@ const MOCK_USERS = [
     },
     {
         id: "2",
-        email: "medico@clinic.com",
+        email: "medico",
         password: "1",
         name: "Dr. Carlos Rodríguez",
         role: "medico",
@@ -22,7 +22,7 @@ const MOCK_USERS = [
     },
     {
         id: "3",
-        email: "laboratorio@clinic.com",
+        email: "laboratorio",
         password: "1",
         name: "Ana Martínez",
         role: "operador_laboratorio",

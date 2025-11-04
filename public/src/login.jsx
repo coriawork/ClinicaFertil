@@ -81,8 +81,7 @@ export default function LoginPage() {
                     <Label htmlFor="email">Correo Electrónico</Label>
                     <Input
                     id="email"
-                    type="email"
-                    placeholder="usuario@clinic.com"
+                    placeholder="username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -117,13 +116,13 @@ export default function LoginPage() {
                     <p className="mb-2 font-medium">Usuarios de prueba:</p>
                     <div className="space-y-1 text-xs text-muted-foreground">
                     <p>
-                        <strong>Paciente:</strong> paciente@clinic.com / paciente123
+                        <strong>Paciente:</strong> paciente / 1
                     </p>
                     <p>
-                        <strong>Médico:</strong> medico@clinic.com / medico123
+                        <strong>Médico:</strong> medico / 1
                     </p>
                     <p>
-                        <strong>Laboratorio:</strong> laboratorio@clinic.com / lab123
+                        <strong>Laboratorio:</strong> laboratorio / 1
                     </p>
                     </div>
                 </div>

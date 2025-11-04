@@ -10,6 +10,7 @@
     --popover: #fcfcfc;
     --popover-foreground: #000000;
     --primary: #7033ff;
+    --soft: var(--primary);
     --primary-foreground: #ffffff;
     --secondary: #edf0f4;
     --secondary-foreground: #080808;
@@ -104,6 +105,7 @@
     --color-muted: var(--muted);
     --color-muted-foreground: var(--muted-foreground);
     --color-accent: var(--accent);
+    --color-soft: var(--soft);
     --color-accent-foreground: var(--accent-foreground);
     --color-destructive: var(--destructive);
     --color-destructive-foreground: var(--destructive-foreground);
@@ -152,5 +154,33 @@
     
     body {
         @apply bg-background text-foreground;
+    }
+}
+@layer components {
+    .card-3d-hover {
+        @apply transition-all shadow-accent duration-300 transform-gpu;
+        cursor: pointer;
+    }
+
+    .card-3d-hover:hover {
+        @apply scale-[1.02];
+        transform: perspective(1000px) rotateX(10deg);
+    }
+
+    /* Variantes del efecto */
+    .card-3d-light:hover {
+        @apply shadow-lg scale-[1.01];
+        transform: perspective(800px) rotateX(5deg);
+    }
+
+    .card-3d-strong:hover {
+        @apply shadow-2xl scale-[1.03];
+        transform: perspective(1200px) rotateX(15deg);
+    }
+
+    /* Con rotación inversa */
+    .card-3d-reverse:hover {
+        @apply shadow-xl scale-[1.02];
+        transform: perspective(1000px) rotateX(-10deg);
     }
 }
