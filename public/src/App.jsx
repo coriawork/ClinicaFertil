@@ -14,12 +14,14 @@ import AgendaPage from "./pages/medico/agenda"
 import DoctorDashboard from "./pages/medico/dashboard_medico"
 import StudiesRequestPage from "./pages/medico/estudios"
 import ClinicalHistoryPage from "@/pages/medico/historial-clinica"
+import RegistrarPaciente from "./registrar"
 function App() {
     return (
         <AuthProvider>    
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginPage />} />
+                    <Route path="/registrar" element={<RegistrarPaciente />} />
                     
                     {/* Prefijo único para paciente */}
                     <Route

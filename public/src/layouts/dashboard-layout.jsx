@@ -101,7 +101,7 @@ export function DashboardLayout({ children, role }) {
                 <p className="text-sm font-medium text-foreground">{user?.name}</p>
                 <p className="text-xs text-muted-foreground">{user && getRoleLabel(user.role)}</p>
             </div>
-            <Button variant="outline" size="sm" className={"cursor-pointer"} onClick={handleLogout}>
+            <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
                 Salir
             </Button>

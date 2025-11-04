@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Heart, AlertCircle } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
+import {Link} from "react-router-dom"
 
 export default function LoginPage() {
     const { user, login, isLoading } = useAuth()
@@ -64,7 +65,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+        <div className="flex min-h-screen items-center justify-center  p-4">
             <Card className="w-full max-w-md">
                 <CardHeader className="space-y-4 text-center">
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary">
@@ -111,6 +112,11 @@ export default function LoginPage() {
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
                 </Button>
+                <div>
+                    <Link to="/registrar" className="text-sm text-muted-foreground underline hover:text-primary"> 
+                        ¿No tenes una cuenta? Regístrate
+                    </Link>
+                </div>
 
                 <div className="rounded-lg bg-muted p-4 text-sm">
                     <p className="mb-2 font-medium">Usuarios de prueba:</p>
