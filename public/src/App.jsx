@@ -15,6 +15,7 @@ import DoctorDashboard from "./pages/medico/dashboard_medico"
 import StudiesRequestPage from "./pages/medico/estudios"
 import ClinicalHistoryPage from "@/pages/medico/historial-clinica"
 import RegistrarPaciente from "./registrar"
+import PacientesPage from "./pages/medico/pacientes"
 function App() {
     return (
         <AuthProvider>    
@@ -22,7 +23,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<LoginPage />} />
                     <Route path="/registrar" element={<RegistrarPaciente />} />
-                    
+                    <Route path="/medico/pacientes" element={<PacientesPage />} />
                     {/* Prefijo único para paciente */}
                     <Route
                         path="/paciente"

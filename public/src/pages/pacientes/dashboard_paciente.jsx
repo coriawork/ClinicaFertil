@@ -5,6 +5,8 @@ import { DashboardLayout } from "@/layouts/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar, MessageCircle, Heart, FileText, Clock, Activity } from "lucide-react"
+import {CardShort} from "@/components/ui/card-short"
+import {CardList} from "@/components/ui/card-list"
 
 export default function PatientDashboard() {
   const { user, isLoading } = useAuth()
@@ -80,90 +82,24 @@ export default function PatientDashboard() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {quickActions.map((action) => {
+           {quickActions.map((action) => {
             const Icon = action.icon
             return (
-              <Link key={action.href} to={action.href}>
-                <Card className="transition-all hover:shadow-md">
-                  <CardHeader className="flex flex-row items-center gap-4">
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${action.bgColor}`}>
-                      <Icon className={`h-6 w-6 ${action.color}`} />
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-lg">{action.title}</CardTitle>
-                      <CardDescription className="text-sm">{action.description}</CardDescription>
-                    </div>
-                  </CardHeader>
-                </Card>
-              </Link>
+                <Link key={action.href} to={action.href}>
+                    <CardShort title={action.title} description={action.description} color={action.color} bgColor={action.bgColor}>
+                        <action.icon className={`h-6 w-6 ${action.color}`} />
+                    </CardShort>
+                </Link>
             )
-          })}
+            })}
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Próximas Citas</CardTitle>
-              <CardDescription>Tus citas programadas</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between rounded-lg border p-3">
-                  <div>
-                    <p className="font-medium text-foreground">Consulta de Seguimiento</p>
-                    <p className="text-sm text-muted-foreground">Dr. Carlos Rodríguez</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-foreground">15 Ene 2025</p>
-                    <p className="text-sm text-muted-foreground">10:00 AM</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between rounded-lg border p-3">
-                  <div>
-                    <p className="font-medium text-foreground">Monitoreo Ecográfico</p>
-                    <p className="text-sm text-muted-foreground">Dr. Carlos Rodríguez</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-foreground">18 Ene 2025</p>
-                    <p className="text-sm text-muted-foreground">09:30 AM</p>
-                  </div>
-                </div>
-              </div>
-              <Button variant="outline" className="mt-4 w-full bg-transparent" asChild>
-                <Link to="/paciente/mis-citas">Ver todas las citas</Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Estado del Tratamiento</CardTitle>
-              <CardDescription>Información actual</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="flex flex-col space-y-22">
-                    <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Fase actual</span>
-                            <span className="font-medium text-foreground">Estimulación Ovárica</span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Día del ciclo</span>
-                            <span className="font-medium text-foreground">Día 8</span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Próximo monitoreo</span>
-                            <span className="font-medium text-foreground">18 Ene 2025</span>
-                        </div>
-                    </div>
-                    <Button variant="outline" className="w-full bg-transparent" asChild>
-                        <Link to="/paciente/tratamiento">Ver detalles completos</Link>
-                    </Button>
-                </div>
-            </CardContent>
-          </Card>
-        </div>
+            <CardList title="Proximas Citas" data={[{ h1: "Consulta de Seguimiento", right: <div><p>15 Ene 2025</p><p>10:00 AM</p></div>, h2: "Dr. Carlos Rodríguez" },{ h1: "Monitoreo ecográfico", right: <div><p>18 Ene 2025</p><p>09:30 AM</p></div>, h2: "Laura Pérez" }]}>
+                <Button variant="primary" className="mt-4 w-full ">Ver Citas</Button>
+            </CardList> 
       </div>
+      </div>    
     </DashboardLayout>
   )
 }

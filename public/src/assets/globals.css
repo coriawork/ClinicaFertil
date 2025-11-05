@@ -49,7 +49,7 @@
 }
 
 .dark {
-    --background: linear-gradient(180deg, rgba(112, 51, 255, 1) 0%, rgba(54, 0, 181, 1) 100%);;
+    --background: #000;
     --foreground: #f0f0f0;
     --card: #222327;
     --card-foreground: #f0f0f0;

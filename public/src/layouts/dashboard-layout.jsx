@@ -84,7 +84,7 @@ export function DashboardLayout({ children, role }) {
     const navigation = getNavigation()
 
     return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background transition-colors duration-300 {}">
         <header className="sticky top-0 z-50 border-b bg-card">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-3">
@@ -97,14 +97,15 @@ export function DashboardLayout({ children, role }) {
             </div>
             </div>
             <div className="flex items-center gap-4">
-            <div className="text-right">
-                <p className="text-sm font-medium text-foreground">{user?.name}</p>
-                <p className="text-xs text-muted-foreground">{user && getRoleLabel(user.role)}</p>
-            </div>
-            <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                Salir
-            </Button>
+           
+                <div className="text-right">
+                    <p className="text-sm font-medium text-foreground">{user?.name}</p>
+                    <p className="text-xs text-muted-foreground">{user && getRoleLabel(user.role)}</p>
+                </div>
+                <Button variant="primary" size="sm" className="cursor-pointer" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Salir
+                </Button>
             </div>
         </div>
         </header>
