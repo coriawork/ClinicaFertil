@@ -14,8 +14,11 @@ import {
   TestTube,
   Beaker,
   Package,
+  Sun,Moon,
   ClipboardList,
 } from "lucide-react"
+import { useTheme } from "@/lib/ThemeContex"
+import { useState } from "react"
 import { useNavigate, useLocation, Link } from "react-router-dom"
 
 
@@ -23,7 +26,27 @@ export function DashboardLayout({ children, role }) {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
+    const { theme, setTheme } = useTheme()
+    
+    const toggleTheme = () => {
+    // Solo alterna entre light y dark
+    if (theme === "dark") {
+      setTheme("light")
+    } else {
+      setTheme("dark")
+    }
+  }
 
+  const getThemeIcon = () => {
+    switch (theme) {
+      case "light":
+        return <Sun className="h-4 w-4" />
+        case "dark":
+        return <Moon className="h-4 w-4" />
+      default:
+          return <Sun className="h-4 w-4" />
+    }
+  }
     const handleLogout = () => {
         logout()
         navigate("/")
@@ -80,34 +103,37 @@ export function DashboardLayout({ children, role }) {
         return []
     }
     }
-
+    const [isDarkMode,setDarrkMode]=useState(false);
     const navigation = getNavigation()
 
     return (
-    <div className="min-h-screen bg-background transition-colors duration-300 {}">
-        <header className="sticky top-0 z-50 border-b bg-card">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-            <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-                <Heart className="h-5 w-5 text-primary-foreground" fill="currentColor" />
-            </div>
-            <div>
-                <h1 className="text-lg font-bold text-foreground">FertilCare</h1>
-                <p className="text-xs text-muted-foreground">Sistema de Gestión de Clínica</p>
-            </div>
-            </div>
-            <div className="flex items-center gap-4">
-           
-                <div className="text-right">
-                    <p className="text-sm font-medium text-foreground">{user?.name}</p>
-                    <p className="text-xs text-muted-foreground">{user && getRoleLabel(user.role)}</p>
+    <div className={"min-h-screen bg-background transition-colors duration-500 ease-in-out "+(isDarkMode ? "dark" : "")}>
+        <header className="sticky top-0 z-50 border-b bg-background/10 shadow-sm backdrop-blur-xl">
+            <div className="container mx-auto flex h-16 items-center justify-between px-4">
+            
+                <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
+                    <Heart className="h-5 w-5 text-primary-foreground" fill="currentColor" />
                 </div>
-                <Button variant="primary" size="sm" className="cursor-pointer" onClick={handleLogout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Salir
-                </Button>
+                <div>
+                    <h1 className="text-lg font-bold text-foreground">FertilCare</h1>
+                    <p className="text-xs text-muted-foreground">Sistema de Gestión de Clínica</p>
+                </div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <Button onClick={toggleTheme} variant="ghost" size="sm" className="text-foreground cursor-pointer">
+                        {getThemeIcon()}
+                    </Button>
+                    <div className="text-right">
+                        <p className="text-sm font-medium text-foreground">{user?.name}</p>
+                        <p className="text-xs text-muted-foreground">{user && getRoleLabel(user.role)}</p>
+                    </div>
+                    <Button variant="primary" size="sm" className="cursor-pointer" onClick={handleLogout}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Salir
+                    </Button>
+                </div>
             </div>
-        </div>
         </header>
 
         <div className="container mx-auto flex gap-6 p-4 md:p-6 lg:p-8">

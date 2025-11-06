@@ -146,7 +146,7 @@ export default function PacientesPage() {
             <p className="text-muted-foreground">Gestiona y consulta la información de tus pacientes</p>
             </div>
             <Button asChild className="bg-primary hover:bg-primary/90">
-                <Link to="/medico/pacientes/nuevo">
+                <Link to="/registrar">
                     <UserPlus className="h-4 w-4 mr-2" />
                     Nuevo Paciente
                 </Link>
@@ -190,14 +190,14 @@ export default function PacientesPage() {
                 <div className="flex gap-2 ">
                 <Select value={selectedFilter} onValueChange={setSelectedFilter}>
                     <SelectTrigger className="w-[140px] bg-primary text-white hover:bg-primary/90 ">
-                    <Filter className="text-white h-4 w-4 mr-2" />
-                    <SelectValue />
+                        <Filter className="text-white h-4 w-4 mr-2" />
+                        <SelectValue />
                     </SelectTrigger>
                     <SelectContent  className="w-[140px] bg-primary text-white hover:bg-primary/90 ">
-                    <SelectItem value="todos">Todos</SelectItem>
-                    <SelectItem value="activo">Activos</SelectItem>
-                    <SelectItem value="en_pausa">En pausa</SelectItem>
-                    <SelectItem value="completado">Completados</SelectItem>
+                        <SelectItem value="todos">Todos</SelectItem>
+                        <SelectItem value="activo">Activos</SelectItem>
+                        <SelectItem value="en_pausa">En pausa</SelectItem>
+                        <SelectItem value="completado">Completados</SelectItem>
                     </SelectContent>
                 </Select>
 
@@ -236,7 +236,9 @@ export default function PacientesPage() {
             ) : (
                 <div className="divide-y p-10 gap-2 flex flex-col">
                     {pacientesFiltrados.map((paciente) => (
-                        <CardPaciente key={paciente.id} paciente={paciente} />
+                        <Link to={`/medico/pacientes/${paciente.id}`} key={paciente.id} className="no-underline">
+                            <CardPaciente paciente={paciente} />
+                        </Link>
                     ))}
                 </div>
             )}

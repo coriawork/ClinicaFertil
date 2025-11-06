@@ -33,7 +33,7 @@ export function CardPaciente({ paciente }) {
         }
     } */
     return (
-        <div key={paciente.id} className="group bg-primary rounded-xl hover:scale-[1.008] transition-all p-4 hover:bg-primary/90 ">
+        <div key={paciente.id} className="cursor-pointer group bg-primary rounded-xl hover:scale-[1.008] transition-all p-4 hover:bg-primary/90 ">
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 shadow-inset-strong   rounded-full bg-background flex items-center justify-center">

@@ -3,8 +3,8 @@ export function CardInfo({title,cant,desc,children}){
     return (
         <Card className="card-3d-hover bg-gradient-soft hover:shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm rounded-2xl text-background font-medium ">{title}</CardTitle>
-                <div className="bg-white p-2 rounded-md shadow-inset-custom">
+                <CardTitle className="text-sm rounded-2xl text-foreground font-medium ">{title}</CardTitle>
+                <div className="bg-background p-2 rounded-md shadow-inset-custom">
                         {children}
                 </div>
             </CardHeader>

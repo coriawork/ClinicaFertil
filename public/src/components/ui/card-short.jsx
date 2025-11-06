@@ -4,7 +4,7 @@ export function CardShort({ title, description, color, bgColor, children }) {
         <Card className="transition-all card-3d-hover hover:shadow-md">
             <CardHeader className="flex flex-row items-center gap-4">
                 <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${bgColor}`}>
-                    <div className={`h-6 w-6 ${color}`}>
+                    <div className={`h-6 w-6  rounded-2xl  ${color}`}>
                         {children}
                     </div>
                 </div>

@@ -122,8 +122,8 @@ export default function DoctorDashboard() {
             const Icon = action.icon
             return (
                 <Link key={action.href} to={action.href}>
-                    <CardShort title={action.title} description={action.description} color={action.color} bgColor={action.bgColor}>
-                        <action.icon className={`h-6 w-6 ${action.color}`} />
+                    <CardShort title={action.title} description={action.description} color={action.color} >
+                        <action.icon className={`h-6 w-6  ${action.color}`} />
                     </CardShort>
                 </Link>
             )

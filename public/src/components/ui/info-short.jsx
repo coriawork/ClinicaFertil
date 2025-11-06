@@ -1,6 +1,6 @@
 export function ShortInfo({ h1,h2,right,i }) {
     return (
-       <div key={i} className="group flex  bg-white items-center justify-between rounded-lg border p-3 hover:shadow-md transition-all">
+       <div key={i} className="group flex  bg-background items-center justify-between rounded-lg border p-3 hover:shadow-md transition-all">
             <div className="">
                 <p className="font-medium text-foreground">{h1}</p>
                 <p className="text-sm text-muted-foreground">{h2}</p>
