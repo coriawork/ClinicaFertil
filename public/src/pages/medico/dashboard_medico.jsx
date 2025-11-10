@@ -102,17 +102,17 @@ export default function DoctorDashboard() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Link to="/medico/agenda">
                 <CardInfo title="Citas Agendadas" cant="24" desc="Próximas citas programadas">
-                    <Calendar className="text-primary h-4 w-6"/>
+                    <Calendar className="text-chart-4 h-4 w-6"/>
                 </CardInfo>
             </Link>
             <Link to="/medico/tratamientos">
                 <CardInfo title="Tratamientos en Curso" cant="12" desc="8 estimulación, 4 FIV">
-                    <Activity className="h-4 w-6 text-primary" />
+                    <Activity className="h-4 w-6 text-chart-4" />
                 </CardInfo>
             </Link>
             <Link to="/medico/estudios" className="">
                 <CardInfo title="Estudios Pendientes" cant="5" desc="Resultados por revisar">
-                    <ClipboardList className="h-4 w-6 text-primary" />
+                    <ClipboardList className="h-4 w-6 text-chart-4" />
                 </CardInfo>
             </Link>
         </div>

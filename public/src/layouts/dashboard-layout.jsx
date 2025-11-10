@@ -137,26 +137,26 @@ export function DashboardLayout({ children, role }) {
         </header>
 
         <div className="container mx-auto flex gap-6 p-4 md:p-6 lg:p-8">
-            <aside className=" w-64 shrink-0 lg:block">
+            <aside className=" w-60">
                 <nav className="space-y-1">
-                {navigation.map((item) => {
-                    const Icon = item.icon
-                    const isActive = location.pathname === item.href
-                    return (
-                    <Link
-                        key={item.href}
-                        to={item.href}
-                        className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                        isActive
-                            ? "bg-primary text-primary-foreground"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                        }`}
-                    >
-                        <Icon className="h-4 w-4" />
-                        {item.label}
-                    </Link>
-                    )
-                })}
+                    {navigation.map((item) => {
+                        const Icon = item.icon
+                        const isActive = location.pathname === item.href
+                        return (
+                        <Link
+                            key={item.href}
+                            to={item.href}
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                            isActive
+                                ? "bg-primary text-background "
+                                : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+                            }`}
+                        >
+                            <Icon className="h-4 w-4" />
+                            {item.label}
+                        </Link>
+                        )
+                    })}
                 </nav>
             </aside>
 

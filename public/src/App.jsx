@@ -17,6 +17,7 @@ import ClinicalHistoryPage from "@/pages/medico/historial-clinica"
 import RegistrarPaciente from "./registrar"
 import PacientesPage from "./pages/medico/pacientes"
 import PacienteDetail from "./pages/medico/paciente"
+import HomePage from "./pages/index.jsx"
 import { ThemeProvider } from "./lib/ThemeContex"
 function App() {
     return (
@@ -24,7 +25,8 @@ function App() {
             <AuthProvider>    
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<LoginPage />} />
+                        <Route path='/login' element={<LoginPage />} />
+                        <Route path="/" element={<HomePage />} />
                         <Route path="/registrar" element={<RegistrarPaciente />} />
                        
                         {/* Prefijo único para paciente */}

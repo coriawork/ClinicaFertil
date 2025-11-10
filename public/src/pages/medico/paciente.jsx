@@ -9,22 +9,29 @@ import {
     CalendarCheck,
     ClipboardList,
     FileText,
-    HeartPulse,
+    HeartPulse,ArrowLeft,
     Stethoscope,
     Upload,
-    UserRound
+    UserRound,
+    TestTube,
+    Heart,
+    Target,
+    Activity,
+    Syringe,
+    User
+
 } from "lucide-react"
 
 const pacientes = [
     {
-        id: "PAC-001",
+        id: "1",
         nombre: "María González",
         edad: 34,
         telefono: "+54 11 4567-8890",
         email: "maria.gonzalez@example.com",
         obraSocial: "OSDE 410",
         es_pareja: false,
-        pareja: { id: "PAC-004", nombre: "Juan Pérez" },
+        pareja: { id: "3", nombre: "Juan Pérez", email: "juan.perez@example.com" },
         historiaClinica: {
             diagnostico: "Infertilidad tubárica con antecedentes de endometriosis.",
             antecedentes: ["Endometriosis estadio II", "Hipotiroidismo subclínico", "Cirugía laparoscópica 2022"],
@@ -44,7 +51,7 @@ const pacientes = [
         ]
     },
     {
-        id: "PAC-002",
+        id: "2",
         nombre: "Lucía Fernández",
         edad: 29,
         telefono: "+54 351 223-7766",
@@ -64,14 +71,14 @@ const pacientes = [
         ]
     },
     {
-        id: "PAC-004",
+        id: "3",
         nombre: "Juan Pérez",
         edad: 36,
         telefono: "+54 11 9876-5432",
         email: "juan.perez@example.com",
         obraSocial: "OSDE 410",
         es_pareja: true,
-        pareja: { id: "PAC-001", nombre: "María González" },
+        pareja: { id: "1", nombre: "María González", email: "maria.gonzalez@example.com" },
         historiaClinica: {
             diagnostico: "Factor masculino leve con varicocele tratado.",
             antecedentes: ["Varicocelectomía 2021", "Asma leve controlada"],
@@ -100,7 +107,7 @@ const formatDate = (isoDate) =>
 
 export default function PacienteDetail() {
     const { id } = useParams()
-    const paciente = pacientes.find((item) => item.id === id) ?? pacientes[0]
+    const paciente = pacientes.find((item) => item.id === id) ?? null
 
     if (!paciente) {
         return (
@@ -108,7 +115,7 @@ export default function PacienteDetail() {
                 <div className="flex min-h-[60vh] items-center justify-center">
                     <Card className="max-w-md border-dashed border-border/60 bg-muted/40 text-center shadow-sm">
                         <CardHeader>
-                            <CardTitle className="text-lg text-foreground">Paciente no encontrado</CardTitle>
+                            <CardTitle className="text-xl text-foreground">Paciente no encontrado</CardTitle>
                         </CardHeader>
                         <CardContent className="text-sm text-muted-foreground">
                             Verificá el identificador o seleccioná un paciente desde el listado.
@@ -127,57 +134,92 @@ export default function PacienteDetail() {
     return (
         <DashboardLayout role="medico">
             <div className="space-y-8">
+                <div className="space-y-6">
+                    <div className="flex items-center gap-4">
+                        <Button variant="ghost" size="sm" asChild>
+                            <Link to="/medico">
+                                <ArrowLeft className="mr-2 h-4 w-4" />
+                                Volver
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+                
                 <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 shadow-inset-strong">
-                    <div>
-                        <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-                            Panel del médico
-                        </p>
-                        <h1 className="text-2xl font-semibold text-foreground">{paciente.nombre}</h1>
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                            <Badge variant="secondary">{paciente.id}</Badge>
-                            <Badge variant="outline" className="text-muted-foreground">
-                                {paciente.obraSocial}
-                            </Badge>
-                            {paciente.es_pareja && (
-                                <Badge className="bg-primary/15 text-primary">Pareja</Badge>
-                            )}
+                    <div className="w-full">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+                                    Panel del médico
+                                </p>
+                                <h1 className="text-2xl font-semibold text-foreground">{paciente.nombre}</h1>
+                            </div>
+                            <div className="mt-3 flex flex-wrap items-center gap-10">
+                                <Badge className="bg-chart-2  text-foreground"> {paciente.es_pareja? (("Pareja de Paciente")) : ("Paciente Principal")}</Badge>
+                            </div>
                         </div>
                         <div className="mt-4 flex flex-col items-stretch gap-2 md:flex-row md:items-center md:justify-start md:gap-3">
-                            <div className="flex flex-wrap gap-2">
-                                <Button variant="outline" size="sm">
+                            <div className="flex flex-wrap  gap-2">
+                                <Button variant="action">
+                                    <TestTube className="mr-2 h-4 w-4" />
                                     Pedir estudio
                                 </Button>
-                                <Button variant="outline" size="sm">
+                                <Button variant="action">
+                                    <Activity className="mr-2 h-4 w-4" />
                                     Generar monitoreo
                                 </Button>
-                                <Button variant="outline" size="sm">
+                                <Button variant="action">
+                                    <Target className="mr-2 h-4 w-4" />
                                     Registrar objetivo
                                 </Button>
-                                <Button variant="outline" size="sm">
+                                <Button variant="action">
+                                    <Syringe className="mr-2 h-4 w-4" />
                                     Registrar tratamiento
+                                </Button>
+                                <Button variant="action"  className="shadow-md">
+                                    <CalendarCheck className="mr-2 h-4 w-4" />
+                                    Programar control
                                 </Button>
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                        <Button asChild variant="outline" size="sm">
-                            <Link to="/medico/pacientes">Volver al listado</Link>
-                        </Button>
-                        <Button variant="primary" size="sm" className="shadow-md">
-                            <CalendarCheck className="mr-2 h-4 w-4" />
-                            Programar control
-                        </Button>
-                    </div>
                 </header>
-                <div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr,1fr]">
-                    <Card className="border-border/60 shadow-md">
+
+                {paciente.pareja ? (
+                    <Card className="border-primary/40 bg-gradient-to-b from-primary/30 via-primary/11 to-transparent bg shadow-none">
                         <CardHeader>
-                            <div className="flex items-center gap-3">
-                                <Stethoscope className="h-5 w-5 text-primary" />
-                                <CardTitle className="text-lg text-foreground">Datos generales</CardTitle>
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                    <User className="h-5 w-5 text-foreground" />
+                                    <div>
+                                        <CardTitle className="text-lg text-foreground">{paciente.es_pareja?('Es pareja de: ') : 'Tiene de pareja a:'}</CardTitle>
+                                        <p className="text-sm text-muted-foreground">
+                                            {paciente.pareja.nombre}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            {paciente.pareja.email}
+                                        </p>
+                                    </div>
+                                </div>
+                                <Button asChild  variant="action" >
+                                    <Link to={`/medico/pacientes/${paciente.pareja.id}`}>
+                                        Administrar Pareja
+                                    </Link>
+                                </Button>
                             </div>
                         </CardHeader>
-                        <CardContent className="space-y-6">
+                    </Card>
+                ) : null}
+
+                <div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr,1fr]">
+                    <Card className="bg-primary/20 border-primary/50 shadow-md">
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <Stethoscope className="h-5 w-5 text-foreground" />
+                                <CardTitle className="text-2xl text-foreground">Datos generales</CardTitle>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="space-y-6 ">
                             <dl className="grid grid-cols-1 gap-4 text-sm md:grid-cols-2">
                                 <div>
                                     <dt className="text-muted-foreground">Edad</dt>
@@ -196,99 +238,51 @@ export default function PacienteDetail() {
                                     <dd className="font-medium text-foreground">{paciente.obraSocial}</dd>
                                 </div>
                             </dl>
-                            <Separator />
-                            <div className="space-y-4 rounded-2xl border border-border/60 bg-muted/40 p-5">
-                                <div className="flex items-center justify-between gap-3">
-                                    <div className="flex items-center gap-3">
-                                        <ClipboardList className="h-5 w-5 text-primary" />
-                                        <div>
-                                            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                                                Historia clínica
-                                            </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                Última actualización: {formatDate(paciente.historiaClinica.ultimaActualizacion)}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <Button variant="ghost" size="sm">
-                                        Ver historia clínica
-                                    </Button>
-                                </div>
-                                <p className="text-sm leading-relaxed text-foreground">
-                                    {paciente.historiaClinica.diagnostico}
-                                </p>
-                                <div className="space-y-2">
-                                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                                        Antecedentes relevantes
-                                    </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        {paciente.historiaClinica.antecedentes.map((item) => (
-                                            <Badge key={item} variant="secondary" className="rounded-full px-3 py-1 text-xs">
-                                                {item}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
                         </CardContent>
                     </Card>
-                    <Card className="border-border/60 bg-card/70 shadow-md">
+                     
+                    <Card className='shadow-md border-primary/50 bg-primary/20'>
                         <CardHeader>
-                            <div className="flex items-center justify-between gap-3">
-                                <div className="flex items-center gap-3">
-                                    <UserRound className="h-5 w-5 text-primary" />
-                                    <CardTitle className="text-lg text-foreground">Vínculo de pareja</CardTitle>
-                                </div>
-                                {paciente.pareja ? (
-                                    <Badge className="bg-primary/15 text-primary">Vinculado</Badge>
-                                ) : (
-                                    <Badge variant="outline" className="text-muted-foreground">
-                                        Sin pareja registrada
-                                    </Badge>
-                                )}
+                            <div className="flex items-center gap-3">
+                                <ClipboardList className="h-5 w-5 text-foreground" />
+                                    <CardTitle className="text-2xl text-foreground">
+                                    Historia clínica del paciente
+                                    <p className="text-xs text-muted-foreground">
+                                        Última actualización: {formatDate(paciente.historiaClinica.ultimaActualizacion)}
+                                    </p>
+                                </CardTitle>
                             </div>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            {paciente.pareja ? (
-                                <>
-                                    <p className="text-sm text-muted-foreground">
-                                        Esta persona comparte la misma vista clínica para seguimiento coordinado.
-                                    </p>
-                                    <Button asChild variant="ghost" size="sm" className="w-full justify-start text-primary hover:text-primary">
-                                        <Link to={`/medico/pacientes/${paciente.pareja.id}`}>
-                                            Ver ficha de {paciente.pareja.nombre}
-                                        </Link>
-                                    </Button>
-                                </>
-                            ) : (
-                                <p className="text-sm text-muted-foreground">
-                                    Registrá una pareja para habilitar la vista compartida y sincronizar tratamientos.
-                                </p>
-                            )}
-                        </CardContent>
-                        <CardFooter>
-                            <Button variant="outline" size="sm" className="w-full">
-                                Gestionar vínculo
-                            </Button>
+                        <CardContent>
+                            <p className="text-xs mb-5 font-semibold uppercase tracking-wide text-muted-foreground">
+                                Resumen
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                {paciente.historiaClinica.antecedentes.map((item) => (
+                                    <Badge key={item} className=" bg-accent rounded-full px-3 py-1 text-xs">
+                                        {item}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </CardContent>    
+                        <CardFooter className="flex  w-full items-center  gap-2">
+                            <Button  variant='action' className="w-full">Gestionar tratamiento</Button>
                         </CardFooter>
                     </Card>
                 </div>
                 {paciente.tratamiento && (
-                    <Card className="border-primary/40 bg-primary/5 shadow-lg">
+                    <Card className="border-primary/50 bg-primary/20 shadow-lg">
                         <CardHeader>
                             <div className="flex flex-wrap items-center justify-between gap-3">
                                 <div className="flex items-center gap-3">
-                                    <HeartPulse className="h-5 w-5 text-primary" />
+                                    <HeartPulse className="h-5 w-5 text-foreground" />
                                     <div>
-                                        <CardTitle className="text-lg text-foreground">Tratamiento activo</CardTitle>
+                                        <CardTitle className="text-2xl text-foreground">Tratamiento activo</CardTitle>
                                         <p className="text-sm text-muted-foreground">
                                             {paciente.tratamiento.nombre}
                                         </p>
                                     </div>
                                 </div>
-                                <Badge className="bg-primary text-primary-foreground">
-                                    {paciente.tratamiento.estado}
-                                </Badge>
                             </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -320,39 +314,33 @@ export default function PacienteDetail() {
                                 </div>
                             </dl>
                         </CardContent>
-                        <CardFooter className="flex flex-wrap items-center justify-end gap-2">
-                            <Button variant="outline" size="sm">
-                                Registrar evolución
-                            </Button>
-                            <Button size="sm">Ver plan completo</Button>
+                        <CardFooter className="flex  w-full items-center  gap-2">
+                            <Button  variant='action' className="w-full">Gestionar tratamiento</Button>
                         </CardFooter>
                     </Card>
                 )}
-                <Card className="border-border/60 shadow-md">
+                <Card className="border-primary/50 bg-primary/20 shadow-md">
                     <CardHeader>
                         <div className="flex flex-wrap items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
-                                <FileText className="h-5 w-5 text-primary" />
+                                <FileText className="h-5 w-5 text-foreground" />
                                 <div>
-                                    <CardTitle className="text-lg text-foreground">Estudios realizados</CardTitle>
+                                    <CardTitle className="text-2xl text-foreground">Estudios realizados</CardTitle>
                                     <p className="text-xs text-muted-foreground">
                                         Resumen de estudios y carga de resultados pendientes.
                                     </p>
                                 </div>
                             </div>
-                            <Button variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10">
-                                <Upload className="mr-2 h-4 w-4" />
-                                Cargar resultados
-                            </Button>
+                            
                         </div>
+                        <Separator className={"bg-foreground/50"} />
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <Separator />
                         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
                             {paciente.estudios.map((estudio) => (
                                 <div
                                     key={`${paciente.id}-${estudio.nombre}`}
-                                    className="flex flex-col gap-3 rounded-xl border border-border/40 bg-muted/30 p-4"
+                                    className="flex flex-col gap-3 rounded-xl border border-border/40 bg-chart-4/30 p-4"
                                 >
                                     <div>
                                         <p className="text-sm font-medium text-foreground">{estudio.nombre}</p>
@@ -361,15 +349,12 @@ export default function PacienteDetail() {
                                         </p>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <Badge variant={estudio.estado === "Completado" ? "secondary" : "outline"}>
-                                            {estudio.estado}
-                                        </Badge>
                                         {estudio.resultadoPendiente ? (
-                                            <Badge variant="outline" className="border-amber-400 text-amber-600">
+                                            <Badge  className="bg-amber-600 text-foreground ">
                                                 Resultado pendiente
                                             </Badge>
                                         ) : (
-                                            <Badge className="bg-emerald-500/20 text-emerald-600">
+                                            <Badge className="bg-emerald-500/50 text-foreground-600">
                                                 Resultado cargado
                                             </Badge>
                                         )}
@@ -378,6 +363,11 @@ export default function PacienteDetail() {
                             ))}
                         </div>
                     </CardContent>
+                    <CardFooter className="flex  w-full items-center  gap-2">
+                        <Button  variant='action' className="w-full">
+                            Gestionar tratamiento
+                        </Button>
+                    </CardFooter>
                 </Card>
             </div>
         </DashboardLayout>
