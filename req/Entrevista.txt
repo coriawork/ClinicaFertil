@@ -1,0 +1,437 @@
+Contexto: Clinica de fertilidad, el objetivo es que las mujeres tengan un embarazo, tiene matices segun la situacion de la mujer , tratamiento de fertilidad. Una mujer puede hacer un tratamiento de fertilidad varias veces, los datos personales se pueden editar, pero cada tratamiento tiene su propio historial clinico. (inventar un nombre)
+
+%! DATOS OBTENIDOS DE LA PRIMER ENTREVISTA:
+________________________________________________________________________________
+%*Etapa 1: Sacar turno:
+    %!  -Se necesitan datos personales de la mujer:
+            - Nombre y apellido
+            - Sexo biologico
+            - ocupacion
+            - telefono
+            - mail
+            - Dni
+            - Cobertura medica (Hay registro de obras sociales con las cuales la clinica tiene convenio) [se nos comparten un link de todas las obras sociales]
+                -Numero de socio que tiene en la cobertura
+            - fecha de nacimiento
+    %?  - Tiene que tener la posibilidad de elegir con que medico quiere sacar el turno
+    %?  - Tiene que tener la posibilidad de que se le asigne un medico de forma aleatoria
+    %!  - Desde el momento en el que se crea el turno se crea el historial clinica del paciente
+    %?  - cualquier persona puede sacar turno, no es necesario que sea paciente
+_______________________________________________________________________________
+%*Etapa 2: Primea consulta con el medico tratante, el tratamiento elegido en esta etapa se toma como tratamiento inicial, puede ser cancelaado o vigente (si a los 3 meses no vuelve se da por cancelado) la causa es un dato de cuando se cancela, otro estado seria completado. si el paciente se va y vuelve el tratamiento es uno nuevo.
+
+    - El medico tratante tiene que tener acceso a la historia clinica de la paciente:
+        - Cada medico puede ver y editar solo sus pacientes
+        - El director medico puede ver y editar todos los pacientes
+
+    - Se le pregunta a la pareja o a la mujer cual es su objetivo:
+        - Tener un embarazo con gametos propios (con ovocito de la mujer y espermatozoide del hombre) 
+        - tener embarazo con ovocito de la mujer y espermatozoide de un donante (feminina sola o pareja de mujeres)
+        - metodo ropa (pareja de mujeres) una mujer aporta ovocito y la otra el espermatozoide (pareja de femeninas)
+        - Preservacion de ovocitos o embriones (mujer que no quiere tener un embarazo en el momento pero quiere preservar su fertilidad para mas adelante)
+
+  - El medico es el que completa toda la informacion de lo que se va a pedir (todos obligatorios, puede haber un no aplica)
+
+  - Informacion que se pide:
+    -Antecedentes clinicos quirujicos: 
+      - No es campo libre si no que se deben listar especificamente los antecedentes
+    - si fuma
+      - Pack/dias: cantidad de cigarrillos por dia * cantidad de años que fuma / 20
+    - si toma alcohol:
+      - con que frecuencia y que cantidad
+    - si consume drogas recreativas
+    - libres: observaciones sobre los habitos  
+    - antecedentes familiares: campo libre
+    - si sobra el tiempo una estructura de arbol que deje marcar antecedentes familiares (padres, abuelos, hermanos) 
+    - antecedentes ginecologicos: (si no es metodo de ropa solo se hace para una mujer) 
+        -Menarca (edad de la primer menstruacion)
+        -Ciclo menstrual (regular o irregular)
+        -Duracion en dias del ciclo
+        -caracteristicas del sangrado (cantidad, duracion en dias) (campo libre)
+        -G: cantidad de embarazos (no es lo mismo que partos)
+        -P: cantidad de partos
+        -AB: cantidad de abortos
+        -ST: embarazos ectopicos (el embrion se emplato en un lugar que no es el utero)
+    - Examen fisico (campo libre)
+    - Fenotipo [define si se va a necesitar un donante de ovocitos o espermatozoides]:
+      - Color de ojos
+      - Color de pelo 
+      - Tipo de pelo 
+      - Altura 
+      - Complexion corporal [delgada, media o robustas]
+
+  - El tratameinto inicia cuando se elige el objetivo   
+  
+  - Pareja (puede no tener):
+    - si es masculina:
+      - Mismos datos de la mujer, cambiar antecedentes ginecologicos por antecedentes genitales
+    - si es femenina:
+      - si es metodo ropa:
+        - mismos datos que la mujer que aporta ovocito
+      - si no es metodo ropa:
+        - datos personales
+
+  - Pedir estudios Medicos: (el medico tiene que poder elegir de una lista de estudios cual pedir)
+    3/4 dependiendo de la situacion
+    - estudios prequirujicos generales (sangre, orina, electrocardiograma, radiografia de torax)
+    - estudios hormonales (estradiol, progesterona, prolactina, FSH, LH, TSH, T3, T4)
+    - Estudios ginecologicos  (mamografia, papanicolau, cultivo cervico vaginal, ecografia transvaginal)
+    - Si hay una pareja (solo si esta presente el hombre), estudio de semen (tambien una lista)
+  - Se le manda por mail la orden (creo que habian de la orden )
+  
+  - Al finalizar el paciente se tiene que encargar de pedir un segundo turno luego de hacerse los turnos
+_______________________________________________________________________________
+%*Etapa 3: Segunda consulta con estudios
+  analiza los estudios y hace un registro de esa informacion
+  - hay dos posibilidades:
+    - basica: subir los pdf que trajo el paciente (lo malo es que no se consumen esos datos)
+    - completa : registrar los datos en un formulario dinamico (clave, valor)
+  como conclusion se registra datos importantes: (con esto se sabe que estrategia tomar para seguir el tratamiento)
+    - ovocitos viables
+    - espermatozoides viables
+  - Se planifica el proximo pasos(?)
+  - en esta etapa no cambia el tratamiento predefinido, lo que puede cambiar si es con semen donado o otro 
+_______________________________________________________________________________
+%*Etapa 4: Estimulacion (en el ciclo natural 1 solo madura y llega a la trompa, la estimulacion hace que maduren mas de 1)
+    - Hay muchos esquemas, todo depende de las caracteristicas de la mujer y de sus objetivos
+    - Tipo de medicacion [oral, inyectable o mixta]
+    - dosis
+    - duracion (suelen ser 15 dias) pero depende de las caracteristicas de la paciente
+    - droga: (se escribe como un campo libre, pero idealmente se deberia elegir de una lista)
+        - Se genera una nueva orden medica (llega el mail y la disponibilad para descargarla)
+    - Antes de empezar con la droga se debe tener la firma del consentimiento informado (el medico dispone de un pdf que se descarga se imprime y luego sube una foto de la firma)
+_______________________________________________________________________________
+%*Etapa 5: Monitoreo de la estimulacion
+  *Depende de las caracteristicas de la paciente*
+  - debe cargar un calendario de controles ideales ej:(dentro de 3 dias, dentro de 5 dias y dentro de 7 dias)
+    - Esto habilita en el calendario del paciente para elegir dentro de esos dias (mas, menos un dia) un turno (horario)
+    - para hacerlo mas simple todos los turnos son iguales para los medicos, los turnos duran 20 minutos. cada medico tiene un rango horario distinto. 
+    - En caso de que justo en los dias que se pidio no haya turnos disponibles, el paciente puede elegir un sobreturno, en ese caso se atiende 2 pacientes en 20 minutos
+  - el seguimiento es una fecha y campo libre (el medico anota lo que ve en el monitoreo)
+  - el medico le pide que se saque un nuevo turno para la siguiente etapa
+_______________________________________________________________________________
+%*Etapa 6: Puncion folicular (intervencion quirurjica, )
+  - se programa la puncion (dia y hora) (turno con el mismo medico)
+  - 1 de los dos pasos core del sistemas
+  - cuanto mas ovocitos y de mejor calidad se obtengan, mas chances de embarazo
+  - se debe registrar informacion de la punsion: (lo hace todo el laboratorio) 
+    -fecha y hora 
+    - numero de quirofano
+    - problemas?
+    - informacion de cada ovocito (se puede asumir que se cargan todos los ovocitos, no hay que registrar los que no se cargan)
+      - codigo unico (prefijo Ovo_<YY/MM/DD>_<primeros digitos del apellido>_<primeros digitos del nombre>_<numero consecutivo>)
+      - Estado inicial (muy inmaduro, inmaduro, maduro)
+        - Si es muy inmaduro, el medico puede decidir descartarlo
+        - Si es inmaduro, el medico puede decidir madurarlo in vitro (en el laboratorio)
+        - Si es maduro, ... 
+        -En cualquier momento se puede descartar cada ovocito
+        - los ovocitos descartados tienen que quedar registrados como descartados
+        -tiene que haber una causa por ovocito descartado (campo libre)
+    - se tienen que poder congelar ovocitos (criopreservacion)
+      - tiene que estar maduro para esto
+    - se tiene que poder todo el "viaje del ovocito"
+_______________________________________________________________________________
+%*Etapa 7: Fecundacion
+  - se emula el proceso de fecundacion (union del ovocito y el espermatozoide), tecnica FIP
+  - la tecica que se usa cuando se usa cuando FIP no funciona se llama ICSI (inyeccion intracitoplasmatica de espermatozoide)
+  - Para cada embrion generado debo almacenar la siguiente informacion
+    - identificador del embrion igual que del ovocito per emb
+    - fecha de la fertilizacion
+    - relacion entre el ovocito que se uso
+    - tecnica utilizada (propia de cada embrion FIP o ICSI)
+    - operador de laboratorio que lo hizo la fecundacion (se puede usar la session)
+    - calidad (1..5)
+    - Se puede hacer un estudio sobre el embrio llamado PGT 
+    - En caso de hacerse el PGT se agrega el dato (Ok, not ok)
+_______________________________________________________________________________
+%*Etapa 8: Transferencia embrionaria (en este punto se tienen muchos embriones)
+    hay 3 posibilidades:
+    - Transferencia embrionaria (poner   el embrion en el utero de la mujer)
+        - De a uno a la vez o maximo 2 (situacion particular)
+    - criopreservacion (congelar el embrion para usarlo en el futuro)
+        - Si no funciona la tranferencia se puede usar el embrion congelado
+    - Descarte (No usual)
+    - no se debe registrar nada, solo si el embrio se transfiere o no
+
+    El tratamiento TERMINA: Cuando todos los embriones fueron transferidos o Criopreservados
+
+    Si el tratamiento principal no funcion se inicia un nuevo tratamiento de tranferencia de embriones criopreservados:
+    -Hay que pedirle al modulo que hace la criopreservacion de embriones que me recupere ese embrion que quiero tranferir, los embriones se guardan en tuvos de nitrogeno, cuando lo preservo tengo que guardar en que tuvo de nitrogeno y en que rack
+
+    Para ambos tratamientos registro:
+        - dio positiva la beta (si/no)
+        - hay saco (si/no)
+        - Embarazo clinico (si/no)
+        - nacido vivo (si/no)
+
+    existe la operacion descarte de embriones, una pareja puede decidir si descartar o no esos embriones
+
+    Que el paciente pueda tener ver sus productos (?)
+
+    Una mujer cualquiera puede donar ovulos, en el momento tiene que preguntar si tiene o no tiene mutuaciones preguntandole al modulo de banco de semen 
+_______________________________________________________________________________
+** Se le avisa por fuera del sistema que si tiene que sacar un turno
+
+%*ROLES:
+    - Paciente
+    - Medico tratante
+    - Director medico
+    - Operadores de Laboratorio (hacen manipulacion a nivel celular)
+    - Admin 
+
+%*Medico tratante:
+    tiene acceso a todos los datos medicos (tambien Laboratorio)
+
+%*Operadore de laboratorio:
+    pueden ver todo los datos medicos ya que los puede nesecitar para hacer su trabajo (de todos los pacientes)
+
+%*Admin:
+    crea usuarios medicos o entidades basicas
+
+%*Director medico y usuarios gerenciales:
+    ver en estadisticas (tasa de embarazo en el ultimo año) y tasa por medico [No hay que implementar esto]
+
+%*Paciente:
+    Puede ver sus ordenes y descargarlas
+    resumen del historial clinico
+
+%!Datos tecnicos:
+    -Gameto: celula sexual (ovocito o espermatozoide)
+    -Embrion: celula resultante de la union de un ovocito y un espermatozoide
+    -Ovocitos: celula sexual femenina
+    -Espermatozoide: celula sexual masculina
+    -Snowmed: sistema de codificacion medica internacional
+    -Puncion: Capturar los ovocitos para que lleguen a la trompa de falopio
+    -Criopreservacion: congelar los ovocitos para que se puedan usar en el futuro, se hace por si la mujer quiere volver a embarazarse mas adelante
+    -PGT: Estudio sobre el embrion para ver si tiene alguna alteracion genetica
+    
+%!Requerimientos Generales:
+  - Se necesita saber quien edito cada paciente
+
+%!Datos Generales:
+    - Se tienen los datos de cuantas cobertura tiene dependiendo de la obra sociales
+    - El medico no habla de pagos, carga el tratamiento y las obras sociales, pero tiene que decir cuanto 
+    - En cualquier momento se puede cancelar el tratamiento   
+    - El no 90% de los ovocitos muy inmaduros se descartan
+
+%?Modulos de pagos:
+    - Cuentas de creditos de cada obra social y cada paciente (simulando que se van generando pagos)
+    - ej: suitmedical debe 10m de pesos y pago 50m de pesos
+    - Obrasocial o Paciente
+    - cantidad abonada y deuda
+    - Api que registra un pago (sin mercado pago ni medio de pago especifico) 
+    - En la consulta no aparece nada de dinero
+
+%?Modulo Calendario:
+    - Se puede asumir que alguien se encarga de cargar los turnos (se dispone)
+    - se puede scriptear
+
+%?Modulo Genetica (PGT): 
+    - Se encarga de evaluar dado el padre y la madre si existe riesgo de algun gen mutado
+    - Imaginemos que existe este modulo (genera de manera aleatoria datos geneticos)
+    - Se vera mas adelante...
+
+
+%?Modulo Banco de semen:
+    - Registro de los donantes
+    - posibilidad de registrar una donacion
+    - Se le pide una muestra compatible con una paciente, se busca el que mayor similitud fenotipica tenga 
+    - tiene un identificador
+    - debe haber una relacion con a quien se le dona
+    - puede usarse el de la pareja por lo que este modulo no seria necesario
+
+%! FIN DE LOS DATOS OBTENIDOS DE LA PRIMER ENTREVISTA:
+_______________________________________________________________________________
+
+%! RESUMENES DE ETAPAS
+$Contexto General:$
+    El sistema es una plataforma diseñada para gestionar una clínica de fertilidad especializada en tratamientos reproductivos cuyo objetivo principal es que las mujeres logren un embarazo. Una mujer puede realizar múltiples tratamientos de fertilidad a lo largo del tiempo donde cada tratamiento mantiene su propio historial clínico independiente. Los datos personales básicos de la paciente se mantienen actualizables centralmente pero cada tratamiento conserva su registro histórico separado.
+----
+$   Etapa 1 ( Registro y Solicitud de Turno ):$
+       En esta etapa se registra un turno y pacientes en caso de no estar registrado. se toman datos personales (ver seccion Entidades).
+       El usuario visualiza un calendario en el cual podra elegir un turno y el medico que la tratara o no elegir medico
+        
+----
+$   Etapa 2 ( Primera Consulta Médica ):$
+        En esta etapa el medico le pide datos clinicos al paciente (quirurjicos, genicologicos, genealogicos, etc), luego selecciona un objetivo y se crea un tratamiento (ver seccion Entidades). Ademas pide datos a la pareja en caso de ser necesario
+        Finalmente el medico pide estudios medicos (ver seccion Entidades), aqui el sistema envia la orden medica por mail al paciente
+        (el paciente sera el encargado de sacar un nuevo turno luego de hacerse los estudios)
+----
+$   Etapa 3 ( Análisis de Estudios Médicos ):$
+        En esta etapa el medico analiza los estudios y registra la informacion. Puede hacerlo de dos formas: 
+            - Subiendo los archivos PDF que trajo el paciente (no permite consumir esos datos posteriormente)
+            - Registrando los datos en formularios dinamicos de clave-valor (permite analisis posterior de la informacion) [preferida por el medico]
+
+        El sistema registra conclusiones importantes para determinar estrategias de tratamiento (viabilidad de ovocitos y espermatozoides) y planifica los proximos pasos.
+        En esta etapa no cambia el tratamiento predefinido, lo que puede cambiar si es con semen donado o otro 
+----
+$   Etapa 4 ( Estimulación Ovárica ):$ (bastante resumido ya)
+        se define que droga se utilizara (ver seeccion Entidades), se genera una nueva orden medica que llega por mail al paciente
+        el medico imprime desde el sistema el consentimiento informado, el paciente lo firma y el medico sube una foto de la firma al sistema
+
+----
+$   Etapa 5 ( Monitoreo de la Estimulación ):$
+        El medico carga un calendario de controles ideales (dias) y el paciente elige un turno dentro de esos dias (mas, menos un dia)
+        En caso de que no haya turnos disponibles en esos dias, el paciente puede elegir un sobreturno (se atienden 2 pacientes en 20 minutos)
+        El medico registra la informacion del monitoreo (fecha y campo libre) 
+        Luego de la cantidad de monitoreos necesaria el medico le pide que se saque un nuevo turno para la siguiente etapa
+
+----
+$   Etapa 6 ( Punción Folicular ):$
+        El medico programa la puncion (dia y hora) (turno con el mismo medico)
+        El sistema registra informacion de la punsion (Ver seccion Entidades)
+        se puede pedir criogenizacion de ovocitos (ver seccion Entidades)3
+----
+$   Etapa 7 ( Fecundación ):$
+        se pueden usar las tecnica FIP o ICSI
+        Para cada embrion generado el sistema almacena la informacion (ver seccion Entidades)
+        se puede hacer un estudio sobre el embrio llamado PGT (ver seccion Entidades)
+----
+$   Etapa 8 ( Transferencia Embrionaria ):$
+
+        Si el tratamiento principal no funcion se inicia un nuevo tratamiento de tranferencia de embriones criopreservados
+        El sistema registra los resultados medicos (ver seccion Entidades)
+        Existe la operacion descarte de embriones (ver seccion Entidades)
+        El paciente puede ver sus productos (?)
+
+$ Entidades $
+_______________________________
+
+    $Tratamientos:$
+        Estados:
+            ■ Vigente
+            ■ Cancelado 
+            ■ Completado
+
+        %! Un tratamiento se considera cancelado automáticamente si el paciente no regresa dentro de tres meses desde la última consulta. El sistema debe solicitar la causa específica de cancelación. Si es cancelacion automatica el mensaje tambien debira serlo (opnion)
+        
+        %! Si un paciente regresa después de un tratamiento cancelado se debe crear un nuevo tratamiento independiente.
+
+        %! El tratamiento se considera iniciado cuando se elige el objetivo
+        %! El tratamiento TERMINA: Cuando todos los embriones fueron transferidos o Criopreservados
+________________________________
+
+    $Objetivos:$
+        Tipos:
+            ■ Embarazo con gametos propios usando ovocito de la mujer y espermatozoide del hombre (pareja heterosexual)
+            ■ Embarazo con ovocito propio y espermatozoide de donante
+            ■ Embarazo con metodo ROPA (dos mujres) una aporta ovocito y la otra gesta
+
+        %?  Se puede querer preservar ovocitos para futuros embarazos
+_______________________________
+
+    $Pacientes:$
+        Datos: 
+            ■ Nombre y apellido
+            ■ Sexo biologico
+            ■ ocupacion
+            ■ telefono
+            ■ mail
+            ■ Dni
+            ■ Numero de socio que tiene en la cobertura
+            ■ Fecha de nacimiento
+_______________________________
+
+    $Medico tratante:$
+       Funciones:
+            ■ Acceso a datos medicos de sus pacientes
+            ■ Seleccion de objetivo y tratamiento
+            ■ Registro de datos clinicos
+            ■ Registro de estimulación ovárica
+            ■ Monitoreo de estimulación
+            ■ Programacion de puncion folicular
+            ■ Gestion de ovocitos obtenidos
+            ■ Gestion de fecundacion y embriones generados
+            ■ Gestion de transferencia y destino de embriones
+            ■ Registro de resultados post-transferencia
+            ■ Operacion de descarte de embriones
+_______________________________
+
+    $Historial Clinico:$
+        Datos:
+            ■ Antecedentes clinico-quirurgicos
+            ■ Habitos (tabaco, alcohol, drogas recreativas)
+            ■ Antecedentes familiares
+            ■ Antecedentes ginecologicos
+            ■ Examen fisico
+            ■ Caracteristicas fenotipicas
+            ■ Datos de pareja (si aplica)
+            ■ Estudios medicos solicitados
+            ■ Analisis de estudios
+            ■ Estimulacion ovárica
+            ■ Monitoreo de estimulación
+            ■ Puncion folicular y ovocitos obtenidos
+            ■ Fecundacion y embriones generados
+            ■ Transferencia y destino de embriones
+            ■ Resultados post-transferencia
+_______________________________
+
+    $Estudios Medicos:$
+        Datos:
+            ■ Estudios prequirúrgicos generales
+            ■ Estudios hormonales
+            ■ Estudios ginecológicos
+            ■ Estudios de semen (si aplica)
+            ■ Resultados
+_______________________________
+
+    $Resultados Medicos:$
+        Estructura clave valor (para analisis posterior)
+        
+_______________________________
+    
+    $Medicamientos:$
+        Datos:
+            ■ Tipo de medicacion [oral, inyectable o mixta]
+            ■ Dosis
+            ■ Duracion
+            ■ Droga (nombre)
+_______________________________    
+
+    $Punciones:$
+        Datos:
+            ■ Fecha y hora
+            ■ Numero de quirófano
+            ■ Problemas (si aplica)
+            ■ Información de cada ovocito obtenido (ver seccion Ovocito)
+_______________________________    
+
+    $Ovocitos:$
+        Datos:
+            ■ Codigo unico (Ovo_<YY/MM/DD>_<primeros digitos del apellido>_<primeros digitos del nombre>_<numero consecutivo>)
+            ■ Estado inicial (muy inmaduro, inmaduro, maduro)
+            ■ Descartado (si/no)
+            ■ Causa de descarte (si aplica)
+            ■ Maduracion in vitro (si aplica)
+            ■ Criopreservacion (si/no)
+            ■ Registro completo del "viaje del ovocito"
+_______________________________
+
+    $Conclusiones Estudios:$
+        Datos:
+            ■ hay beta positiva (si/no)
+            ■ hay saco (si/no)
+            ■ embarazo clinico (si/no)
+            ■ nacido vivo (si/no)
+            
+_______________________________    
+
+    $Embriones:$
+        Datos:
+            ■ Identificador unico (Emb_<YY/MM/DD>_<primeros digitos del apellido>_<primeros digitos del nombre>_<numero consecutivo>)
+            ■ Fecha de fertilizacion
+            ■ Tecnica de fertilizacion (FIP o ICSI)
+            ■ Calidad (1 a 5)
+            ■ Estudio PGT (si aplica) y resultado (Ok, Not Ok)
+            ■ Tuvo de nitrogeno (si se preserva)
+            ■ Rack (si se preserva)
+            ■ Operador de laboratorio responsable   
+            ■ Relacion con ovocito utilizado
+
+_______________________________________________________________________________
+
+%?Resumen de modulos dichos por el profesor: 
+    Modulo turnero, Genetica, donados (ovocitos o sperma), pagos, avisos (mail), clendario, terminos medicos. (se entregan a distintos grupos de trabajo) -> el profesor dijo que para que no haya problemas, todas funciones debe tener un parametro para saber que grupo lo pide 
+______________________________________________
+
+

@@ -1,0 +1,68 @@
+modulos de api-rest con buena documentacicon
+a entregar de aca a dos semanas 
+
+
+General para los endpoints:
+    para los modulos que no solo tengan consulta si no tambien escritura
+    hay que manejar un parametro que sea nro de grupo
+    ej turnero dar de alta un turno : registrarTurno()
+    idioma esp
+
+
+para simplificar se reciben ids no entiedades
+
+MODULOS:
+    modulo turnero :
+        (alta de turno)
+        (resrva turno medico,paciente,dia,hora)
+        (turnos disponibles)
+        (registrar alta y reserva de forma aleatoria)
+    
+    Pagos:
+        (lista de obras sociales)
+        (registrar orden de paog) -> cuando alguien inicia el tratamiento (paciente, obrasocial) registra una deuda en parte al paciente y en parte a la obra social dependiendo el porcentaje de pago (monto hardcodeado a 1m pesos para simplificar)
+        registraar pagos tanto de obrasocial como paciente
+        pedir deuda de obra social o paciente
+        total cobrado (cuanto cobre en total) 
+        total deuda (cuanto me deben en total)
+        cuenta corriente simple
+    
+    Terminos medicos:
+        investigar SNOMERD tiene una estructura de arbol
+
+    Estudios:
+        pedir estudios prequirurgicos, hormonales y genicologicos
+        adiciona, general una orden con la lista de estudios devuelve pdf base64
+
+    banco de gametos donados:
+        esperma y ovocitos:
+        dar de alta tanque de ovocitos (fenotipos)
+        dar de alta tanque de esperma (fenotipos)
+        buscar compatibilidad fenotipica
+
+    6. Avisos:
+        Un modulo que manda mensajes por telegram y/o mail
+
+    CrioPreservacion de ovocitos:
+        preservar devuelve el tanque y el rack
+        descongelar se evia id,tanque y rack
+    
+    CrioPreservacion semen
+        idem
+
+    9. Modulo chatbot
+        modulo que recibe una pregunta y devuelve una respuesta 
+
+    supabase tiene muchas librerias para resolveer el 6 y el 9 
+    
+________________________________________________________________________
+
+
+hay que usar supabase 
+buscar deno son lo que se hacen las apis en supabase
+
+se suele utilizar una forma llamada swaguer pero hay formas mas sencillas 
+
+para los pacientes hay que implemnetar un chatbot para preguntas freguntes
+
+

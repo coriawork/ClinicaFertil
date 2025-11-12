@@ -1,0 +1,141 @@
+Registrar Paciente
+Mediante un formulario de datos personales se registran a los pacientes que no fueron registrados con los datos: nombre y apellido, sexo biologico, ocupacion, telefono, mail, dni, fecha de naciemiento y numero de socio de la obra social con la que tiene cobertura. Este formulario debe darse cuando una persona quiere solicitar turno y no se encuentra registrado.
+
+Solicitar turno
+Se proporciona la posibilidad a cualquier persona (previamente registrada o nueva) de registrar un turno en la clínica. El usuario visualiza un calendario con fechas disponibles y un “select” para elegir un médico el cual se quiere elegir, si no se selecciona ninguno se elige uno aleatorio.
+
+Registrar historial Clínico
+El médico solicita información al paciente y completa el historial clínico de ese paciente en particular con los siguientes datos: antecedentes quirúrgicos, nivel de tabaquismo, consume drogas recreativas (si/no), frecuencia y cantidad de alcohol ingerido (opcional), observaciones (campo libre nullable), antecedentes familiares (campo libre), Antecedentes Ginecológicos: menarca, ciclo menstrual, duración del ciclo, características de sangrado (campo libre), g, p, AB,ST ; examen físico (campo libre), color de ojos, color de pelo, tipo de pelo, altura, complexion corporal .
+
+Registrar historial Clínico de la pareja
+Para una paciente que viene con una pareja (puede no tener pareja), el médico le toma los datos clínicos de la pareja y se los asocian a la paciente. Los datos que se piden depende de la pareja y del objetivo, Si es masculina la pareja se pide lo mismo que a la paciente pero se cambian antecedentes ginecológicos por genitales; Si es femenina y el método es ROPA, los mismos datos que la que aporta los ovocitos; si es femenina pero no método ropa solo datos personales.
+
+Solicitar estudios
+El médico selecciona de una lista los estudios para pedirle a la paciente (si se requiere también a la pareja), luego el sistema envía un mail a la persona con la orden generada automáticamente. 
+
+Listar estudios comunes
+El médico puede listar estudios comunes a pedir. agrupados por quirúrgicos generales (sangre, orina, electrocardiograma, radiografía de tórax,etc), estudios hormonales (estradiol, progesterona,etc), estudios ginecológicos y estudios de semen (solo si se es para la pareja hombre).
+
+Listar antecedentes quirúrgicos 
+El médico cuando completa historial clínico debe tener la posibilidad de listar antecedentes quirúrgicos comunes de una lista dada.
+
+Calcular tabaquismo
+El sistema permite que ingresando cantidad de cigarrillos por día y años fumando se calcule automáticamente el nivel de tabaquismo de una persona, si una persona no fuma puede recibirse 0 y retorna 0, indicando así que la persona no fuma. 
+
+Registrar objetivo de paciente
+El médico tratante accede a un listado de objetivos y selecciona de entre los tres tipos existentes (gametos de la paciente y de la pareja masculina; ovocito propio y espermatozoide donante; método ropa). Una vez se aprueba la selección de objetivos se da como comenzado el tratamiento.
+
+Completar resultados de estudios
+El médico puede registrar mediante un formulario (clave-valor a completar) los datos de los resultados de los estudios médicos de un paciente. 
+
+
+Registrar conclusiones de estudios
+El médico tratante tiene la posibilidad de registrar una conclusión sobre estos estudios, hay tres campos, uno indica si hay ovocitos viables, otro si los espermatozoides son viables (sólo si aplica) y por último un capo libre por si el médico quiere agregar algún detalle a tener en cuenta.
+
+
+Registrar tratamiento por paciente
+El médico tratante deja registrado que tratamiento seguirá el paciente, registrando: droga utilizada elegida de una lista, tipo de droga (oral, inyectable, mixta) y duración (suelen ser 15 días). El sistema debe permitir que un paciente tenga varios tratamientos a lo largo del tiempo.
+
+
+Listar drogas 
+El médico tiene la posibilidad de listar todas las drogas más comunes utilizadas en sus tratamientos.
+
+Imprimir contrato de consentimiento
+El médico dispone de un botón para imprimir un contrato de consentimiento para iniciar el tratamiento (sin esto no se puede iniciar).
+
+Registrar consentimiento 
+El médico sube una foto del contrato firmado por el paciente y este se asocia al mismo.
+
+Registrar monitoreo
+El médico asigna días ideales para monitorear la estimulación ej: dentro de 3,5 y 7 días, esto habilita al usuario un panel para poder elegir turnos.
+
+Elección de turnos 
+El paciente elige los turnos asignados por el médico para monitoreos, el paciente tiene la posibilidad de elegir con un día de desfase de los días asignados por los médicos. Además si el paciente elige un día con un turno ya asignado entonces este se considera sobreturno (se atiende a ambos pacientes). 
+
+Registrar seguimiento
+El médico tratante registra en un formulario que tiene la fecha actual y un campo libre donde se anota lo observado en el monitoreo del paciente.
+
+
+
+Registrar Punción
+El médico registra la punción a realizarse por el paciente, primero se registra fecha, hora y número de quirófano; una vez realizada la intervención el operador de laboratorio registra: problemas (si aplica) e información de cada ovocito obtenido.
+
+Registrar ovocito 
+El operador de laboratorio puede registrar ovocitos a través de un formulario con la siguiente información: código único de ovocito (ovo_<yy/mm/dd><3 caracteres del apellido>_<autoincremental>), Estado inicial (muy inmaduro, inmaduro, maduro), descartado (si/no), maduración in vitro (si aplica).
+
+Descartar ovocito 
+El operador tiene la posibilidad de marcar un ovocito como descartado, este descarte no elimina el ovocito registrado. Además para los ovocitos descartados hay un campo libre donde se pone la causa del ovocito registrado.
+	
+Criopreservar ovocito 
+El operador puede marcar un ovocito como criopreservado, el ovocito tiene que estar marcado como maduro para poder criopreservar, para esto se registra el tubo de nitrógeno y el racks en el que es preservado.
+
+
+Registrar embrión
+Luego de hacer una fecundación el operador registra los embriones obtenidos, se registran los datos: identificador único (emb_<yy/mm/dd><3 caracteres del apellido>_<autoincremental>), fecha de fecundación, técnica de fecundación (FIP o ICSI), calidad (1 a 5), si se realizó estudio de PGT (ok, not ok), si se preserva además se registra el tubo de nitrogeno y el rack donde se preserva el embrión; también se mantiene una relación con el empleado que hizo la fecundación y con el ovocito fecundado.
+
+Transferir embrión
+Esta función marca a un embrión como transferido, esto solo se puede aplicar sobre embriones ya registrados y criopreservados, para esto se debe ingresar el rack y el tubo de nitrógeno en el que se encuentran.
+
+
+Registrar resultados tratamiento
+Existe la posibilidad de registrar los resultados de un tratamiento para esto se almacena la siguiente información: si hay beta (si / no), si hay saco (si /no), si hay embarazo clínico (si / no), nacido vivo (si / no).
+
+Descartar embrión
+Una pareja y/o el médico pueden decidir descartar embriones, para esto el embrión registrado se marca como descartado y se tiene la posibilidad de en un campo aclarar el porqué del descarte.
+
+Criopreservar embrión
+Un embrión puede querer ser preservado para futuros tratamientos, para esto se tienen que poder marcar como criopreservados para esto se registra el tubo de nitrógeno y el racks en el que es preservado. 
+
+Ver embriones
+Esta función es utilizada para poder listar los embriones con toda su información.
+
+Ver ovocitos
+Esta función es utilizada para poder listar los ovocitos con toda su información.
+
+
+Ver embriones
+Esta función es utilizada para poder listar los embriones con toda su información.
+.
+
+Donar
+Cuando una persona quiere donar espermas o ovocitos se registran los fenotipos de la donación.
+
+Obtener Donantes
+Se ingresa un fenotipo y se busca alguna donación con fenotipos parecidos.
+
+Hacer pregunta
+Los pacientes pueden acceder a un chatbot el cual responde estas consultas sobre tratamientos y metodologías.
+
+Listar recetas médicas
+El sistema debe permitir al paciente visualizar todas las órdenes médicas generadas por su médico tratante. 
+
+Descargar recetas medicas
+El paciente debe poder acceder a la lista de órdenes desde su panel personal y descargarlas en formato digital para su uso posterior.
+
+Consultar historial clínico
+Cada paciente puede ver su historial clínico dado por el médico .
+
+Gestionar médicos
+En el sistema los admins son los que agregan, eliminan, editan y ven a todos los médicos.
+
+Auditoría de pacientes
+Los directores médicos tienen la capacidad de seguir trazabilidad de que médico editó información de un paciente.
+
+Consultar estadísticas
+El director médico puede acceder a un panel donde se observan estadísticas, con tasas de embarazos por año y la posibilidad de ver estadísticas de embarazos para cada médico.
+
+Cancelar tratamiento
+El médico tratante puede cancelar tratamientos activos de un paciente, de esto debe quedar registrada la cancelación y el motivo de la misma.
+
+Gestionar árbol genealógico
+El médico tratante para completar los datos genealógicos de un paciente a un gráfico de árbol con campo libre para cada pariente del paciente.
+
+
+Gestionar estado de tratamiento
+El sistema debe permitir al médico tratante gestionar los estados de los tratamientos de fertilidad. El sistema debe marcar automáticamente como cancelado cualquier tratamiento donde el paciente no regrese dentro de tres meses desde la última consulta. El médico debe poder registrar la causa específica de cancelación cuando corresponda.
+
+Editar datos del paciente
+El sistema debe permitir la modificación de datos personales básicos de los pacientes. Los médicos tratantes solo modifican los datos de sus pacientes, los directores médicos editan cualquier paciente.
+
+Listar Pacientes
+El sistema debe poder mostrar el listado de pacientes. Cada médico puede listar sólo sus pacientes y el director puede listar todos.
