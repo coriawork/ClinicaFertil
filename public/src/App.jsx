@@ -29,7 +29,6 @@ function App() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/registrar" element={<RegistrarPaciente />} />
                        
-                        {/* Prefijo único para paciente */}
                         <Route
                             path="/paciente"
                             element={
