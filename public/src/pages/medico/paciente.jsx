@@ -149,9 +149,6 @@ export default function PacienteDetail() {
                     <div className="w-full">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-                                    Panel del médico
-                                </p>
                                 <h1 className="text-2xl font-semibold text-foreground">{paciente.nombre}</h1>
                             </div>
                             <div className="mt-3 flex flex-wrap items-center gap-10">
@@ -167,18 +164,6 @@ export default function PacienteDetail() {
                                 <Button variant="action">
                                     <Activity className="mr-2 h-4 w-4" />
                                     Generar monitoreo
-                                </Button>
-                                <Button variant="action">
-                                    <Target className="mr-2 h-4 w-4" />
-                                    Registrar objetivo
-                                </Button>
-                                <Button variant="action">
-                                    <Syringe className="mr-2 h-4 w-4" />
-                                    Registrar tratamiento
-                                </Button>
-                                <Button variant="action"  className="shadow-md">
-                                    <CalendarCheck className="mr-2 h-4 w-4" />
-                                    Programar control
                                 </Button>
                             </div>
                         </div>

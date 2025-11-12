@@ -7,8 +7,113 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Heart, AlertCircle, UserPlus } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 import {Link} from "react-router-dom"
+import { Combobox } from "@/components/ui/combobox"
+import { Separator } from "@/components/ui/separator"
+
 
 export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
+    const obrasSociales = [
+        {
+            'value': 'osde',
+            'label': 'OSDE'
+        },
+        {
+            'value': 'swiss-medical',
+            'label': 'Swiss Medical'
+        },
+        {
+            'value': 'galeno',
+            'label': 'Galeno'
+        },
+        {
+            'value': 'medicus',
+            'label': 'Medicus'
+        },
+        {
+            'value': 'omint',
+            'label': 'OMINT'
+        },
+        {
+            'value': 'osecac',
+            'label': 'OSECAC'
+        },
+        {
+            'value': 'osperyh',
+            'label': 'OSPERYH '
+        },
+        {
+            'value': 'osde-binario',
+            'label': 'OSDE Binario'
+        },
+        {
+            'value': 'accord-salud',
+            'label': 'Accord Salud'
+        },
+        {
+            'value': 'federada-salud',
+            'label': 'Federada Salud'
+        },
+        {
+            'value': 'ospe',
+            'label': 'OSPE'
+        },
+        {
+            'value': 'sancor-salud',
+            'label': 'Sancor Salud'
+        },
+        {
+            'value': 'osmedica',
+            'label': 'OSMEDICA'
+        },
+        {
+            'value': 'aca-salud',
+            'label': 'ACA Salud'
+        },
+        {
+            'value': 'amffa',
+            'label': 'AMFFA'
+        },
+        {
+            'value': 'opdea',
+            'label': 'OPDEA'
+        },
+        {
+            'value': 'osuthgra',
+            'label': 'OSUTHGRA'
+        },
+        {
+            'value': 'osmata',
+            'label': 'OSMATA'
+        },
+        {
+            'value': 'ospoce',
+            'label': 'OSPOCE'
+        },
+        {
+            'value': 'osplad',
+            'label': 'OSPLAD'
+        },
+        {
+            'value': 'pami',
+            'label': 'PAMI'
+        },
+        {
+            'value': 'ioma',
+            'label': 'IOMA'
+        },
+        {
+            'value': 'avalian',
+            'label': 'Avalian'
+        },
+        {
+            'value': 'osdepym',
+            'label': 'OSDEPYM'
+        },
+        {
+            'value': 'particular',
+            'label': 'Particular (sin obra social)'
+        }
+    ]
     const [formData, setFormData] = useState({
         nombre: "",
         apellido: "",
@@ -82,7 +187,7 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
         setIsSubmitting(true)
 
         try {
-            // Aquí iría la llamada a la API para registrar el paciente
+            // Aca iría la llamada a la API para registrar el paciente
             // const response = await registrarPaciente(formData)
             
             // Simulación de registro exitoso
@@ -127,7 +232,7 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                         {/* Nombre y Apellido */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="nombre">Nombre *</Label>
+                                <Label htmlFor="nombre">Nombre </Label>
                                 <Input
                                     id="nombre"
                                     placeholder="Ingrese su nombre"
@@ -145,7 +250,7 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                             </div>
                             
                             <div className="space-y-2">
-                                <Label htmlFor="apellido">Apellido *</Label>
+                                <Label htmlFor="apellido">Apellido </Label>
                                 <Input
                                     id="apellido"
                                     placeholder="Ingrese su apellido"
@@ -166,7 +271,7 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                         {/* DNI y Fecha de Nacimiento */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="dni">DNI *</Label>
+                                <Label htmlFor="dni">DNI </Label>
                                 <Input
                                     id="dni"
                                     placeholder="12345678"
@@ -184,7 +289,7 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                             </div>
                             
                             <div className="space-y-2">
-                                <Label htmlFor="fechaNacimiento">Fecha de Nacimiento *</Label>
+                                <Label htmlFor="fechaNacimiento">Fecha de Nacimiento </Label>
                                 <Input
                                     id="fechaNacimiento"
                                     type="date"
@@ -201,54 +306,56 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                                 )}
                             </div>
                         </div>
-
-                        {/* Sexo Biológico */}
-                        <div className="space-y-2">
-                            <Label htmlFor="sexoBiologico">Sexo Biológico *</Label>
-                            <Select 
-                                value={formData.sexoBiologico} 
-                                onValueChange={(value) => handleInputChange('sexoBiologico', value)}
-                                disabled={isSubmitting}
-                            >
-                                <SelectTrigger className={errors.sexoBiologico ? "border-destructive" : ""}>
-                                    <SelectValue placeholder="Seleccione su sexo biológico" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="femenino">Femenino</SelectItem>
-                                    <SelectItem value="masculino">Masculino</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            {errors.sexoBiologico && (
-                                <div className="flex items-center gap-1 text-sm text-destructive">
-                                    <AlertCircle className="h-3 w-3" />
-                                    <span>{errors.sexoBiologico}</span>
-                                </div>
-                            )}
+                        <Separator/>
+                        {/* Ocupación y Sexo Biologico*/}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">                    
+                            <div className="space-y-2">
+                                <Label htmlFor="ocupacion">Ocupación </Label>
+                                <Input
+                                    id="ocupacion"
+                                    placeholder="Ingrese su ocupación"
+                                    value={formData.ocupacion}
+                                    onChange={(e) => handleInputChange('ocupacion', e.target.value)}
+                                    disabled={isSubmitting}
+                                    className={errors.ocupacion ? "border-destructive" : ""}
+                                />
+                                {errors.ocupacion && (
+                                    <div className="flex items-center gap-1 text-sm text-destructive">
+                                        <AlertCircle className="h-3 w-3" />
+                                        <span>{errors.ocupacion}</span>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <div className="space-y-2">
+                                <Label htmlFor="sexoBiologico">Sexo Biológico </Label>
+                                <Select 
+                                    value={formData.sexoBiologico} 
+                                    onValueChange={(value) => handleInputChange('sexoBiologico', value)}
+                                    disabled={isSubmitting}
+                                    
+                                >
+                                    <SelectTrigger className={errors.sexoBiologico ? "border-destructive" : ""}>
+                                        <SelectValue placeholder="Seleccione su sexo biológico" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="femenino">Femenino</SelectItem>
+                                        <SelectItem value="masculino">Masculino</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                {errors.sexoBiologico && (
+                                    <div className="flex items-center gap-1 text-sm text-destructive">
+                                        <AlertCircle className="h-3 w-3" />
+                                        <span>{errors.sexoBiologico}</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-
-                        {/* Ocupación */}
-                        <div className="space-y-2">
-                            <Label htmlFor="ocupacion">Ocupación *</Label>
-                            <Input
-                                id="ocupacion"
-                                placeholder="Ingrese su ocupación"
-                                value={formData.ocupacion}
-                                onChange={(e) => handleInputChange('ocupacion', e.target.value)}
-                                disabled={isSubmitting}
-                                className={errors.ocupacion ? "border-destructive" : ""}
-                            />
-                            {errors.ocupacion && (
-                                <div className="flex items-center gap-1 text-sm text-destructive">
-                                    <AlertCircle className="h-3 w-3" />
-                                    <span>{errors.ocupacion}</span>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Teléfono y Email */}
+                                
+                        {/* Obra social */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="telefono">Teléfono *</Label>
+                                <Label htmlFor="telefono">Teléfono </Label>
                                 <Input
                                     id="telefono"
                                     placeholder="1123456789"
@@ -266,7 +373,7 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                             </div>
                             
                             <div className="space-y-2">
-                                <Label htmlFor="email">Email *</Label>
+                                <Label htmlFor="email">Email </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -285,24 +392,33 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                             </div>
                         </div>
 
-                        {/* Número de Socio Obra Social */}
-                        <div className="space-y-2">
-                            <Label htmlFor="numeroSocioObraSocial">Número de Socio de Obra Social *</Label>
-                            <Input
-                                id="numeroSocioObraSocial"
-                                placeholder="Ingrese su número de socio"
-                                value={formData.numeroSocioObraSocial}
-                                onChange={(e) => handleInputChange('numeroSocioObraSocial', e.target.value)}
-                                disabled={isSubmitting}
-                                className={errors.numeroSocioObraSocial ? "border-destructive" : ""}
-                            />
-                            {errors.numeroSocioObraSocial && (
-                                <div className="flex items-center gap-1 text-sm text-destructive">
-                                    <AlertCircle className="h-3 w-3" />
-                                    <span>{errors.numeroSocioObraSocial}</span>
-                                </div>
-                            )}
+                        <Separator/>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                           
+                            <div className="space-y-2">
+                                <Label htmlFor="numeroSocioObraSocial">Número de Socio de Obra Social </Label>
+                                <Input
+                                    id="numeroSocioObraSocial"
+                                    placeholder="Ingrese su número de socio"
+                                    value={formData.numeroSocioObraSocial}
+                                    onChange={(e) => handleInputChange('numeroSocioObraSocial', e.target.value)}
+                                    disabled={isSubmitting}
+                                    className={errors.numeroSocioObraSocial ? "border-destructive" : ""}
+                                />
+                                {errors.numeroSocioObraSocial && (
+                                    <div className="flex items-center gap-1 text-sm text-destructive">
+                                        <AlertCircle className="h-3 w-3" />
+                                        <span>{errors.numeroSocioObraSocial}</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-2 w-full">
+                                <Label className={"text-muted-foregroun/50 ml-5px"} htmlFor="obras">Selecciona particular si no tenes obra social </Label>
+                                <Combobox id='obras' datas={obrasSociales} title="Elegi una obra social" className="w-full"/>
+                            </div>
                         </div>
+
 
                         {/* Botones */}
                         <div className="flex gap-4 pt-4">
@@ -326,13 +442,7 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                             </Button>
                         </div>
 
-                        <div className="rounded-lg bg-muted p-4 text-sm">
-                            <p className="mb-1 font-medium">Información importante:</p>
-                            <p className="text-xs text-muted-foreground">
-                                Todos los campos marcados con (*) son obligatorios. Sus datos serán tratados 
-                                de forma confidencial según la Ley de Protección de Datos Personales.
-                            </p>
-                        </div>
+                     
                     </form>
                 </CardContent>
             </Card>
