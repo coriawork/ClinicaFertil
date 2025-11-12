@@ -266,7 +266,7 @@ export default function PacienteDetail() {
                             </div>
                         </CardContent>    
                         <CardFooter className="flex  w-full items-center  gap-2">
-                            <Button  variant='action' className="w-full">Gestionar tratamiento</Button>
+                            <Button  variant='action' className="w-full">Gestionar Historia Clinica</Button>
                         </CardFooter>
                     </Card>
                 </div>
