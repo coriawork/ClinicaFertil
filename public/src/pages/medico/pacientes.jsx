@@ -145,12 +145,7 @@ export default function PacientesPage() {
             <h2 className="text-3xl font-bold tracking-tight text-foreground">Mis Pacientes</h2>
             <p className="text-muted-foreground">Gestiona y consulta la información de tus pacientes</p>
             </div>
-            <Button asChild className="bg-primary hover:bg-primary/90">
-                <Link to="/registrar">
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    Nuevo Paciente
-                </Link>
-            </Button>
+            
         </div>
 
         {/* Estadísticas rápidas */}
