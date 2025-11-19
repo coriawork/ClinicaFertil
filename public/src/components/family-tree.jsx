@@ -138,13 +138,21 @@ export function FamilyTree({ patientName = "Paciente" }) {
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="relationship">Relación con el Paciente</Label>
-                                <Input
+
+                                 <select
                                     id="relationship"
                                     name="relationship"
-                                    placeholder="ej: Abuelo paterno, Madre, Tío materno"
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                     defaultValue={editingRelative?.relationship}
                                     required
-                                />
+                                >
+                                    <option value="Abuelo">Abuelo</option>
+                                    <option value="Abuela">Abuela</option>
+                                    <option value="Padre">Padre</option>
+                                    <option value="Madre">Madre</option>
+                                    <option value="Tio">Tio</option>
+                                    <option value="Tia">Tia</option>
+                                </select>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="side">Línea Familiar</Label>
@@ -209,12 +217,10 @@ export function FamilyTree({ patientName = "Paciente" }) {
                     <ScrollArea className="w-full">
                         <div className="min-w-max pb-4">
                             <div className="flex flex-col items-center gap-6">
-                                {/* Abuelos - Split by paternal and maternal */}
                                 {(paternalGrandparents.length > 0 || maternalGrandparents.length > 0) && (
                                     <div className="space-y-4">
                                         <p className="text-xs text-center text-muted-foreground font-medium">Abuelos</p>
                                         <div className="flex gap-16 justify-center items-start">
-                                            {/* Paternal Grandparents */}
                                             <div className="flex flex-col items-center gap-2">
                                                 <p className="text-xs text-blue-600 font-medium mb-2">Línea Paterna</p>
                                                 <div className="flex gap-4">
@@ -234,7 +240,6 @@ export function FamilyTree({ patientName = "Paciente" }) {
                                                 )}
                                             </div>
 
-                                            {/* Maternal Grandparents */}
                                             <div className="flex flex-col items-center gap-2">
                                                 <p className="text-xs text-pink-600 font-medium mb-2">Línea Materna</p>
                                                 <div className="flex gap-4">
@@ -257,12 +262,10 @@ export function FamilyTree({ patientName = "Paciente" }) {
                                     </div>
                                 )}
 
-                                {/* Padres/Tíos - Split by paternal and maternal */}
                                 {(paternalParents.length > 0 || maternalParents.length > 0) && (
                                     <div className="space-y-4">
                                         <p className="text-xs text-center text-muted-foreground font-medium">Padres / Tíos</p>
                                         <div className="flex gap-16 justify-center items-start">
-                                            {/* Paternal Side */}
                                             <div className="flex flex-col items-center gap-2">
                                                 <p className="text-xs text-blue-600 font-medium mb-2">Lado Paterno</p>
                                                 <div className="flex gap-4">
@@ -282,7 +285,6 @@ export function FamilyTree({ patientName = "Paciente" }) {
                                                 )}
                                             </div>
 
-                                            {/* Maternal Side */}
                                             <div className="flex flex-col items-center gap-2">
                                                 <p className="text-xs text-pink-600 font-medium mb-2">Lado Materno</p>
                                                 <div className="flex gap-4">
@@ -302,7 +304,6 @@ export function FamilyTree({ patientName = "Paciente" }) {
                                                 )}
                                             </div>
                                         </div>
-                                        {/* Connecting lines */}
                                         <div className="flex justify-center">
                                             <div className="relative w-64 h-8">
                                                 <div className="absolute left-1/4 top-0 w-px h-full bg-blue-300" />
@@ -314,7 +315,6 @@ export function FamilyTree({ patientName = "Paciente" }) {
                                     </div>
                                 )}
 
-                                {/* Paciente */}
                                 <div className="space-y-2">
                                     <p className="text-xs text-center text-muted-foreground font-medium">Paciente</p>
                                     <div className="flex flex-col items-center gap-2 p-4 border-2 border-primary rounded-lg bg-primary/5 min-w-[160px]">
@@ -330,7 +330,6 @@ export function FamilyTree({ patientName = "Paciente" }) {
                                     )}
                                 </div>
 
-                                {/* Hijos */}
                                 {children.length > 0 && (
                                     <div className="space-y-2">
                                         <p className="text-xs text-center text-muted-foreground font-medium">Hijos</p>

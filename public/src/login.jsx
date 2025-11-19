@@ -78,60 +78,48 @@ export default function LoginPage() {
                 </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                    <Label htmlFor="email">Correo Electrónico</Label>
-                    <Input
-                    id="email"
-                    placeholder="username"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={isSubmitting}
-                    />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="password">Contraseña</Label>
-                    <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={isSubmitting}
-                    />
-                </div>
-
-                {error && (
-                    <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-                    <AlertCircle className="h-4 w-4" />
-                        <span>{error}</span>
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Correo Electrónico</Label>
+                        <Input
+                        id="email"
+                        placeholder="username"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        disabled={isSubmitting}
+                        />
                     </div>
-                )}
-
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
-                </Button>
-                <div>
-                    <Link to="/registrar" className="text-sm text-muted-foreground underline hover:text-primary"> 
-                        ¿No tenes una cuenta? Regístrate
-                    </Link>
-                </div>
-
-                <div className="rounded-lg bg-muted p-4 text-sm">
-                    <p className="mb-2 font-medium">Usuarios de prueba:</p>
-                    <div className="space-y-1 text-xs text-muted-foreground">
-                    <p>
-                        <strong>Paciente:</strong> paciente / 1
-                    </p>
-                    <p>
-                        <strong>Médico:</strong> medico / 1
-                    </p>
-                    <p>
-                        <strong>Laboratorio:</strong> laboratorio / 1
-                    </p>
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Contraseña</Label>
+                        <Input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        disabled={isSubmitting}
+                        />
                     </div>
-                </div>
+
+                    {error && (
+                        <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                        <AlertCircle className="h-4 w-4" />
+                            <span>{error}</span>
+                        </div>
+                    )}
+
+                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
+                    </Button>
+                    
+                    <div>
+                        <Link to="/registrar" className="text-sm text-muted-foreground underline hover:text-primary"> 
+                            ¿No tenes una cuenta? Regístrate
+                        </Link>
+                    </div>
+
+               
                 </form>
             </CardContent>
             </Card>

@@ -19,6 +19,7 @@ import PacientesPage from "./pages/medico/pacientes"
 import PacienteDetail from "./pages/medico/paciente"
 import HomePage from "./pages/index.jsx"
 import { ThemeProvider } from "./lib/ThemeContex"
+import GestionHistoria from "@/pages/medico/gestion-historia"
 function App() {
     return (
         <ThemeProvider>
@@ -50,6 +51,7 @@ function App() {
                             <Route path="pacientes" element={ <Outlet />} >
                                 <Route index element={<PacientesPage />} />
                                 <Route path=":id" element={<PacienteDetail />} />
+                                <Route path="historial/:id" element={<GestionHistoria/>}/>
                             </Route>
                             <Route index element={<DoctorDashboard />} />
                             <Route path="agenda" element={<AgendaPage />} />
