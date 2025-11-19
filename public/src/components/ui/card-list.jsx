@@ -4,7 +4,7 @@ import {ShortInfo} from "./info-short"
 import { Separator } from "@/components/ui/separator"
 export function CardList({title,desc,data, children}) {
     return (
-        <Card className="bg-accent/50 border-primary/30 shadow-2xl">
+        <Card className="bg-card-list/50 border-primary/30 shadow-2xl">
             <CardHeader  className=" text-foreground">
                 <CardTitle>{title}</CardTitle>
                 <CardDescription className="text-foreground/75">{desc}</CardDescription>

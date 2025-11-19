@@ -83,12 +83,6 @@ export function DashboardLayout({ children, role }) {
             { href: "/medico/agenda", label: "Agenda", icon: Calendar },
             { href: "/medico/pacientes", label: "Pacientes", icon: Users },
             { href: "/medico/historia-clinica", label: "Historia Clínica", icon: FileText },
-            { href: "/medico/estudios", label: "Estudios", icon: TestTube },
-            { href: "/medico/objetivos", label: "Objetivos", icon: Target },
-            { href: "/medico/tratamientos", label: "Tratamientos", icon: Syringe },
-            { href: "/medico/monitoreo", label: "Monitoreo", icon: Activity },
-            { href: "/medico/punciones", label: "Punciones", icon: Beaker },
-            { href: "/medico/resultados", label: "Resultados", icon: ClipboardList },
         ]
         case "operador_laboratorio":
         return [

@@ -20,9 +20,10 @@ import {
 } from "@/components/ui/popover"
 
 
-export function Combobox({datas,title='elegi alguna opcion'}) {
+export function Combobox({datas,title='elegi alguna opcion',action=()=>{}}) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
+
 
     return (
         <Popover open={open} className='' onOpenChange={setOpen}>
@@ -53,6 +54,8 @@ export function Combobox({datas,title='elegi alguna opcion'}) {
                                     onSelect={(currentValue) => {
                                         setValue(currentValue === value ? "" : currentValue)
                                         setOpen(false)
+                                        action(currentValue)
+                                        
                                     }}
                                 >
                                     {data.label}
