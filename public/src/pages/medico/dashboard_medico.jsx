@@ -132,7 +132,7 @@ export default function DoctorDashboard() {
 
         <div className="grid gap-4  md:grid-cols-2">
             <CardList title="Citas de hoy" desc="Agenda" data={[{ h1: "María González", right: "09:00", h2: "Consulta inicial" },{ h1: "Laura Pérez", right: "10:00", h2: "Monitoreo ecográfico" },{ h1: "Ana Martínez", right: "11:30", h2: "Revisión de resultados" }]}>
-                <Button variant="outline" className="mt-4 bg-white  w-full" asChild>
+                <Button variant="outline" className="mt-4 bg-white w-full" asChild>
                     <Link to="/medico/agenda">Ver agenda completa</Link>
                 </Button>
             </CardList>

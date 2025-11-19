@@ -145,7 +145,7 @@ export default function PacienteDetail() {
                     </div>
                 </div>
                 
-                <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 shadow-inset-strong">
+                <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl  from-primary/10 via-primary/5 to-transparent p-6 shadow-inset-strong">
                     <div className="w-full">
                         <div className="flex items-center justify-between">
                             <div>
@@ -165,13 +165,17 @@ export default function PacienteDetail() {
                                     <Activity className="mr-2 h-4 w-4" />
                                     Generar monitoreo
                                 </Button>
+                                <Link to='/medico/pacientes/historial/1'>
+                                    <Button  variant='action' className="w-full">Gestionar Historia Clinica</Button>
+                                </Link>
+                                
                             </div>
                         </div>
                     </div>
                 </header>
 
                 {paciente.pareja ? (
-                    <Card className="border-primary/40 bg-gradient-to-b from-primary/30 via-primary/11 to-transparent bg shadow-none">
+                    <Card >
                         <CardHeader>
                             <div className="flex flex-wrap items-center justify-between gap-3">
                                 <div className="flex items-center gap-3">
@@ -197,7 +201,9 @@ export default function PacienteDetail() {
                 ) : null}
 
                 <div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr,1fr]">
-                    <Card className="bg-primary/20 border-primary/50 shadow-md">
+
+                    {/* Generales */}
+                    <Card >
                         <CardHeader>
                             <div className="flex items-center gap-3">
                                 <Stethoscope className="h-5 w-5 text-foreground" />
@@ -225,8 +231,8 @@ export default function PacienteDetail() {
                             </dl>
                         </CardContent>
                     </Card>
-                     
-                    <Card className='shadow-md border-primary/50 bg-primary/20'>
+                     {/* Historial */}
+                    <Card >
                         <CardHeader>
                             <div className="flex items-center gap-3">
                                 <ClipboardList className="h-5 w-5 text-foreground" />
@@ -251,109 +257,11 @@ export default function PacienteDetail() {
                             </div>
                         </CardContent>    
                         <CardFooter className="flex  w-full items-center  gap-2">
-                            <Button  variant='action' className="w-full">Gestionar Historia Clinica</Button>
+                          
                         </CardFooter>
                     </Card>
                 </div>
-                {paciente.tratamiento && (
-                    <Card className="border-primary/50 bg-primary/20 shadow-lg">
-                        <CardHeader>
-                            <div className="flex flex-wrap items-center justify-between gap-3">
-                                <div className="flex items-center gap-3">
-                                    <HeartPulse className="h-5 w-5 text-foreground" />
-                                    <div>
-                                        <CardTitle className="text-2xl text-foreground">Tratamiento activo</CardTitle>
-                                        <p className="text-sm text-muted-foreground">
-                                            {paciente.tratamiento.nombre}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <Progress value={paciente.tratamiento.progreso} className="h-2 rounded-full bg-secondary" />
-                            <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
-                                <div>
-                                    <dt className="text-muted-foreground">Fecha de inicio</dt>
-                                    <dd className="font-medium text-foreground">
-                                        {formatDate(paciente.tratamiento.inicio)}
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt className="text-muted-foreground">Próximo control</dt>
-                                    <dd className="font-medium text-foreground">
-                                        {formatDate(paciente.tratamiento.controlProximo)}
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt className="text-muted-foreground">Estado actual</dt>
-                                    <dd className="font-medium text-foreground">
-                                        {paciente.tratamiento.estado}
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt className="text-muted-foreground">Progreso</dt>
-                                    <dd className="font-medium text-foreground">
-                                        {paciente.tratamiento.progreso}%
-                                    </dd>
-                                </div>
-                            </dl>
-                        </CardContent>
-                        <CardFooter className="flex  w-full items-center  gap-2">
-                            <Button  variant='action' className="w-full">Gestionar tratamiento</Button>
-                        </CardFooter>
-                    </Card>
-                )}
-                <Card className="border-primary/50 bg-primary/20 shadow-md">
-                    <CardHeader>
-                        <div className="flex flex-wrap items-center justify-between gap-3">
-                            <div className="flex items-center gap-3">
-                                <FileText className="h-5 w-5 text-foreground" />
-                                <div>
-                                    <CardTitle className="text-2xl text-foreground">Estudios realizados</CardTitle>
-                                    <p className="text-xs text-muted-foreground">
-                                        Resumen de estudios y carga de resultados pendientes.
-                                    </p>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <Separator className={"bg-foreground/50"} />
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-                            {paciente.estudios.map((estudio) => (
-                                <div
-                                    key={`${paciente.id}-${estudio.nombre}`}
-                                    className="flex flex-col gap-3 rounded-xl border border-border/40 bg-chart-4/30 p-4"
-                                >
-                                    <div>
-                                        <p className="text-sm font-medium text-foreground">{estudio.nombre}</p>
-                                        <p className="text-xs text-muted-foreground">
-                                            Realizado el {formatDate(estudio.fecha)}
-                                        </p>
-                                    </div>
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        {estudio.resultadoPendiente ? (
-                                            <Badge  className="bg-amber-600 text-foreground ">
-                                                Resultado pendiente
-                                            </Badge>
-                                        ) : (
-                                            <Badge className="bg-emerald-500/50 text-foreground-600">
-                                                Resultado cargado
-                                            </Badge>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                    <CardFooter className="flex  w-full items-center  gap-2">
-                        <Button  variant='action' className="w-full">
-                            Gestionar tratamiento
-                        </Button>
-                    </CardFooter>
-                </Card>
+            
             </div>
         </DashboardLayout>
     )

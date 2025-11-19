@@ -148,24 +148,6 @@ export default function PacientesPage() {
             
         </div>
 
-        {/* Estadísticas rápidas */}
-        <div className="grid gap-4 md:grid-cols-4">
-            <CardInfo variant="" title="Total Pacientes" cant={pacientes.length} desc="Cantidad totatl de tus pacientes">
-                <Activity className="h-4 w-4 text-primary" />
-            </CardInfo>
-
-            <CardInfo variant="" title="Pacientes Activos" cant={pacientes.filter(p => p.estado === "activo").length} desc="Cantidad de pacientes activos">
-                <UserPlus className="h-4 w-4 text-primary" />
-            </CardInfo>
-
-            <CardInfo variant="" title="Nuevos este mes" cant="3" desc="Pacientes registrados este mes">
-                <Calendar className="h-4 w-4 text-primary" />
-            </CardInfo>
-
-            <CardInfo variant="" title="Citas esta semana" cant="8" desc="Citas programadas para esta semana">
-                <Calendar className="h-4 w-4 text-primary" />
-            </CardInfo>
-        </div>
         {/* Filtros y búsqueda */}
         <Card>
             <CardHeader>
