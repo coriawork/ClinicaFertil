@@ -20,7 +20,7 @@ export default function GestionHistoria() {
     const [editH, setEditH] = useState(false)
 
 
-     const [fenotipo, setFenotipo] = useState({
+    const [fenotipo, setFenotipo] = useState({
         colorOjos: '',
         colorPelo: '',
         tipoPelo: '',

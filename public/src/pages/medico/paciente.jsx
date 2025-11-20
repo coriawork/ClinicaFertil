@@ -25,9 +25,7 @@ const pacientes = [
         es_pareja: false,
         pareja: { id: "3", nombre: "Juan Pérez", email: "juan.perez@example.com" },
         historiaClinica: {
-            diagnostico: "Infertilidad tubárica con antecedentes de endometriosis.",
-            antecedentes: ["Endometriosis estadio II", "Hipotiroidismo subclínico", "Cirugía laparoscópica 2022"],
-            ultimaActualizacion: "2025-10-28"
+            antecedentes: ["biopsia-mamaria", "amigdalectomía", "histeroscopía"],
         },
         tratamiento: {
             nombre: "Fertilización in vitro (FIV)",
@@ -95,7 +93,7 @@ const formatDate = (isoDate) =>
         day: "2-digit",
         month: "short",
         year: "numeric"
-    })
+})
 
 export default function PacienteDetail() {
     const { id } = useParams()
@@ -139,17 +137,19 @@ export default function PacienteDetail() {
                         </div>
                         <div className="mt-4 flex flex-col items-stretch gap-2 md:flex-row md:items-center md:justify-start md:gap-3">
                             <div className="flex flex-wrap  gap-2">
-                                <Button variant="action">
-                                    <TestTube className="mr-2 h-4 w-4" />
-                                    Pedir estudio
-                                </Button>
-                                <Button variant="action">
-                                    <Activity className="mr-2 h-4 w-4" />
-                                    Generar monitoreo
-                                </Button>
-                                <Link to='/medico/pacientes/historial/1'>
-                                    <Button  variant='action' className="w-full">Gestionar Historia Clinica</Button>
+                                <Link to={'/medico/pacientes/historial/'+id}>
+                                    <Button  variant='action' className="w-full">
+                                        <ClipboardList/>
+                                        Gestionar Historia Clinica
+                                    </Button>
                                 </Link>
+                                <Link to={'/medico/pacientes/estudios/'+id}>
+                                    <Button variant="action">
+                                        <TestTube className="mr-2 h-4 w-4" />
+                                        Gestion Estudio
+                                    </Button>
+                                </Link>
+                              
                                 
                             </div>
                         </div>
@@ -167,9 +167,6 @@ export default function PacienteDetail() {
                                         <p className="text-sm text-muted-foreground">
                                             {paciente.pareja.nombre}
                                         </p>
-                                        <p className="text-sm text-muted-foreground">
-                                            {paciente.pareja.email}
-                                        </p>
                                     </div>
                                 </div>
                                 <Button asChild  variant="action" >
@@ -183,7 +180,25 @@ export default function PacienteDetail() {
                 ) : null}
 
                 <div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr,1fr]">
-
+                    {/* Historial */}
+                    <Card >
+                        <CardContent>
+                            <p className="text-xs mb-5 font-semibold uppercase tracking-wide text-muted-foreground">
+                                Resumen historia clincia
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                {paciente.historiaClinica.antecedentes.map((item) => (
+                                    <Badge key={item} className=" bg-accent uppercase rounded-full px-3 py-1 text-xs">
+                                        {item}
+                                    </Badge>
+                                ))}
+                                <Link className="underline ml-2 hover:text-accent-foreground" to={"/medico/pacientes/historial/"+id}>
+                                    ver más
+                                </Link>
+                            </div>
+                        </CardContent>    
+                    </Card>
+                  
                     {/* Generales */}
                     <Card >
                         <CardHeader>
@@ -217,35 +232,6 @@ export default function PacienteDetail() {
                     {/* Objetivo */}
                     <Objetivo idPac={id}/>
 
-                    {/* Historial */}
-                    <Card >
-                        <CardHeader>
-                            <div className="flex items-center gap-3">
-                                <ClipboardList className="h-5 w-5 text-foreground" />
-                                    <CardTitle className="text-2xl text-foreground">
-                                    Historia clínica del paciente
-                                    <p className="text-xs text-muted-foreground">
-                                        Última actualización: {formatDate(paciente.historiaClinica.ultimaActualizacion)}
-                                    </p>
-                                </CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-xs mb-5 font-semibold uppercase tracking-wide text-muted-foreground">
-                                Resumen
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                                {paciente.historiaClinica.antecedentes.map((item) => (
-                                    <Badge key={item} className=" bg-accent rounded-full px-3 py-1 text-xs">
-                                        {item}
-                                    </Badge>
-                                ))}
-                            </div>
-                        </CardContent>    
-                        <CardFooter className="flex  w-full items-center  gap-2">
-                          
-                        </CardFooter>
-                    </Card>
                   
                 </div>
             

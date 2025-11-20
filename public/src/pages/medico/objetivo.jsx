@@ -7,7 +7,8 @@ import { useState } from "react"
 const OBJETIVOS_DISPONIBLES = [
     { id: "gametos_propios", label: "Gametos propios" },
     { id: "esperma_donado", label: "Esperma donado" },
-    { id: "ropa", label: "ROPA" }
+    { id: "ropa", label: "ROPA" },
+    { id: "preservacion", label: "Preservar Gametos" }
 ]
 
 export function Objetivo({objetivo, idPac}){

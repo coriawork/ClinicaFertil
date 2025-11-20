@@ -13,7 +13,6 @@ import GameteDonation from "./pages/pacientes/donacion"
 import AgendaPage from "./pages/medico/agenda"
 import DoctorDashboard from "./pages/medico/dashboard_medico"
 import StudiesRequestPage from "./pages/medico/estudios"
-import ClinicalHistoryPage from "@/pages/medico/historial-clinica"
 import RegistrarPaciente from "./registrar"
 import PacientesPage from "./pages/medico/pacientes"
 import PacienteDetail from "./pages/medico/paciente"
@@ -52,11 +51,10 @@ function App() {
                                 <Route index element={<PacientesPage />} />
                                 <Route path=":id" element={<PacienteDetail />} />
                                 <Route path="historial/:id" element={<GestionHistoria/>}/>
+                                <Route path="estudios/:id" element={<StudiesRequestPage />} />
                             </Route>
                             <Route index element={<DoctorDashboard />} />
                             <Route path="agenda" element={<AgendaPage />} />
-                            <Route path="historia-clinica" element={<ClinicalHistoryPage />} />
-                            <Route path="estudios" element={<StudiesRequestPage />} />
                         </Route>
 
                         <Route path="*" element={<NotFound />} />
