@@ -296,10 +296,9 @@ export default function GestionHistoria() {
                             <Label className={"text-muted-foregroun/50 ml-5px"} htmlFor="antecedentesSelect">Agrega antecedentes quirurgicos</Label>
                             <Combobox id='antecedentesSelect' datas={AntQuirurgico} title="Elegi un antecedente" action={addQuirurgico} className="w-full"/>
                         </div>
-                        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                            
+                        <div className="flex flex-wrap gap-3 ">
                             {(quirurgicoSelected && quirurgicoSelected.length != 0)? (quirurgicoSelected.map((q, index) => (
-                                <div key={index} className="flex w-full justify-between items-center p-3 border rounded-lg">
+                                <div key={index} className="flex w-1/4 justify-between items-center p-3 border rounded-lg">
                                     <span className="text-sm uppercase font-bold">{q}</span>
                                     <X onClick={()=>handleEliminarQuirurgico(index)} className="cursor-pointer"/>
                                 </div>

@@ -20,7 +20,7 @@ import {
 import { useTheme } from "@/lib/ThemeContex"
 import { useState } from "react"
 import { useNavigate, useLocation, Link } from "react-router-dom"
-
+import { Volver } from "@/components/ui/volver"
 
 export function DashboardLayout({ children, role }) {
     const { user, logout } = useAuth()
@@ -82,7 +82,6 @@ export function DashboardLayout({ children, role }) {
             { href: "/medico", label: "Inicio", icon: Home },
             { href: "/medico/agenda", label: "Agenda", icon: Calendar },
             { href: "/medico/pacientes", label: "Pacientes", icon: Users },
-            { href: "/medico/historia-clinica", label: "Historia Clínica", icon: FileText },
         ]
         case "operador_laboratorio":
         return [
@@ -154,7 +153,10 @@ export function DashboardLayout({ children, role }) {
                 </nav>
             </aside>
 
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 flex gap-5 flex-col">
+                <Volver className=""/>
+                {children}
+            </main>
         </div>
     </div>
     )

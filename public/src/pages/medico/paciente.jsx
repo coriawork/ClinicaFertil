@@ -2,25 +2,17 @@ import { DashboardLayout } from "@/layouts/dashboard-layout"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
 import { Link, useParams } from "react-router-dom"
 import {
-    CalendarCheck,
     ClipboardList,
-    FileText,
-    HeartPulse,ArrowLeft,
+    ArrowLeft,
     Stethoscope,
-    Upload,
-    UserRound,
     TestTube,
-    Heart,
-    Target,
     Activity,
-    Syringe,
     User
-
 } from "lucide-react"
+import { Objetivo } from "./objetivo"
+
 
 const pacientes = [
     {
@@ -134,16 +126,6 @@ export default function PacienteDetail() {
     return (
         <DashboardLayout role="medico">
             <div className="space-y-8">
-                <div className="space-y-6">
-                    <div className="flex items-center gap-4">
-                        <Button variant="ghost" size="sm" asChild>
-                            <Link to="/medico">
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Volver
-                            </Link>
-                        </Button>
-                    </div>
-                </div>
                 
                 <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl  from-primary/10 via-primary/5 to-transparent p-6 shadow-inset-strong">
                     <div className="w-full">
@@ -231,7 +213,11 @@ export default function PacienteDetail() {
                             </dl>
                         </CardContent>
                     </Card>
-                     {/* Historial */}
+                    
+                    {/* Objetivo */}
+                    <Objetivo idPac={id}/>
+
+                    {/* Historial */}
                     <Card >
                         <CardHeader>
                             <div className="flex items-center gap-3">
@@ -260,6 +246,7 @@ export default function PacienteDetail() {
                           
                         </CardFooter>
                     </Card>
+                  
                 </div>
             
             </div>
