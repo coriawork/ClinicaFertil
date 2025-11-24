@@ -1,3 +1,6 @@
+
+
+
 @import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
@@ -47,6 +50,20 @@
     --shadow-opacity: 0.2;
     --shadow-color: #000000;
     --card-list:#e2ebff;
+    --calendar-bg: var(--card);
+    --calendar-header: var(--primary);
+    --calendar-header-foreground: var(--primary-foreground);
+    --calendar-cell-bg: var(--card);
+    --calendar-cell-foreground: var(--foreground);
+    --calendar-cell-border: var(--border);
+    --calendar-cell-other-bg: var(--muted);
+    --calendar-cell-other-foreground: var(--muted-foreground);
+    --calendar-today-bg: var(--primary);
+    --calendar-today-foreground: var(--primary-foreground);
+    --calendar-selected-border: var(--accent);
+    --calendar-event-bg: var(--chart-2);
+    --calendar-event-foreground: #fff;
+    --calendar-event-border: var(--chart-2);
 }
 
 .dark {
@@ -89,6 +106,20 @@
     --shadow-opacity: 0.2;
     --shadow-color: #000000;
     --card-list: #1e293b;
+    --calendar-bg: var(--card);
+    --calendar-header: var(--primary);
+    --calendar-header-foreground: var(--primary-foreground);
+    --calendar-cell-bg: var(--card);
+    --calendar-cell-foreground: var(--foreground);
+    --calendar-cell-border: var(--border);
+    --calendar-cell-other-bg: var(--muted);
+    --calendar-cell-other-foreground: var(--muted-foreground);
+    --calendar-today-bg: var(--primary);
+    --calendar-today-foreground: var(--primary-foreground);
+    --calendar-selected-border: var(--accent);
+    --calendar-event-bg: var(--chart-2);
+    --calendar-event-foreground: #fff;
+    --calendar-event-border: var(--chart-2);
 }
 
 @theme inline {
@@ -187,6 +218,61 @@
         @apply scale-[1.02];
         transform: perspective(1000px) rotateX(10deg);
     }
+
+        .calendar-bg {
+            background: var(--calendar-bg, var(--card));
+        }
+    
+        .calendar-header {
+            background: var(--calendar-header, var(--primary));
+            color: var(--calendar-header-foreground, var(--primary-foreground));
+        }
+    
+        .calendar-cell {
+            background: var(--calendar-cell-bg, var(--card));
+            color: var(--calendar-cell-foreground, var(--foreground));
+            border: 1px solid var(--calendar-cell-border, var(--border));
+        }
+    
+        .calendar-cell-other {
+            background: var(--calendar-cell-other-bg, var(--muted));
+            color: var(--calendar-cell-other-foreground, var(--muted-foreground));
+        }
+    
+        .calendar-cell-today {
+            background: var(--calendar-today-bg, var(--primary));
+            color: var(--calendar-today-foreground, var(--primary-foreground));
+        }
+    
+        .calendar-cell-selected {
+            border: 2px solid var(--calendar-selected-border, var(--accent));
+        }
+    
+        .calendar-event {
+            background: var(--calendar-event-bg, var(--chart-2));
+            color: var(--calendar-event-foreground, #fff);
+            border: 1px solid var(--calendar-event-border, var(--chart-2));
+        }
+    
+        .calendar-event-consulta {
+            background: var(--chart-1);
+            color: #fff;
+        }
+    
+        .calendar-event-puncion {
+            background: var(--chart-3);
+            color: #fff;
+        }
+    
+        .calendar-event-transferencia {
+            background: var(--chart-4);
+            color: #fff;
+        }
+    
+        .calendar-event-otro {
+            background: var(--chart-5);
+            color: #fff;
+        }
 
     /* Variantes del efecto */
     .card-3d-light:hover {
