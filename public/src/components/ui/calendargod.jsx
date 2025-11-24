@@ -52,7 +52,6 @@ export function Calendar() {
     };
 
     function MonthView({ year, month }) {
-        // ...usa year y month recibidos por props...
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const today = new Date();
         const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
@@ -151,7 +150,8 @@ export function Calendar() {
                             <ArrowRight size={22}/>
                         </button>
                     </div>
-                    <div className=' '>
+                    {/* Esto puedo agregarlo mas adelante */}
+                   {/*<div className=' '>
                         <Select className="">
                             <SelectTrigger className=" rounded-[5px] ">
                                 <SelectValue  placeholder="vistas" />
@@ -165,7 +165,7 @@ export function Calendar() {
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                    </div>
+                    </div> */}
                     <div className=' '>
                         <Button className=' flex items-center  rounded-[5px]'>
                             <Plus className=''/>
