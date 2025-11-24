@@ -166,16 +166,14 @@ export function Calendar() {
                             </SelectContent>
                         </Select>
                     </div>
-                    {/* podria agregar esto en algun momento  */}
-                   {/*  
-                   <div className=' '>
+                    <div className=' '>
                         <Button className=' flex items-center  rounded-[5px]'>
                             <Plus className=''/>
                             <p className='mt-1 text-md'>
                                 Add event
                             </p>
                         </Button>
-                    </div> */}
+                    </div>
                 </div>
             </CardHeader>   
             <CardContent className='h-200 p-5'>
