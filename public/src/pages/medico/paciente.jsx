@@ -156,14 +156,7 @@ export default function PacienteDetail() {
                                         Gestion Estimulacion
                                     </Button>
                                 </Link>
-                                <Link to={'/medico/pacientes/visitas/'+id}>
-                                    <Button variant="action">
-                                        <Calendar className="mr-2 h-4 w-4" />
-                                        Programar visitas
-                                    </Button>
-                                </Link>
                               
-                                
                             </div>
                         </div>
                     </div>
