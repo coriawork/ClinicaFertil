@@ -20,15 +20,15 @@ import {
 } from "@/components/ui/popover"
 
 
-export function Combobox({datas,title='elegi alguna opcion',action=()=>{}}) {
+export function Combobox({datas,title='elegi alguna opcion',disabled = false,action=()=>{},className}) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
 
 
     return (
         <Popover open={open} className='' onOpenChange={setOpen}>
-            <PopoverTrigger className='w-full' asChild>
-                <Button
+            <PopoverTrigger className={'w-full '+className} asChild>
+                {(!disabled && (<Button
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
@@ -38,11 +38,24 @@ export function Combobox({datas,title='elegi alguna opcion',action=()=>{}}) {
                     ? datas.find((data) => data.value === value)?.label
                     : title}
                     <ChevronsUpDown className="opacity-50" />
-                </Button>
+                </Button>))|| (disabled && (
+                    <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open}
+                        className="justify-between text-muted-foreground hover:text-muted-foreground cursor-not-allowed"
+                    >
+                        {value
+                        ? datas.find((data) => data.value === value)?.label
+                        : title}
+                        <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                ))}
+
             </PopoverTrigger>
-            <PopoverContent className="p-0">
+            {!disabled && (<PopoverContent className={"p-0"}>
                 <Command >
-                    <CommandInput  placeholder={title} className="h-9" />
+                    <CommandInput placeholder={title} className={"h-9"} />
                     <CommandList >
                         <CommandEmpty >Informacion no encontrada</CommandEmpty>
                         <CommandGroup >
@@ -71,6 +84,7 @@ export function Combobox({datas,title='elegi alguna opcion',action=()=>{}}) {
                     </CommandList>
                 </Command>
             </PopoverContent>
+            )}
         </Popover>
     )
 }

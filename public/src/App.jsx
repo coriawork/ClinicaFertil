@@ -19,12 +19,21 @@ import PacienteDetail from "./pages/medico/paciente"
 import HomePage from "./pages/index.jsx"
 import { ThemeProvider } from "./lib/ThemeContex"
 import GestionHistoria from "@/pages/medico/gestion-historia"
+import { Estimulacion } from "./pages/medico/gestion-estimulacion"
+import { Calendar } from "./components/ui/calendargod"
 function App() {
     return (
         <ThemeProvider>
             <AuthProvider>    
                 <BrowserRouter>
                     <Routes>
+                        <Route path="/calendar" element={
+                           <div className="w-full h-full bg-background justify-center items-center flex mt-20">
+                                <div className="w-300">
+                                    <Calendar/>
+                                </div>
+                           </div>
+                        }/>
                         <Route path='/login' element={<LoginPage />} />
                         <Route path="/" element={<HomePage />} />
                         <Route path="/registrar" element={<RegistrarPaciente />} />
@@ -52,6 +61,7 @@ function App() {
                                 <Route path=":id" element={<PacienteDetail />} />
                                 <Route path="historial/:id" element={<GestionHistoria/>}/>
                                 <Route path="estudios/:id" element={<StudiesRequestPage />} />
+                                <Route path="estimulacion/:id" element={<Estimulacion />} />
                             </Route>
                             <Route index element={<DoctorDashboard />} />
                             <Route path="agenda" element={<AgendaPage />} />

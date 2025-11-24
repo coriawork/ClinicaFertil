@@ -9,7 +9,8 @@ import {
     Stethoscope,
     TestTube,
     Activity,
-    User
+    User,
+    Calendar
 } from "lucide-react"
 import { Objetivo } from "./objetivo"
 
@@ -147,6 +148,18 @@ export default function PacienteDetail() {
                                     <Button variant="action">
                                         <TestTube className="mr-2 h-4 w-4" />
                                         Gestion Estudio
+                                    </Button>
+                                </Link>
+                                <Link to={'/medico/pacientes/estimulacion/'+id}>
+                                    <Button variant="action">
+                                        <TestTube className="mr-2 h-4 w-4" />
+                                        Gestion Estimulacion
+                                    </Button>
+                                </Link>
+                                <Link to={'/medico/pacientes/visitas/'+id}>
+                                    <Button variant="action">
+                                        <Calendar className="mr-2 h-4 w-4" />
+                                        Programar visitas
                                     </Button>
                                 </Link>
                               

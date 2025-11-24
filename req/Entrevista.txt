@@ -105,7 +105,7 @@ _______________________________________________________________________________
   *Depende de las caracteristicas de la paciente*
   - debe cargar un calendario de controles ideales ej:(dentro de 3 dias, dentro de 5 dias y dentro de 7 dias)
     - Esto habilita en el calendario del paciente para elegir dentro de esos dias (mas, menos un dia) un turno (horario)
-    - para hacerlo mas simple todos los turnos son iguales para los medicos, los turnos duran 20 minutos. cada medico tiene un rango horario distinto. 
+    - pa1ra hacerlo mas simple todos los turnos son iguales para los medicos, los turnos duran 20 minutos. cada medico tiene un rango horario distinto. 
     - En caso de que justo en los dias que se pidio no haya turnos disponibles, el paciente puede elegir un sobreturno, en ese caso se atiende 2 pacientes en 20 minutos
   - el seguimiento es una fecha y campo libre (el medico anota lo que ve en el monitoreo)
   - el medico le pide que se saque un nuevo turno para la siguiente etapa

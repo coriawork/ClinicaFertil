@@ -162,6 +162,7 @@
         @apply bg-background transition-all  text-foreground;
     }
 }
+
 @layer components {
     button, .btn, [role="button"] {
         cursor: pointer;
@@ -220,5 +221,15 @@
     }
     .dark .bg-gradient-soft {
         background: linear-gradient(180deg, rgba(93, 39, 219, 0.8), rgba(72, 2, 235, 0.9)100%)
+    }
+}
+
+@layer utilities {
+    .rotate-hover {
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .rotate-hover:hover {
+        transform: rotate(-360deg);
     }
 }

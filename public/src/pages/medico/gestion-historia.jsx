@@ -184,30 +184,7 @@ export default function GestionHistoria() {
     obra_social:"OSDE",
     nro_socio:'21324/6'
     }
-    const clinicalHistory = {
-        medicalHistory: {
-        bloodType: "A+",
-        allergies: ["Penicilina"],
-        chronicDiseases: [],
-        previousSurgeries: ["Apendicectomía (2010)"],
-        medications: [],
-        },
-       
-        fertilityStudies: [
-        {
-            type: "Hormonal",
-            date: "2024-12-15",
-            results: "FSH: 7.2 mUI/mL, LH: 5.1 mUI/mL, AMH: 2.8 ng/mL",
-            status: "Normal",
-        },
-        {
-            type: "Ecografía Transvaginal",
-            date: "2024-12-20",
-            results: "Útero normal, ovarios con folículos antrales: 12 (derecho), 10 (izquierdo)",
-            status: "Normal",
-        },
-        ],
-    }
+
 
     const handleEliminarQuirurgico = (index) => {
         setQuirurgicoSelected(prev => prev.filter((_, i) => i !== index))
@@ -421,6 +398,7 @@ export default function GestionHistoria() {
                                     </p>
                                 )}
                             </div>
+                            
 
                             {/* Historial Obstétrico - G P AB ST */}
                             <div className="space-y-3 bg-accent/10 p-2 rounded-2xl">
@@ -516,6 +494,27 @@ export default function GestionHistoria() {
                                         )}
                                     </div>
                                 </div>
+                            </div>
+
+                            {/* Etapa 3 */}
+                            <div className=" flex bg-accent/10 p-2  rounded-2xl">
+                                <Label htmlFor="gametos" className="text-sm flex-1 w-full font-semibold">
+                                    Gametos viables
+                                </Label>
+
+                                {editG ? (
+                                    <Input 
+                                        type={"checkbox"}
+                                        id="gametos"
+                                        className={"w-5 "}
+                                        value={ginecologico.gametos || false}
+                                        onChange={(e) => handleGinecologicoChange('gametos', e.target.value)}
+                                    />
+                                ) : (
+                                    <p className="text-sm pl-6 text-muted-foreground">
+                                        {ginecologico.gametos === false && ("no viable") || ginecologico.gametos === true && ("viable") || 'No registrado'}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </CardContent>
