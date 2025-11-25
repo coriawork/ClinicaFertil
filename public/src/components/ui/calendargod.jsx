@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import {Card, CardContent, CardHeader} from './card'
-import {ArrowLeft,ArrowRight, Plus} from 'lucide-react'
-import { Select, SelectTrigger,SelectValue,SelectGroup,SelectLabel,SelectItem,SelectContent } from './select'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './card'
+import { ArrowLeft, ArrowRight, Plus } from 'lucide-react'
+import { Select, SelectTrigger, SelectValue, SelectGroup, SelectLabel, SelectItem, SelectContent } from './select'
 import { Button } from './button'
-
-
-
+import { Input } from './input'
+import { Textarea } from './textarea'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from './dialog'
+import { Separator } from './separator'
+import { Combobox } from './combobox' 
 export function Calendar() {
     // Estado para mes y año
     const [currentMonth, setCurrentMonth] = useState(10); // 0-based: 0=enero, 10=noviembre
@@ -18,18 +20,22 @@ export function Calendar() {
         year: '',
         startTime: '',
         endTime: '',
-        label: '',
         description: '',
-        type: ''
+        type: '',
+        paciente: ''
     });
+    const pacientes = [
+        { value: '1', label: 'Juan Pérez' },
+        { value: '2', label: 'María Gómez' },
+        { value: '3', label: 'Ana Torres' },
+        { value: '4', label: 'Carlos Díaz' }
+    ];
     const eventTypes = [
-        { value: 'consulta', label: 'Consulta' },
+        { value: 'monitoreo', label: 'Monitoreo' },
         { value: 'puncion', label: 'Punción' },
-        { value: 'transferencia', label: 'Transferencia' },
-        { value: 'otro', label: 'Otro' }
     ];
 
-     const handleAddEventClick = () => {
+    const handleAddEventClick = () => {
         let autoDay = '';
         let autoMonth = '';
         let autoYear = '';
@@ -52,9 +58,9 @@ export function Calendar() {
             year: autoYear,
             startTime: '',
             endTime: '',
-            label: '',
             description: '',
-            type: ''
+            type: '',
+            paciente: ''
         });
         setShowModal(true);
     };
@@ -76,34 +82,48 @@ export function Calendar() {
     const [view, setView] = useState('month');
     
     const [events, setEvents] = useState([
-    {
-        day: 2,
-        month: 10, // noviembre (0-based)
-        year: 2025,
-        label: 'Punción',
-        startTime: '08:30',
-        endTime: '11:30',
-        description: 'Punción ovárica'
-    },
-    {
-        day: 2,
-        month: 10,
-        year: 2025,
-        label: 'Consulta',
-        startTime: '12:30',
-        endTime: '13:30',
-        description: 'Consulta con Dr. Pérez'
-    },
-    {
-        day: 3,
-        month: 10,
-        year: 2025,
-        label: 'Transferencia',
-        startTime: '14:00',
-        endTime: '15:00',
-        description: 'Transferencia embrionaria'
-    },
-]);
+        {
+            day: 2,
+            month: 10,
+            year: 2025,
+            type: 'Punción',
+            startTime: '08:30',
+            endTime: '08:50',
+            paciente: '1'
+        },
+        {
+            day: 2,
+            month: 10,
+            year: 2025,
+            type: 'Consulta',
+            startTime: '12:30',
+            endTime: '12:50',
+            paciente: '2'
+        },
+        {
+            day: 3,
+            month: 10,
+            year: 2025,
+            type: 'Monitoreo',
+            startTime: '14:00',
+            endTime: '14:20',
+            paciente: '3'
+        },
+    ]);
+    function getEventColor(type) {
+        switch (type?.toLowerCase()) {
+            case 'punción':
+            case 'puncion':
+                return 'bg-chart-2/30 border-chart-2 text-chart-2';
+            case 'consulta':
+                return 'bg-chart-1/30 border-chart-1 text-chart-1';
+            case 'monitoreo':
+                return 'bg-chart-4/30 border-chart-4 text-chart-4';
+            default:
+                return 'bg-muted border-muted text-foreground';
+        }
+    }
+
     // Funciones para cambiar mes
     const goToPrev = () => {
     if (view === 'day') {
@@ -178,6 +198,16 @@ export function Calendar() {
         }
     };
 
+    function sumar20Minutos(hora) {
+        if (!hora) return "";
+        const [h, m] = hora.split(":").map(Number);
+        const date = new Date(0, 0, 0, h, m + 20);
+        const hh = String(date.getHours()).padStart(2, "0");
+        const mm = String(date.getMinutes()).padStart(2, "0");
+        return `${hh}:${mm}`;
+    }
+
+    
     function DayView() {
         if (!selectedDay) {
             return (
@@ -186,12 +216,9 @@ export function Calendar() {
                 </div>
             );
         }
-
-        // Horas a mostrar (8 a 18)
-        const desdeH = 6
-        const hours = Array.from({ length:18 }, (_, i) => desdeH + i);
-
-        // Filtrar eventos del día seleccionado
+        const desdeH = 6;
+        const hastaH = 22;
+        const hours = Array.from({ length: hastaH - desdeH }, (_, i) => desdeH + i);
         const dayEvents = events
             .filter(ev =>
                 ev.day === selectedDay.day &&
@@ -199,50 +226,63 @@ export function Calendar() {
                 ev.year === selectedDay.year
             )
             .sort((a, b) => a.startTime.localeCompare(b.startTime));
-
-        // Función para convertir "HH:mm" a minutos
         const toMinutes = (str) => {
             const [h, m] = str.split(':').map(Number);
             return h * 60 + m;
         };
 
+        const hourHeight = 120;
+        const eventHeight = 100;
+
         return (
             <div className="bg-stone-950 rounded-2xl p-6 w-full h-full flex flex-col">
-                <div className="relative flex-1 border rounded-lg bg-neutral-900 overflow-y-auto">
-                    {/* Horas */}
-                    {hours.map((hour, idx) => (
-                        <div key={hour} className="relative border-b border-neutral-800 h-16">
-                            <span className="absolute left-0 top-2 text-xs text-foreground/40 w-12 text-right pr-2 select-none">
-                                {hour}:00
-                            </span>
-                        </div>
-                    ))}
-                    {/* Eventos */}
-                    {dayEvents.map((ev, i) => {
-                        // Calcular posición y altura
-                        const start = Math.max(toMinutes(ev.startTime), desdeH * 60);
-                        const end = Math.min(toMinutes(ev.endTime), 19 * 60);
-                        const top = ((start - desdeH * 60) / 60) * 4; // 4rem por hora
-                        const height = ((end - start) / 60) * 4;
-
-                        return (
+                <div className="relative flex-1 border rounded-lg bg-neutral-900 overflow-y-auto" style={{ minHeight: 600, maxHeight: 700 }}>
+                    <div style={{ position: "relative", height: hours.length * hourHeight }}>
+                        {hours.map((hour, idx) => (
                             <div
-                                key={i}
-                                className="absolute flex flex-wrap justify-between  flex-col left-16 right-4 bg-violet-800/50  border-primary   rounded-[5px] p-2 text-white shadow-2xl"
-                                style={{
-                                    top: `calc(${((start - desdeH * 60) / 60) * 4}rem)`,
-                                    height: `calc(${((end - start) / 60) * 4}rem)`,
-                                    minHeight: '2.5rem',
-                                    zIndex: 10,
-                                }}
-                                title={ev.description}
+                                key={hour}
+                                className="relative border-b border-neutral-800"
+                                style={{ height: hourHeight }}
                             >
-                            
-                                <div className="font-bold">{ev.label}</div>
-                                <div className="text-xs">{ev.startTime} - {ev.endTime}</div>
+                                <span className="absolute left-0 top-2 text-xs text-foreground/40 w-12 text-right pr-2 select-none">
+                                    {hour}:00
+                                </span>
                             </div>
-                        );
-                    })}
+                        ))}
+                        {dayEvents.map((ev, i) => {
+                            const start = Math.max(toMinutes(ev.startTime), desdeH * 60);
+                            const top = ((start - desdeH * 60) / 60) * hourHeight;
+                            return (
+                                <div
+                                    key={i}
+                                    className={`absolute flex flex-col left-20 right-4 border rounded-[12px] p-5 text-white shadow-2xl ${getEventColor(ev.type)} transition-all`}
+                                    style={{
+                                        top: top,
+                                        height: eventHeight,
+                                        minHeight: eventHeight,
+                                        zIndex: 10,
+                                        fontSize: "1.1rem",
+                                        display: "flex",
+                                        justifyContent: "center"
+                                    }}
+                                    title={ev.description}
+                                >
+                                    <div className="flex items-center gap-4 font-bold text-lg mb-1">
+                                        <span className="capitalize">{eventTypes.find(t=>t.value===ev.type?.toLowerCase())?.label || ev.type}</span>
+                                        <span className="text-sm font-normal text-foreground/70">{ev.startTime} - {ev.endTime}</span>
+                                    </div>
+                                    {ev.paciente && (
+                                        <div className="text-base text-foreground/90 mt-1">
+                                            Paciente: <span className="font-semibold">{pacientes.find(p=>p.value===ev.paciente)?.label || ev.paciente}</span>
+                                        </div>
+                                    )}
+                                    {ev.description && (
+                                        <div className="text-sm text-foreground/80 mt-1">{ev.description}</div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         );
@@ -333,7 +373,7 @@ export function Calendar() {
                                 cellYear = month === 11 ? year + 1 : year;
                             }
                         }
-                        const cellEvents = events.filter(
+                      const cellEvents = events.filter(
                             ev =>
                                 ev.day === cell.day &&
                                 ev.month === cellMonth &&
@@ -358,10 +398,12 @@ export function Calendar() {
                                 {cellEvents.slice(0, 3).map((ev, i) => (
                                     <span
                                         key={i}
-                                        className='bg-chart-2/20 text-chart-2 border-chart-2 border flex text-xs items-center justify-between px-2 w-full h-6 rounded-[6px] mt-1 overflow-hidden truncate max-md:text-[0px] max-md:px-0 max-md:h-2'
+                                        className={`border flex text-xs items-center justify-between px-2 w-full h-6 rounded-[6px] mt-1 overflow-hidden truncate max-md:text-[0px] max-md:px-0 max-md:h-2 ${getEventColor(ev.type)}`}
                                         title={ev.description}
                                     >
-                                        <span className='font-bold truncate max-md:hidden'>{ev.label}</span>
+                                        <span className='font-bold truncate max-md:hidden'>
+                                            {eventTypes.find(t=>t.value===ev.type?.toLowerCase())?.label || ev.type}
+                                        </span>
                                         <span className='truncate max-md:hidden'>{ev.time}</span>
                                     </span>
                                 ))}
@@ -478,7 +520,7 @@ export function Calendar() {
                         <Button className=' flex items-center  rounded-[5px]' onClick={handleAddEventClick}>
                             <Plus className=''/>
                             <p className='mt-1 text-md'>
-                                Add event
+                                Agrega Turno
                             </p>
                         </Button>
                     </div>
@@ -489,108 +531,128 @@ export function Calendar() {
                     ? <MonthView year={currentYear} month={currentMonth}/>
                     : <DayView />}
             </CardContent>
-            {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="bg-neutral-900 p-6 rounded-xl w-full max-w-md shadow-lg relative">
-                        <button
-                            className="absolute top-2 right-2 text-foreground/60 hover:text-foreground"
-                            onClick={() => setShowModal(false)}
-                        >✕</button>
-                        <h2 className="text-xl font-bold mb-4">Agregar evento</h2>
-                        <form className="flex flex-col gap-3">
-                            <div className="flex gap-2">
-                                <input
-                                    type="number"
-                                    min="1"
-                                    max="31"
-                                    placeholder="Día"
-                                    className="w-1/3 p-2 rounded bg-neutral-800 text-white"
-                                    value={newEvent.day}
-                                    onChange={e => setNewEvent(ev => ({ ...ev, day: e.target.value }))}
-                                />
-                                <select
-                                    className="w-1/3 p-2 rounded bg-neutral-800 text-white"
-                                    value={newEvent.month}
-                                    onChange={e => setNewEvent(ev => ({ ...ev, month: e.target.value }))}
-                                >
-                                    <option value="">Mes</option>
-                                    {monthNames.map((m, idx) => (
-                                        <option key={idx} value={idx}>{m}</option>
-                                    ))}
-                                </select>
-                                <input
-                                    type="number"
-                                    min="2020"
-                                    max="2100"
-                                    placeholder="Año"
-                                    className="w-1/3 p-2 rounded bg-neutral-800 text-white"
-                                    value={newEvent.year}
-                                    onChange={e => setNewEvent(ev => ({ ...ev, year: e.target.value }))}
-                                />
-                            </div>
-                            <div className="flex gap-2">
-                                <input
-                                    type="time"
-                                    className="w-1/2 p-2 rounded bg-neutral-800 text-white"
-                                    value={newEvent.startTime}
-                                    onChange={e => setNewEvent(ev => ({ ...ev, startTime: e.target.value }))}
-                                />
-                                <input
-                                    type="time"
-                                    className="w-1/2 p-2 rounded bg-neutral-800 text-white"
-                                    value={newEvent.endTime}
-                                    onChange={e => setNewEvent(ev => ({ ...ev, endTime: e.target.value }))}
-                                />
-                            </div>
-                            <select
-                                className="p-2 rounded bg-neutral-800 text-white"
-                                value={newEvent.type}
-                                onChange={e => setNewEvent(ev => ({ ...ev, type: e.target.value }))}
+           <Dialog open={showModal} onOpenChange={setShowModal}>
+                <DialogContent className="bg-neutral-900 p-6 rounded-xl w-full max-w-md shadow-lg">
+                    <DialogHeader>
+                        <DialogTitle>Agregar Turnos</DialogTitle>
+                        <DialogDescription>
+                            Completa los datos del Turno. La duración será de 20 minutos.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form className="flex flex-col gap-3 " onSubmit={e => { e.preventDefault(); }}>
+                        <div className="flex gap-2 ">
+                            <Input
+                                type="number"
+                                min="1"
+                                max="31"
+                                placeholder="Día"
+                                className="w-1/3 rounded-[5px]"
+                                value={newEvent.day}
+                                onChange={e => setNewEvent(ev => ({ ...ev, day: e.target.value }))}
+                            />
+                            <Select
+                                value={newEvent.month !== '' ? String(newEvent.month) : ''}
+                                onValueChange={val => setNewEvent(ev => ({ ...ev, month: val }))}
                             >
-                                <option value="">Tipo de evento</option>
-                                {eventTypes.map(t => (
-                                    <option key={t.value} value={t.value}>{t.label}</option>
-                                ))}
-                            </select>
-                            <input
+                                <SelectTrigger className="w-1/3 rounded-[5px]">
+                                    <SelectValue placeholder="Mes" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Mes</SelectLabel>
+                                        {monthNames.map((m, idx) => (
+                                            <SelectItem key={idx} value={String(idx)}>{m}</SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                            <Input
+                                type="number"
+                                min="2020"
+                                max="2100"
+                                placeholder="Año"
+                                className="w-1/3 rounded-[5px]"
+                                value={newEvent.year}
+                                onChange={e => setNewEvent(ev => ({ ...ev, year: e.target.value }))}
+                            />
+                        </div>
+                        <div className="flex gap-2">
+                            <Input
+                                type="time"
+                                className="w-1/2 rounded-[5px]"
+                                value={newEvent.startTime}
+                                onChange={e => setNewEvent(ev => ({ ...ev, startTime: e.target.value }))}
+                            />
+                            <Input
                                 type="text"
-                                placeholder="Título"
-                                className="p-2 rounded bg-neutral-800 text-white"
-                                value={newEvent.label}
-                                onChange={e => setNewEvent(ev => ({ ...ev, label: e.target.value }))}
+                                className="w-1/2 rounded-[5px] bg-neutral-800 text-white"
+                                value={newEvent.startTime ? sumar20Minutos(newEvent.startTime) : ''}
+                                readOnly
+                                placeholder="Fin (+20min)"
+                                tabIndex={-1}
                             />
-                            <textarea
-                                placeholder="Descripción"
-                                className="p-2 rounded bg-neutral-800 text-white"
-                                value={newEvent.description}
-                                onChange={e => setNewEvent(ev => ({ ...ev, description: e.target.value }))}
-                            />
-                            <div className="flex justify-end gap-2 mt-2">
-                                <Button type="button" variant="secondary" onClick={() => setShowModal(false)}>
+                        </div>
+                        {/* Combobox de pacientes (a esto podria agregarle que los pacientes tengan su dni o algo mas identificativo) */}
+                        <Separator/>
+                        <Combobox
+                            datas={pacientes}
+                            title="Seleccionar paciente"
+                            action={val => setNewEvent(ev => ({ ...ev, paciente: val }))}
+                            className="w-full rounded-[5px]"
+                            disabled={false}
+                        />
+                        <Select
+                            value={newEvent.type}
+                            onValueChange={val => setNewEvent(ev => ({ ...ev, type: val }))}
+                        >
+                            <SelectTrigger className={'rounded-[5px]'}>
+                                <SelectValue placeholder="Tipo de turno" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Tipo de turno</SelectLabel>
+                                    {eventTypes.map(t => (
+                                        <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <DialogFooter className="flex justify-end gap-2 mt-2">
+                            <DialogClose asChild>
+                                <Button type="button" variant="secondary">
                                     Cancelar
                                 </Button>
-                                <Button
-                                    type="button"
-                                    onClick={() => {
-                                        setEvents(prev => [
-                                            ...prev,
-                                            {
-                                                ...newEvent,
-                                                day: Number(newEvent.day),
-                                                month: Number(newEvent.month),
-                                                year: Number(newEvent.year)
-                                            }
-                                        ]);
-                                        setShowModal(false);
-                                    }}
-                                >
-                                    Guardar
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+                            </DialogClose>
+                            <Button
+                                type="button"
+                                onClick={() => {
+                                    setEvents(prev => [
+                                        ...prev,
+                                        {
+                                            ...newEvent,
+                                            day: Number(newEvent.day),
+                                            month: Number(newEvent.month),
+                                            year: Number(newEvent.year),
+                                            endTime: sumar20Minutos(newEvent.startTime)
+                                        }
+                                    ]);
+                                    setShowModal(false);
+                                }}
+                                disabled={
+                                    !newEvent.day ||
+                                    newEvent.month === '' ||
+                                    !newEvent.year ||
+                                    !newEvent.startTime ||
+                                    !newEvent.type ||
+                                    !newEvent.paciente
+                                }
+                            >
+                                Guardar
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </Card>
     )
 }

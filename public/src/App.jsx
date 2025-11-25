@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom"
 import {AuthProvider} from "@/lib/AuthContext"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
+
 import PatientDashboard from "./pages/pacientes/dashboard_paciente"
 import LoginPage from "@/login"
 import NotFound from "@/pages/NotFound"
@@ -21,6 +21,8 @@ import { ThemeProvider } from "./lib/ThemeContex"
 import GestionHistoria from "@/pages/medico/gestion-historia"
 import { Estimulacion } from "./pages/medico/gestion-estimulacion"
 import { Calendar } from "./components/ui/calendargod"
+import { LaboratorioDashboard } from '@/pages/laboratorio/dashboard_laboratorio'
+
 function App() {
     return (
         <ThemeProvider>
@@ -65,6 +67,11 @@ function App() {
                             </Route>
                             <Route index element={<DoctorDashboard />} />
                             <Route path="agenda" element={<AgendaPage />} />
+                        </Route>
+
+                        <Route path="/operador_laboratorio" element={<Outlet />}>
+                            <Route index element={<LaboratorioDashboard />} />
+
                         </Route>
 
                         <Route path="*" element={<NotFound />} />

@@ -37,16 +37,16 @@ export function DashboardLayout({ children, role }) {
     }
   }
 
-  const getThemeIcon = () => {
-    switch (theme) {
-      case "light":
-        return <Sun className="h-4 w-4" />
-        case "dark":
-        return <Moon className="h-4 w-4" />
-      default:
-          return <Sun className="h-4 w-4" />
+    const getThemeIcon = () => {
+        switch (theme) {
+        case "light":
+            return <Sun className="h-4 w-4" />
+            case "dark":
+            return <Moon className="h-4 w-4" />
+        default:
+            return <Sun className="h-4 w-4" />
+        }
     }
-  }
     const handleLogout = () => {
         logout()
         navigate("/")
@@ -72,10 +72,6 @@ export function DashboardLayout({ children, role }) {
             { href: "/paciente", label: "Inicio", icon: Home },
             { href: "/paciente/citas", label: "Solicitar Cita", icon: Calendar },
             { href: "/paciente/mis-citas", label: "Mis Citas", icon: ClipboardList },
-            { href: "/paciente/tratamiento", label: "Mi Tratamiento", icon: Activity },
-            { href: "/paciente/historia", label: "Mi Historia Clínica", icon: FileText },
-            { href: "/paciente/chatbot", label: "Consultas", icon: MessageSquare },
-            { href: "/paciente/donacion", label: "Donación", icon: Heart },
         ]
         case "medico":
         return [
@@ -96,6 +92,7 @@ export function DashboardLayout({ children, role }) {
         return []
     }
     }
+
     const [isDarkMode,setDarrkMode]=useState(false);
     const navigation = getNavigation()
 

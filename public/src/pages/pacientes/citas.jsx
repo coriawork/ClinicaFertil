@@ -263,14 +263,7 @@ export default function AppointmentBooking() {
     return (
         <DashboardLayout role="paciente">
             <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="sm" asChild>
-                        <Link to="/paciente">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Volver
-                        </Link>
-                    </Button>
-                </div>
+                
 
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight text-foreground">Solicitar Cita</h2>
