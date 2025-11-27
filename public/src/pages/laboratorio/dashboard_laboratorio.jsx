@@ -5,9 +5,7 @@ import { useNavigate, Link } from "react-router-dom"
 import { useAuth } from "@/lib/AuthContext"
 import { DashboardLayout } from "@/layouts/dashboard-layout"
 import { Button } from "@/components/ui/button"
-import { Users, FileText, Calendar, Activity, ClipboardList, Syringe, FileCheck, TrendingUp, Clock } from "lucide-react"
-import {CardShort} from "@/components/ui/card-short"
-import { CardInfo } from "../../components/ui/card-info"
+
 import { CardList } from "../../components/ui/card-list"
 
 export function LaboratorioDashboard () {
@@ -24,73 +22,6 @@ export function LaboratorioDashboard () {
     return null
   }
 
-  const quickActions = [
-    {
-      title: "Mis Pacientes",
-      description: "Ver lista de pacientes",
-      icon: Users,
-      href: "/medico/pacientes",
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-    },
-    {
-      title: "Historia Clínica",
-      description: "Registrar historia clínica",
-      icon: FileText,
-      href: "/medico/historia-clinica",
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
-    },
-    {
-      title: "Solicitar Estudios",
-      description: "Pedir análisis y estudios",
-      icon: ClipboardList,
-      href: "/medico/estudios",
-      color: "text-green-600",
-      bgColor: "bg-green-50",
-    },
-    {
-      title: "Objetivos de Tratamiento",
-      description: "Definir plan terapéutico",
-      icon: TrendingUp,
-      href: "/medico/objetivos",
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
-    },
-    {
-      title: "Tratamientos",
-      description: "Gestionar tratamientos",
-      icon: Syringe,
-      href: "/medico/tratamientos",
-      color: "text-red-600",
-      bgColor: "bg-red-50",
-    },
-    {
-      title: "Monitoreo",
-      description: "Seguimiento de pacientes",
-      icon: Activity,
-      href: "/medico/monitoreo",
-      color: "text-pink-600",
-      bgColor: "bg-pink-50",
-    },
-    {
-      title: "Punciones",
-      description: "Registrar punciones",
-      icon: FileCheck,
-      href: "/medico/punciones",
-      color: "text-indigo-600",
-      bgColor: "bg-indigo-50",
-    },
-    {
-      title: "Agenda",
-      description: "Ver citas programadas",
-      icon: Calendar,
-      href: "/medico/agenda",
-      color: "text-teal-600",
-      bgColor: "bg-teal-50",
-    },
-  ]
-
   return (
     <DashboardLayout role="operador_laboratorio">
         <div className="space-y-6">
@@ -100,12 +31,12 @@ export function LaboratorioDashboard () {
             </div>
 
             <div className="grid gap-4  md:grid-cols-2">
-                <CardList title="Citas de hoy" desc="Agenda" data={[{ h1: "María González", right: "09:00", h2: "Consulta inicial" },{ h1: "Laura Pérez", right: "10:00", h2: "Monitoreo ecográfico" },{ h1: "Ana Martínez", right: "11:30", h2: "Revisión de resultados" }]}>
+                <CardList title="Citas de hoy" desc="Agenda" data={[{ h1: "María González", right: "09:00", h2: "Punsion" },{ h1: "Laura Pérez", right: "10:00", h2: "Punsion" },{ h1: "Ana Martínez", right: "11:30", h2: "Punsion" }]}>
                     <Button variant="outline" className="mt-4 bg-white w-full" asChild>
                         <Link to="/medico/agenda">Ver agenda completa</Link>
                     </Button>
                 </CardList>
-                <CardList title="Alertas y recordatorios" desc="Acciones pendientes" data={[{ h1: "María Punción programada", h2: "María González - Mañana 08:00", right:  <Clock className="h-4 w-4 text-purple-700" />}]}/>
+               
 
             </div>
         </div>

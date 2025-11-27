@@ -29,13 +29,13 @@ export function DashboardLayout({ children, role }) {
     const { theme, setTheme } = useTheme()
     
     const toggleTheme = () => {
-    // Solo alterna entre light y dark
-    if (theme === "dark") {
-      setTheme("light")
-    } else {
-      setTheme("dark")
+        // Solo alterna entre light y dark
+        if (theme === "dark") {
+        setTheme("light")
+        } else {
+        setTheme("dark")
+        }
     }
-  }
 
     const getThemeIcon = () => {
         switch (theme) {
@@ -82,6 +82,7 @@ export function DashboardLayout({ children, role }) {
         case "operador_laboratorio":
         return [
             { href: "/laboratorio", label: "Inicio", icon: Home },
+            { href: "/laboratorio/punsiones", label: "Gestion Punsion", icon: Activity },
             { href: "/laboratorio/ovulos/registrar", label: "Registrar Óvulos", icon: TestTube },
             { href: "/laboratorio/embriones/registrar", label: "Registrar Embriones", icon: Beaker },
             { href: "/laboratorio/inventario", label: "Inventario", icon: Package },
@@ -127,7 +128,7 @@ export function DashboardLayout({ children, role }) {
         </header>
 
         <div className="container mx-auto flex gap-6 p-4 md:p-6 lg:p-8">
-            <aside className=" w-60">
+            <aside className="">
                 <nav className="space-y-1">
                     {navigation.map((item) => {
                         const Icon = item.icon

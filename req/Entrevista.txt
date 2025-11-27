@@ -50,7 +50,7 @@ _______________________________________________________________________________
         -caracteristicas del sangrado (cantidad, duracion en dias) (campo libre)
         -G: cantidad de embarazos (no es lo mismo que partos)
         -P: cantidad de partos
-        -AB: cantidad de abortos
+        -AB: cantidad de abortos    
         -ST: embarazos ectopicos (el embrion se emplato en un lugar que no es el utero)
     - Examen fisico (campo libre)
     - Fenotipo [define si se va a necesitar un donante de ovocitos o espermatozoides]:
@@ -115,7 +115,7 @@ _______________________________________________________________________________
   - 1 de los dos pasos core del sistemas
   - cuanto mas ovocitos y de mejor calidad se obtengan, mas chances de embarazo
   - se debe registrar informacion de la punsion: (lo hace todo el laboratorio) 
-    -fecha y hora 
+    - fecha y hora 
     - numero de quirofano
     - problemas?
     - informacion de cada ovocito (se puede asumir que se cargan todos los ovocitos, no hay que registrar los que no se cargan)
