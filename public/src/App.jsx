@@ -25,6 +25,7 @@ import { LaboratorioDashboard } from '@/pages/laboratorio/dashboard_laboratorio'
 import { GestionPunsion } from "./pages/laboratorio/punsiones"
 import { Punsion } from "./pages/laboratorio/punsion"
 import { Ovocito } from "./pages/ovocitos/ovocito"
+import { Ovocitos } from "./pages/ovocitos/ovocitos"
 
 function App() {
     return (
@@ -75,6 +76,7 @@ function App() {
                         <Route path="/laboratorio" element={<Outlet />}>
                             <Route index element={<LaboratorioDashboard />} />
                             <Route path="punsiones" element={<GestionPunsion/>}/>
+                            <Route path="ovocitos" element={<Ovocitos/>} /> 
                             <Route path="punsion/:id" element={<Punsion/>}/>
                             <Route path="ovocito/:id" element={<Ovocito/>}/>
                         </Route>

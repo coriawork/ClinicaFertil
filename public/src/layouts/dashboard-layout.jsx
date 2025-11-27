@@ -84,11 +84,7 @@ export function DashboardLayout({ children, role }) {
         return [
             { href: "/laboratorio", label: "Inicio", icon: Home },
             { href: "/laboratorio/punsiones", label: "Gestion Punsion", icon: Activity },
-            { href: "/laboratorio/ovulos/registrar", label: "Registrar Óvulos", icon: TestTube },
-            { href: "/laboratorio/embriones/registrar", label: "Registrar Embriones", icon: Beaker },
-            { href: "/laboratorio/inventario", label: "Inventario", icon: Package },
-            { href: "/laboratorio/ovulos/gestionar", label: "Gestionar Óvulos", icon: Activity },
-            { href: "/laboratorio/embriones/gestionar", label: "Gestionar Embriones", icon: ClipboardList },
+            { href: "/laboratorio/ovocitos/", label: "Gestion Ovocitos", icon: TestTube },
         ]
         default:
         return []
@@ -100,7 +96,7 @@ export function DashboardLayout({ children, role }) {
 
     return (
     <div className={"min-h-screen bg-background transition-colors duration-500 ease-in-out "+(isDarkMode ? "dark" : "")}>
-        <header className="sticky top-0 z-50 border-b bg-background/10 shadow-sm backdrop-blur-xl">
+        <header className="sticky top-0  z-50 border-b bg-background/10 shadow-sm backdrop-blur-xl">
             <div className="container mx-auto flex h-16 items-center justify-between px-2 sm:px-4">
                 {/* Botón hamburguesa solo visible en móvil */}
                 <button
