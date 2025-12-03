@@ -129,7 +129,7 @@ export function GestionPunsion() {
     }
 
     return (
-        <DashboardLayout role="operador_laboratorio">
+        <DashboardLayout role="laboratorio">
             <Card className="rounded-xl border-primary/20 bg-card/80 shadow-lg">
                 <CardHeader>
                     <CardTitle className="text-lg font-bold text-primary flex items-center gap-2">
