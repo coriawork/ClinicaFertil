@@ -21,15 +21,14 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (!isLoading && user) {
-        // Redirect based on role
         switch (user.role) {
             case "paciente":
             navigate("/paciente")
-            break
+            break   
             case "medico":
             navigate("/medico")
             break
-            case "operador_laboratorio":
+            case "laboratorio":
             navigate("/laboratorio")
             break
             default:

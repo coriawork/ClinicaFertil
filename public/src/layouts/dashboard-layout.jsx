@@ -59,8 +59,8 @@ export function DashboardLayout({ children, role }) {
             return "Paciente"
         case "medico":
             return "Médico Tratante"
-        case "operador_laboratorio":
-            return "Operador de Laboratorio"
+        case "laboratorio":
+            return "laboratorio"
         default:
             return role
         }
@@ -73,6 +73,7 @@ export function DashboardLayout({ children, role }) {
             { href: "/paciente", label: "Inicio", icon: Home },
             { href: "/paciente/citas", label: "Solicitar Cita", icon: Calendar },
             { href: "/paciente/mis-citas", label: "Mis Citas", icon: ClipboardList },
+            { href: "/paciente/ovocitos", label: "ovocitos", icon: ClipboardList },
         ]
         case "medico":
         return [
@@ -80,11 +81,12 @@ export function DashboardLayout({ children, role }) {
             { href: "/medico/agenda", label: "Agenda", icon: Calendar },
             { href: "/medico/pacientes", label: "Pacientes", icon: Users },
         ]
-        case "operador_laboratorio":
+        case "laboratorio":
         return [
             { href: "/laboratorio", label: "Inicio", icon: Home },
             { href: "/laboratorio/punsiones", label: "Gestion Punsion", icon: Activity },
             { href: "/laboratorio/ovocitos/", label: "Gestion Ovocitos", icon: TestTube },
+            { href: "/laboratorio/embriones/", label: "Gestion Embriones", icon: TestTube },
         ]
         default:
         return []
@@ -134,7 +136,6 @@ export function DashboardLayout({ children, role }) {
                         onClick={handleLogout}
                     >
                         <LogOut className="h-4 w-4" />
-                        <span className="hidden sm:inline">Salir</span>
                     </Button>
                 </div>
             </div>

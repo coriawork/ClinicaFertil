@@ -10,7 +10,7 @@ import { Separator } from './separator'
 import { Combobox } from './combobox' 
 export function Calendar() {
     // Estado para mes y año
-    const [currentMonth, setCurrentMonth] = useState(10); // 0-based: 0=enero, 10=noviembre
+    const [currentMonth, setCurrentMonth] = useState(11); // 0-based: 0=enero, 10=noviembre
     const [currentYear, setCurrentYear] = useState(2025);
     const [selectedDay, setSelectedDay] = useState(null); // { day, month, year }
     const [showModal, setShowModal] = useState(false);
@@ -84,7 +84,7 @@ export function Calendar() {
     const [events, setEvents] = useState([
         {
             day: 2,
-            month: 10,
+            month: 11,
             year: 2025,
             type: 'Punción',
             startTime: '08:30',
@@ -93,7 +93,7 @@ export function Calendar() {
         },
         {
             day: 2,
-            month: 10,
+            month: 11,
             year: 2025,
             type: 'Consulta',
             startTime: '12:30',
@@ -102,7 +102,7 @@ export function Calendar() {
         },
         {
             day: 3,
-            month: 10,
+            month: 11,
             year: 2025,
             type: 'Monitoreo',
             startTime: '14:00',
@@ -510,8 +510,8 @@ export function Calendar() {
                             <SelectContent className="rounded-[5px]">
                                 <SelectGroup>
                                     <SelectLabel>vistas</SelectLabel>
-                                    <SelectItem value="day">Day View</SelectItem>
-                                    <SelectItem value="month">Month View</SelectItem>
+                                    <SelectItem value="day">DIA</SelectItem>
+                                    <SelectItem value="month">MES</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
