@@ -1,36 +1,27 @@
 import { DashboardLayout } from "@/layouts/dashboard-layout";
 import { useState, useRef, use } from "react"
-import { Card } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Calendar } from "lucide-react";
 import { DTE } from "./DTE";
 import { Input } from "@/components/ui/input";
-import  {MoreVertical} from 'lucide-react' 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Select, SelectTrigger, SelectContent, SelectValue, SelectItem } from "@/components/ui/select"
-
+import {AccionesOvocitoMenu} from "@/pages/ovocitos/acciones"
+import { useAuth } from "@/lib/AuthContext";
 export function Ovocito(){
     
+    const { user } = useAuth()
     const [openDescartar,setOpenDescartar] = useState(false)
     const [openCrio,setOpenCrio] = useState(false)
     const [openEstado,setOpenEstado] = useState(false)
     const [nuevoEstado,setNuevoEstado] = useState()
-    const [transiciones,setTransiones] = useState([{ estado: "muy inmaduro", fecha: "2025/11/25" },{ estado: "muy inmaduro", fecha: "2025/11/25" }])
+    const [transiciones,setTransiones] = useState([{ estado: "muy inmaduro", fecha: "2025/11/25" },])
     const [tubo,setTubo]=useState('')
     const [rack,setRack]=useState('')
     const [motivo,setMotivo] = useState('')
-
+    console.log('OVOCITO',user)
     const [ovo,setOvo] = useState({
         estado_actual:'inmaduro',
         id: "Ovo_25/11/25_Gar_Ana_1"
@@ -50,8 +41,9 @@ export function Ovocito(){
         setTransiones([...transiciones,{estado:estado,fecha:"2025/12/2" }])
     }
 
+
    return(
-    <DashboardLayout role={'operador_laboratorio'}>
+    <DashboardLayout role={user.role}>
         <div className="flex flex-col items-center w-full px-2 sm:px-0">
             <div className="bg-card  rounded-xl shadow-sm p-5 mb-8">
                 <div className="flex flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-8">
@@ -62,57 +54,27 @@ export function Ovocito(){
                             <h2 className="text-lg sm:text-xl font-bold text-foreground mb-2 break-all">{ovo.id}</h2>
                             <Badge className={'bg-primary/50 text-foreground/50'}>{ovo.estado_actual}</Badge>
                         </div>                            
-                        <DropdownMenu className='w-full'>
-                            <DropdownMenuTrigger asChild disabled={(ovo.estado_actual == 'descartado')}>
-                                <Button variant="" size="icon" >
-                                    <MoreVertical className="w-5 h-5" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-56" align="start">
-                                <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                <Separator/>
-                                <DropdownMenuGroup >
-                                    {
-                                    (ovo.estado_actual === 'maduro')&&(
-                                        <>
-                                        <DropdownMenuItem variant="" onClick={()=>setOpenCrio(true)}>
-                                            Criopreservar
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem variant="" onClick={()=>confirmarCambioEstado('fecundado')}>
-                                            Fecundar
-                                        </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        </>
-                                    ) ||
-                                    (ovo.estado_actual === 'in vitro')&&(
-                                        <>
-                                        <DropdownMenuItem variant="" onClick={()=>confirmarCambioEstado('maduro')}>
-                                            madurar
-                                        </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        </>
-                                    ) ||
-                                    (ovo.estado_actual === 'inmaduro')&&(
-                                        <>
-                                            <DropdownMenuItem onClick={()=>setInvitro()} variant="">
-                                                Madurar Invitro
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                        </>)
-                                    }
-                                    {(ovo.estado_actual !='descartado') &&(<>
-                                        <DropdownMenuItem variant="destructive" onClick={()=>setOpenEstado(true)}>    
-                                            Cambiar estado_actual
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem variant="destructive" onClick={()=>setOpenDescartar(true)} >    
-                                            Descartar
-                                        </DropdownMenuItem>
-                                    </>)                                             
-                                    }
-                                    
-                                </DropdownMenuGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <AccionesOvocitoMenu
+                            ovocito={ovo}
+                            onCriopreservar={(_, datos) => {
+                                setOvo({...ovo, estado_actual: "criopreservado", tubo: datos.tubo, rack: datos.rack});
+                                setTubo(datos.tubo);
+                                setRack(datos.rack);
+                            }}
+                            onFecundar={(_, datos) => {
+                                confirmarCambioEstado('fecundado');
+                            }}
+                            onMadurarInvitro={setInvitro}
+                            onMadurar={() => confirmarCambioEstado('maduro')}
+                            onCambiarEstado={(_, nuevoEstado) => {
+                                confirmarCambioEstado(nuevoEstado);
+                            }}
+                            onDescartar={(_, causa) => {
+                                setMotivo(causa);
+                                confirmarCambioEstado('descartado');
+                            }}
+                            mostrarVerDetalle={false}
+                        />
                     </div>  
                 </div>
                 {(tubo !== undefined && rack !== undefined && ovo.estado_actual == 'criopreservado' ) &&
@@ -141,9 +103,7 @@ export function Ovocito(){
                     </div> 
                 )}
             </div>
-            <div className="w-ful max-w-screen">
-                <DTE transiciones={transiciones}></DTE>
-            </div>
+            <DTE transiciones={transiciones}></DTE>
         </div>            
 
         <Dialog open={openDescartar} onOpenChange={()=>setOpenDescartar(false)} >

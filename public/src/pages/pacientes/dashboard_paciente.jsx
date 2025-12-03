@@ -10,18 +10,7 @@ import {CardList} from "@/components/ui/card-list"
 
 export default function PatientDashboard() {
   const { user, isLoading } = useAuth()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (!isLoading && (!user || user.role !== "paciente")) {
-      navigate("/")
-    }
-  }, [user, isLoading, navigate])
-
-  if (isLoading || !user) {
-    return null
-  }
-
+  console.log('DASHBOARD PAC: ',user)
   const quickActions = [
     {
       title: "Solicitar Cita",

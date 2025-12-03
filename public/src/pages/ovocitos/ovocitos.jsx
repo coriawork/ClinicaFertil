@@ -3,15 +3,18 @@ import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
 import { Combobox } from "@/components/ui/combobox"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/components/ui/select"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Label } from "@/components/ui/label"
 import { DashboardLayout } from "@/layouts/dashboard-layout"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Link } from "react-router-dom"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/lib/AuthContext"
 
-export function Ovocitos(){
+export function Ovocitos({role}){
+    const {user, isLoading} = useAuth()
+    console.log('OVOCITOS',user)
     const medicos = [{value:'juan perez',label:'Juan Perez'},{value:'rodrigo paez',label:'Rodrigo Paez'}]
     const monthNames = [
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -51,8 +54,9 @@ export function Ovocitos(){
     const [filtroDia, setFiltroDia] = useState("");
     const [filtroMes, setFiltroMes] = useState("");
     const [filtroAnio, setFiltroAnio] = useState("");
-
-    const [ovocitos] = useState([
+    
+    const [ovocitos] = useState(
+    [
         {
             codigo: 'Ovo_25/11/25_Gar_Ana_1',
             estado: 'maduro',
@@ -62,18 +66,18 @@ export function Ovocitos(){
             idx: 1
         },
         {
-            codigo: 'Ovo_12/10/24_Pae_Luis_2',
+            codigo: 'Ovo_12/10/24_Gar_Ana_2',
             estado: 'inmaduro',
             punsion: '12/10/2024',
-            paciente: 'Paez Luis',
+            paciente: 'Garcia Ana',
             medico: 'Rodrigo Paez',
             idx: 2
         },
         {
-            codigo: 'Ovo_03/05/23_Rod_Mar_3',
+            codigo: 'Ovo_03/05/23_Gar_Ana_3',
             estado: 'muy_inmaduro',
             punsion: '03/05/2023',
-            paciente: 'Rodriguez Maria',
+            paciente: 'Garcia Ana',
             medico: 'Juan Perez',
             idx: 3
         },
@@ -133,7 +137,8 @@ export function Ovocitos(){
             medico: 'Rodrigo Paez',
             idx: 10
         }
-    ]);
+    ]
+    );
     
     const limpiarFiltros = () => {
         setFiltroMedico("");
@@ -142,6 +147,12 @@ export function Ovocitos(){
         setFiltroMes("");
         setFiltroAnio("");
     };
+
+    useEffect(()=>{
+        if(user.role == 'paciente'){
+            setFiltroPaciente('Garcia Ana')
+        }
+    },[user.role])
     
     const ovocitosFiltrados = ovocitos.filter(ovo => {
         // Filtrar por médico (normalizar ambos valores a minúsculas)
@@ -185,10 +196,21 @@ export function Ovocitos(){
         return true;
     });
 
+    if (isLoading) {
+        return (
+            <DashboardLayout role={role}>
+                <div className="flex items-center justify-center h-64">
+                    <p>Cargando...</p>
+                </div>
+            </DashboardLayout>
+        )
+    }
+
     return(
-        <DashboardLayout role="operador_laboratorio">
+        <DashboardLayout role={role}>
             <Card className={'rounded-[5px]'}>
-                <CardHeader>
+                
+                {<CardHeader>
                     <CardTitle>
                         <h1 className="p-5">
                             OVOCITOS
@@ -213,12 +235,15 @@ export function Ovocitos(){
                             className={"rounded-[5px]"}
                             action={v => setFiltroMedico(v || "")}
                         />
-                        <Combobox
-                            datas={pacientes}
-                            title="Busca por paciente"
-                            className={"rounded-[5px]"}
-                            action={v => setFiltroPaciente(v || "")}
-                        />
+                        {(user.role == 'laboratorio' &&
+                    
+                            <Combobox
+                                datas={pacientes}
+                                title="Busca por paciente"
+                                className={"rounded-[5px]"}
+                                action={v => setFiltroPaciente(v || "")}
+                            />)
+                        }
                         <div className="flex flex-col gap-2">
                             <Label>
                                 Fecha de punsion
@@ -264,7 +289,8 @@ export function Ovocitos(){
                             Mostrando {ovocitosFiltrados.length} de {ovocitos.length} ovocitos
                         </div>
                     </CardDescription>
-                </CardHeader>
+                </CardHeader>}
+
                 <CardContent>
                     <Table>
                         <TableHeader>
@@ -272,7 +298,7 @@ export function Ovocitos(){
                                 <TableHead>Código</TableHead>
                                 <TableHead>Estado</TableHead>
                                 <TableHead>Fecha Punsion</TableHead>
-                                <TableHead>Paciente</TableHead>
+                                {user.role == 'laboratorio' &&(<TableHead>Paciente</TableHead>)}
                                 <TableHead>Medico Encargado</TableHead>
                                 <TableHead>ACCIONES</TableHead>
                             </TableRow>
@@ -294,15 +320,17 @@ export function Ovocitos(){
                                         <TableCell>
                                             <p>{ovo.punsion}</p>
                                         </TableCell>
-                                        <TableCell>
+
+                                        {user.role == 'laboratorio' &&(<TableCell>
                                             <p>{ovo.paciente}</p>
-                                        </TableCell>
+                                        </TableCell>)}
                                         <TableCell>
                                             <p>{ovo.medico}</p>
                                         </TableCell>
                                         <TableCell>
                                             <Link 
-                                                to={'/laboratorio/ovocito/' + ovo.idx}
+                                            
+                                                to={(user.role == 'laboratorio' &&('/laboratorio/ovocito/' + ovo.idx) ||user.role == 'paciente' &&('/paciente/ovocito/' + ovo.idx) )}
                                                 className="text-blue-600 hover:underline"
                                             >
                                                 Ver detalles

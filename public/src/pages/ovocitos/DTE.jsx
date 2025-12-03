@@ -39,8 +39,8 @@ export const DTE = ({ transiciones }) => {
     };
 
    return (
-    <div className="w-full md:max-w-150  border cursor-pointer  overflow-y-auto">
-        <div className="w-full overflow-x-auto">
+    <div className="w-full max-w-70 md:max-w-200  overflow-x-auto  border cursor-pointer ">
+        <div className="w-full ">
             <div className="rounded-xl p-4 sm:p-8 min-w-fit">
                 <div className="flex pb-4">
                     {((transiciones == undefined || transiciones.length == 0)&&(<></>))

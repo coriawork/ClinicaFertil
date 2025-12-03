@@ -201,15 +201,6 @@ export default function AppointmentBooking() {
         }
     }, [selectedDate, selectedTime, selectedDoctor])
 
-    useEffect(() => {
-        if (!isLoading && (!user || user.role !== "paciente")) {
-            navigate("/")
-        }
-    }, [user, isLoading, navigate])
-
-    if (isLoading || !user) {
-        return null
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault()

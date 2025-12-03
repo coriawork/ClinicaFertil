@@ -9,8 +9,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, Pill, Activity, TrendingUp } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import { Separator } from "@/components/ui/separator"
 
-export default function PatientTreatmentPage() {
+export default function Tratamiento() {
   const { user, isLoading } = useAuth()
   const navigate = useNavigate()
 
