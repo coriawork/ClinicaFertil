@@ -1,31 +1,24 @@
-import { use, useState } from "react";
+import { use, useState,useMemo } from "react";
 import { DashboardLayout } from "@/layouts/dashboard-layout"
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectTrigger, SelectContent, SelectValue, SelectItem } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Separator } from "@/components/ui/separator";
-import { MoreVertical } from "lucide-react";
-import { Link } from "react-router-dom";
-
-
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import { AccionesOvocitoMenu } from "../ovocitos/acciones";
+import { useNavigate } from "react-router-dom";
 const nombrePaciente = "Ana";
 const apellidoPaciente = "García";
-
 export function Punsion() {
+    const navigate = useNavigate();
     const [quirofano, setQuirofano] = useState("");
     const [problemas, setProblemas] = useState("");
     const [ovocitos, setOvocitos] = useState([]);
@@ -33,37 +26,53 @@ export function Punsion() {
         estado: ""
     });
 
+    const estadisticas = useMemo(() => {
+        const conteo = {
+            "Muy inmaduro": { cantidad: 0, color: "#3b82f6" },
+            "Inmaduro": { cantidad: 0, color: "#eab308" },
+            "Maduro": { cantidad: 0, color: "#22c55e" },
+            "In vitro": { cantidad: 0, color: "#a855f7" },
+            "Criopreservado": { cantidad: 0, color: "#06b6d4" },
+            "Descartado": { cantidad: 0, color: "#dc2626" },
+            "Fecundado": { cantidad: 0, color: "#ec4899" }
+        };
 
-    // Para descartar ovocito
-    const [descartarIdx, setDescartarIdx] = useState(null);
-    const [causaDescarte, setCausaDescarte] = useState("");
+        ovocitos.forEach(ovo => {
+            switch(ovo.estado) {
+                case "muy_inmaduro":
+                    conteo["Muy inmaduro"].cantidad++;
+                    break;
+                case "inmaduro":
+                    conteo["Inmaduro"].cantidad++;
+                    break;
+                case "maduro":
+                    conteo["Maduro"].cantidad++;
+                    break;
+                case "in vitro":
+                    conteo["In vitro"].cantidad++;
+                    break;
+                case "criopreservado":
+                    conteo["Criopreservado"].cantidad++;
+                    break;
+                case "descartado":
+                    conteo["Descartado"].cantidad++;
+                    break;
+                case "fecundado":
+                    conteo["Fecundado"].cantidad++;
+                    break;
+            }
+        });
 
-    const [crioDialogIdx, setCrioDialogIdx] = useState(null);
-    const [crioTubo, setCrioTubo] = useState("");
-    const [crioRack, setCrioRack] = useState("");
+        return Object.entries(conteo).map(([estado, data]) => ({
+            estado,
+            cantidad: data.cantidad,
+            color: data.color
+        }));
+    }, [ovocitos]);
 
-    // Modifica la función criopreservarOvocito para usar los datos del diálogo
-    const confirmarCriopreservar = () => {
-        setOvocitos(ovocitos.map((ovo, i) =>
-            i === crioDialogIdx
-                ? { 
-                    ...ovo, 
-                    criopreservado: true, 
-                    estado: "criopreservado", // Cambia el estado aquí
-                    criodata: { tubo: crioTubo, rack: crioRack } 
-                }
-                : ovo
-        ));
-        setCrioDialogIdx(null);
-        setCrioTubo("");
-        setCrioRack("");
-    };
 
-    const cancelarCriopreservar = () => {
-        setCrioDialogIdx(null);
-        setCrioTubo("");
-        setCrioRack("");
-    };
+ 
+    const [punsionReg,setPunsionReg] = useState(false);
 
     const getBadgeColor = (estado) => {
        switch (estado) {
@@ -85,29 +94,8 @@ export function Punsion() {
                 return "bg-gray-400 text-white";
         }
     };
-    const fecundarOvocito = (idx) => {
-        setOvocitos(ovocitos.map((ovo, i) =>
-            i === idx ? { ...ovo, estado: "fecundado" } : ovo
-        ));
-    };
+
     
-    const [cambiarEstadoIdx, setCambiarEstadoIdx] = useState(null);
-    const [nuevoEstado, setNuevoEstado] = useState("");
-
-    const confirmarCambioEstado = () => {
-        setOvocitos(ovocitos.map((ovo, idx) =>
-            idx === cambiarEstadoIdx
-                ? { ...ovo, estado: nuevoEstado }
-                : ovo
-        ));
-        setCambiarEstadoIdx(null);
-        setNuevoEstado("");
-    };
-
-    const cancelarCambioEstado = () => {
-        setCambiarEstadoIdx(null);
-        setNuevoEstado("");
-    };
     const generarCodigoOvocito = (index) => {
         const hoy = new Date();
         const yy = hoy.getFullYear().toString().slice(-2);
@@ -132,243 +120,192 @@ export function Punsion() {
         setNuevoOvocito({ estado: "" });
     };
 
-
-
-    const confirmarDescartar = () => {
-        setOvocitos(ovocitos.map((ovo, idx) =>
-            idx === descartarIdx
-                ? { ...ovo, descartado: true, causaDescarte: causaDescarte, estado: "descartado" }
-                : ovo
-        ));
-        setDescartarIdx(null);
-        setCausaDescarte("");
-    };
-
+   
     const madurarInVitro = (idx) => {
         setOvocitos(ovocitos.map((ovo, i) =>
             i === idx ? { ...ovo, estado: "in vitro" } : ovo
         ));
     };
-
-    const cancelarDescartar = () => {
-        setDescartarIdx(null);
-        setCausaDescarte("");
+    const madurar = (idx) => {
+        setOvocitos(ovocitos.map((ovo, i) =>
+            i === idx ? { ...ovo, estado: "maduro" } : ovo
+        ));
     };
+
+    function registrarPunsion(){
+        if(!quirofano )return null
+        setPunsionReg(true)
+
+    }
 
 
     return (
-        <DashboardLayout role="operador_laboratorio">
-            <Card className="rounded-[5px]">
-                <CardHeader>
-                    <h2 className="text-lg font-bold">Registrar Punción</h2>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4">
-                    <div className="flex gap-4">
-                        <Input
-                            placeholder="Número de quirófano"
-                            value={quirofano}
-                            onChange={e => setQuirofano(e.target.value)}
-                            className={'rounded-[5px]'}
-                        />
-                        <Input
-                            placeholder="Problemas (opcional)"
-                            value={problemas}
-                            onChange={e => setProblemas(e.target.value)}
-                            className={'rounded-[5px]'}
-                        />
-                    </div>
-                    <Button className={'font-bold'}>REGISTRAR</Button>
-                    <div className="border-t pt-4 mt-4">
-                        <h3 className="font-semibold mb-2">Agregar Ovocito</h3>
-                        <div className="flex gap-2 mb-2">
-                            <Select
-                                value={nuevoOvocito.estado}
-                                onValueChange={estado => setNuevoOvocito({ estado })}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Estado inicial" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="muy_inmaduro">Muy inmaduro</SelectItem>
-                                    <SelectItem value="inmaduro">Inmaduro</SelectItem>
-                                    <SelectItem value="maduro">Maduro</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Button onClick={handleAgregarOvocito} disabled={!nuevoOvocito.estado}>
-                                Agregar
-                            </Button>
-                        </div>
-                        <div>
-                            <h4 className="font-medium mb-2">Ovocitos registrados:</h4>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Código</TableHead>
-                                        <TableHead>Estado</TableHead>
-                                        <TableHead>ACCIONES</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {ovocitos.map((ovo, idx) => (
-                                    <TableRow key={idx}>
-                                        <TableCell>
-                                            <Badge className={`font-bold rounded-[5px] ${getBadgeColor(ovo.estado)}`}>{ovo.codigo}</Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge className={`font-bold rounded-[5px] ${getBadgeColor(ovo.estado)}`}>{ovo.estado}</Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                   <Button variant="ghost" size="icon" aria-label="Acciones">
-                                                        <MoreVertical className="w-5 h-5" />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent className="w-56" align="start">
-                                                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                                    <Separator/>
-                                                    <DropdownMenuGroup >
-                                                        {
-                                                        (ovo.estado === 'maduro')&&(
-                                                            <>
-                                                            <DropdownMenuItem variant="" onClick={() => setCrioDialogIdx(idx)}>
-                                                                Criopreservar
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuItem variant="" onClick={() => fecundarOvocito(idx)}>
-                                                                Fecundar
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuSeparator />
-                                                            </>
-                                                        ) ||
-                                                        (ovo.estado === 'inmaduro')&&(
-                                                            <>
-                                                            <DropdownMenuItem variant="" onClick={() => madurarInVitro(idx)}>
-                                                                Madurar Invitro
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuSeparator />
-                                                            </>
-                                                        )
-                                                        }
-                                                        <Link to="/laboratorio/ovocito/1">
-                                                            <DropdownMenuItem variant="">
-                                                                    ver ovocito
-                                                            </DropdownMenuItem>
-                                                        </Link>    
-                                                        <DropdownMenuItem variant="destructive" onClick={() => setCambiarEstadoIdx(idx)}>    
-                                                            Cambiar estado
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem variant="destructive" onClick={() => setDescartarIdx(idx)}>    
-                                                            Descartar
-                                                        </DropdownMenuItem>
-                                                        
-                                                    </DropdownMenuGroup>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
-                                    </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </div>
-                </CardContent>
-                <CardFooter>
-                   
-                </CardFooter>
-            </Card>
-            <Dialog open={descartarIdx !== null} onOpenChange={cancelarDescartar}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Descarte de ovocito</DialogTitle>
-                    </DialogHeader>
-                    <div>
-                        <p>Por favor, indique la causa del descarte:</p>
-                        <Textarea
-                            placeholder="Causa del descarte"
-                            value={causaDescarte}
-                            onChange={e => setCausaDescarte(e.target.value)}
-                            className="mt-2"
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button
-                            onClick={confirmarDescartar}
-                            disabled={!causaDescarte.trim()}
-                        >
-                            Confirmar descarte
-                        </Button>
-                        <Button variant="outline" onClick={cancelarDescartar}>
-                            Cancelar
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-            <Dialog open={crioDialogIdx !== null} onOpenChange={cancelarCriopreservar}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Criopreservar ovocito</DialogTitle>
-                    </DialogHeader>
-                    <div className="flex flex-col gap-2">
-                        <Input
-                            placeholder="Tubo"
-                            value={crioTubo}
-                            onChange={e => setCrioTubo(e.target.value)}
-                        />
-                        <Input
-                            placeholder="Rack"
-                            value={crioRack}
-                            onChange={e => setCrioRack(e.target.value)}
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button
-                            onClick={confirmarCriopreservar}
-                            disabled={!crioTubo.trim() || !crioRack.trim()}
-                        >
-                            Confirmar criopreservación
-                        </Button>
-                        <Button variant="outline" onClick={cancelarCriopreservar}>
-                            Cancelar
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-            <Dialog open={cambiarEstadoIdx !== null} onOpenChange={cancelarCambioEstado}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Cambiar estado del ovocito</DialogTitle>
-                    </DialogHeader>
-                    <div className="flex flex-col gap-2">
-                        <Select
-                            value={nuevoEstado}
-                            onValueChange={setNuevoEstado}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Seleccionar nuevo estado" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="muy_inmaduro">Muy inmaduro</SelectItem>
-                                <SelectItem value="inmaduro">Inmaduro</SelectItem>
-                                <SelectItem value="maduro">Maduro</SelectItem>
-                                <SelectItem value="in vitro">In vitro</SelectItem>
-                                <SelectItem value="criopreservado">Criopreservado</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <DialogFooter>
-                        <Button
-                            onClick={confirmarCambioEstado}
-                            disabled={!nuevoEstado}
-                        >
-                            Confirmar cambio
-                        </Button>
-                        <Button variant="outline" onClick={cancelarCambioEstado}>
-                            Cancelar
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-          
+        <DashboardLayout role="laboratorio">
+            <Tabs defaultValue="Punsion" className="">
+                <TabsList>
+                    <TabsTrigger value="Punsion">Punsion</TabsTrigger>
+                    <TabsTrigger value="Estadisticas">Estadisticas</TabsTrigger>
+                </TabsList>
+                <TabsContent value="Punsion">
+                    <Card className="rounded-[5px]">
+                        <CardHeader>
+                            <h2 className="text-lg font-bold">Registrar Punción</h2>
+                        </CardHeader>
+                        <CardContent className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-4">
+                                {quirofano && (<p>quirofano registrado</p>)}
+                                <div className="flex gap-20 ">
+                                    <Input
+                                        placeholder="Número de quirófano"
+                                        value={quirofano}
+                                        disabled={punsionReg}
+                                        onChange={e => setQuirofano(e.target.value)}
+                                        className={'rounded-[5px]'}
+                                        />
+                                    <Input
+                                        placeholder="Problemas (opcional)"
+                                        value={problemas}
+                                        disabled={punsionReg}
+                                        onChange={e => setProblemas(e.target.value)}
+                                        className={'rounded-[5px]'}
+                                    />
+                                </div>
+                            </div>
+                            <Button disabled={punsionReg} onClick={()=>registrarPunsion()} className={'font-bold'}>REGISTRAR</Button>
+                            <div className="border-t pt-4 mt-4">
+                                <h3 className="font-semibold mb-2">Agregar Ovocito</h3>
+                                <div className="flex gap-2 mb-2">
+                                    <Select
+                                        value={nuevoOvocito.estado}
+                                        onValueChange={estado => setNuevoOvocito({ estado })}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Estado inicial" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="muy_inmaduro">Muy inmaduro</SelectItem>
+                                            <SelectItem value="inmaduro">Inmaduro</SelectItem>
+                                            <SelectItem value="maduro">Maduro</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <Button onClick={handleAgregarOvocito} disabled={!nuevoOvocito.estado}>
+                                        Agregar
+                                    </Button>
+                                </div>
+                                <div>
+                                    <h4 className="font-medium mb-2">Ovocitos registrados:</h4>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Código</TableHead>
+                                                <TableHead>Estado</TableHead>
+                                                <TableHead>ACCIONES</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {ovocitos.map((ovo, idx) => (
+                                                <TableRow key={idx}>
+                                                    
+                                                    <TableCell>
+                                                        <Badge className={`font-bold rounded-[5px] ${getBadgeColor(ovo.estado)}`}>{ovo.codigo}</Badge>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Badge className={`font-bold rounded-[5px] ${getBadgeColor(ovo.estado)}`}>{ovo.estado}</Badge>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <AccionesOvocitoMenu
+                                                            ovocito={ovo}
+                                                            index={idx}
+                                                            onCriopreservar={(idx, datos) => {
+                                                                setOvocitos(ovocitos.map((ovo, i) =>
+                                                                    i === idx ? { ...ovo, estado: "criopreservado", criodata: datos } : ovo
+                                                                ));
+                                                            }}
+                                                            onFecundar={(idx, datos) => {
+                                                                setOvocitos(ovocitos.map((ovo, i) =>
+                                                                    i === idx ? { ...ovo, estado: "fecundado", ...datos } : ovo
+                                                                ));
+                                                            }}
+                                                            onMadurarInvitro={madurarInVitro}
+                                                            onMadurar={madurar}
+                                                            onCambiarEstado={(idx, nuevoEstado) => {
+                                                                setOvocitos(ovocitos.map((ovo, i) =>
+                                                                    i === idx ? { ...ovo, estado: nuevoEstado } : ovo
+                                                                ));
+                                                            }}
+                                                            onDescartar={(idx, causa) => {
+                                                                setOvocitos(ovocitos.map((ovo, i) =>
+                                                                    i === idx ? { ...ovo, estado: "descartado", causaDescarte: causa } : ovo
+                                                                ));
+                                                            }}
+                                                            onVerDetalle={(idx) => {
+                                                                navigate(`/laboratorio/ovocito/${idx}`);
+                                                            }}
+                                                            mostrarVerDetalle={true}
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </div>
+                        </CardContent>
+                        <CardFooter>
+                        
+                        </CardFooter>
+                    </Card>
+
+                </TabsContent>
+                <TabsContent value="Estadisticas">
+                    {ovocitos.length > 0 && (
+                        <Card className="rounded-lg shadow-md">
+                            <CardHeader className="border-b">
+                                <h2 className="text-xl font-bold text-foreground">Estadísticas de Ovocitos</h2>
+                                <p className="text-sm text-foreground/70 mt-1">Total: {ovocitos.length} ovocitos registrados</p>
+                            </CardHeader>
+                            <CardContent className="pt-6">
+                                <ResponsiveContainer width="100%" height={320}>
+                                    <BarChart data={estadisticas} margin={{ top: 20, right: 30, left: 20, bottom: 80 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                                        <XAxis 
+                                            dataKey="estado" 
+                                            angle={-45}
+                                            textAnchor="end"
+                                            height={100}
+                                            fontSize={11}
+                                            stroke="#6b7280"
+                                        />
+                                        <YAxis 
+                                            allowDecimals={false}
+                                            label={{ value: 'Cantidad', angle: -90, position: 'insideLeft', style: { fill: '#6b7280' } }}
+                                            stroke="#6b7280"
+                                        />
+                                        <Tooltip 
+                                            contentStyle={{ 
+                                                backgroundColor: 'var(--background)', 
+                                                borderRadius: '8px',
+                                                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                                            }}
+                                            cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
+                                        />
+                                        <Bar 
+                                            dataKey="cantidad" 
+                                            radius={[8, 8, 0, 0]}
+                                        >
+                                            {estadisticas.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.color} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </CardContent>
+                        </Card>
+                    )|| ovocitos.length == 0 &&(<>no hay ovocitos en esta punsion</>)}  
+                </TabsContent>
+                
+            </Tabs>
+            
         </DashboardLayout>
     );
 }

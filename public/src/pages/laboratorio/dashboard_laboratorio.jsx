@@ -13,7 +13,7 @@ export function LaboratorioDashboard () {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!isLoading && (!user || user.role !== "operador_laboratorio")) {
+    if (!isLoading && (!user || user.role !== "laboratorio")) {
       navigate("/")
     }
   }, [user, isLoading, navigate])
@@ -23,7 +23,7 @@ export function LaboratorioDashboard () {
   }
 
   return (
-    <DashboardLayout role="operador_laboratorio">
+    <DashboardLayout role="laboratorio">
         <div className="space-y-6">
             <div>
             <h2 className="text-3xl font-bold tracking-tight text-foreground">Bienvenido, {user.name}</h2>
