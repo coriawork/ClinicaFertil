@@ -205,61 +205,6 @@ export default function GestionHistoria() {
                     <h1 className="text-3xl font-bold">Gestionar Historial Clinico</h1>
                 </div>
 
-                {/* Personal informacion */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex text-2xl items-center gap-2">
-                            Información Personal
-                        </CardTitle>
-                        <Separator/>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="flex items-center gap-2 text-sm">
-                                <User className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-muted-foreground">Nombre:</span>
-                                <span className="font-medium">{personalInfo.name+' '+personalInfo.last_name}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                                <span className="text-muted-foreground">Sexo Biologico:</span>
-                                <span className="font-medium">{personalInfo.sexo}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                                <Calendar className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-muted-foreground">Fecha de nacimiento:</span>
-                                <span className="font-medium">
-                                    {new Date(personalInfo.birthDate).toLocaleDateString("es-ES")} (
-                                    {personalInfo.age} años)
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                                <Phone className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-muted-foreground">Teléfono:</span>
-                                <span className="font-medium">{personalInfo.phone}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                                <Mail className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-muted-foreground">Email:</span>
-                                <span className="font-medium">{personalInfo.email}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                                <MapPin className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-muted-foreground">Dirección:</span>
-                                <span className="font-medium">{personalInfo.address}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                                
-                                <span className="text-muted-foreground">Obra social:</span>
-                                <span className="font-medium">{personalInfo.obra_social}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                                <span className="text-muted-foreground">Numero socio:</span>
-                                <span className="font-medium">{personalInfo.nro_socio}</span>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
                 {/* Antecedentes quirurgicos */}
                 <Card>
                     <CardHeader>

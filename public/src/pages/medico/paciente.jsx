@@ -150,10 +150,10 @@ export default function PacienteDetail() {
                                         Gestion Estudio
                                     </Button>
                                 </Link>
-                                <Link to={'/medico/pacientes/estimulacion/'+id}>
+                                <Link to={'/medico/pacientes/tratamientos/'+id}>
                                     <Button variant="action">
                                         <TestTube className="mr-2 h-4 w-4" />
-                                        Gestion Estimulacion
+                                        Gestion Tratamiento
                                     </Button>
                                 </Link>
                               
@@ -186,24 +186,7 @@ export default function PacienteDetail() {
                 ) : null}
 
                 <div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr,1fr]">
-                    {/* Historial */}
-                    <Card >
-                        <CardContent>
-                            <p className="text-xs mb-5 font-semibold uppercase tracking-wide text-muted-foreground">
-                                Resumen historia clincia
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                                {paciente.historiaClinica.antecedentes.map((item) => (
-                                    <Badge key={item} className=" bg-accent uppercase rounded-full px-3 py-1 text-xs">
-                                        {item}
-                                    </Badge>
-                                ))}
-                                <Link className="underline ml-2 hover:text-accent-foreground" to={"/medico/pacientes/historial/"+id}>
-                                    ver más
-                                </Link>
-                            </div>
-                        </CardContent>    
-                    </Card>
+                    
                   
                     {/* Generales */}
                     <Card >
@@ -234,10 +217,7 @@ export default function PacienteDetail() {
                             </dl>
                         </CardContent>
                     </Card>
-                    
-                    {/* Objetivo */}
-                    <Objetivo idPac={id}/>
-
+                
                   
                 </div>
             

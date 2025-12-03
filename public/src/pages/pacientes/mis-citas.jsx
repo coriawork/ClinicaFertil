@@ -36,16 +36,6 @@ export default function MyAppointmentsPage() {
     }
 
 
-    useEffect(() => {
-        if (!isLoading && (!user || user.role !== "paciente")) {
-            navigate("/")
-        }
-    }, [user, isLoading, navigate])
-
-    if (isLoading || !user) {
-        return null
-    }
-
     const appointments = [
         {
             id: "1",

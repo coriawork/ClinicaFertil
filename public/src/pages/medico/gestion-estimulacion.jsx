@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { RotateCcw } from "lucide-react"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
 export function Estimulacion(){
 
@@ -104,7 +105,7 @@ export function Estimulacion(){
             <h1 className="text-2xl font-bold">GESTION DE ESTIMULACION</h1>
             <Card>
                 <CardTitle className={'px-5 flex items-center justify-between'}>
-                    <h2 className="text-2xl font-bold">REGISTRAR ESTIMULACION</h2>
+                    <h2 className="text-2xl font-bold">REGISTRAR DROGA</h2>
                     <RotateCcw 
                         className="cursor-pointer rotate-hover hover:text-chart-4"
                         onClick={handleResetFijado}
@@ -115,7 +116,9 @@ export function Estimulacion(){
                 <Separator/>
                 <CardContent className={'gap-5 flex flex-col'}> 
                     <div className="space-y-2 w-full">
-                        <Label className={"text-muted-foregroun/50 ml-5px"} htmlFor="tipoSelect">Tipo de medicacion</Label>
+                        <Label className={"text-muted-foregroun/50 ml-5px"} htmlFor="tipoSelect">
+                            Tipo de medicacion
+                        </Label>
                         <Combobox 
                             id='tipoSelect' 
                             datas={Tiposmedicaciones} 
@@ -187,7 +190,10 @@ export function Estimulacion(){
                     )}
                 </CardContent>
             </Card>
-             <Card className="mt-8">
+            <Button asChild>
+                <Link to={'/medico/agenda'}>Pedir monitoreo</Link>
+            </Button>
+            <Card className="mt-8">
                 <CardHeader>
                     <CardTitle>Monitoreo</CardTitle>
                     <CardDescription>
@@ -200,6 +206,7 @@ export function Estimulacion(){
                         <Input
                             placeholder="Observaciones del monitoreo"
                             value={nuevoMonitoreo}
+                            disabled={!consentimiento}
                             onChange={e => setNuevoMonitoreo(e.target.value)}
                             className="w-full"
                         />
