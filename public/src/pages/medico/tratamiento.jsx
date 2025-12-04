@@ -95,9 +95,9 @@ const tratamientosEjemplo = [
 ]
 
 export function TratamientoDetalle() {
-    const { id } = useParams()
+    const { tratamientoId,id } = useParams()
     const navigate = useNavigate()
-    const [tratamiento, setTratamiento] = useState(tratamientosEjemplo.find(t => t.id === Number(id)))
+    const [tratamiento, setTratamiento] = useState(tratamientosEjemplo.find(t => t.id === Number(tratamientoId)))
     const [dialogOpen, setDialogOpen] = useState(false)
     const [nuevoEstado, setNuevoEstado] = useState("")
     const [motivoCancelacion, setMotivoCancelacion] = useState("")
@@ -119,7 +119,7 @@ export function TratamientoDetalle() {
     }
 
     const estadoConfig = ESTADOS[tratamiento.estado]
-    const objetivoInfo = OBJETIVOS_DISPONIBLES.find(o => o.id === tratamiento.objetivo)
+    const objetivoInfo = OBJETIVOS_DISPONIBLES.find(o => o.tratamientoId === tratamiento.objetivo)
     const tipoMedicacion = TIPOS_MEDICACION[tratamiento.estimulo.tipo]
 
     const handleCambiarEstado = (estado) => {
@@ -162,7 +162,7 @@ export function TratamientoDetalle() {
                         </div>
 
                         <div className="flex flex-wrap gap-2 mt-4">
-                            <Link to={`/medico/pacientes/tratamiento/estimulacion/${id}`}>
+                            <Link to={`/pacientes/${id}/tratamiento/${tratamientoId}/estimulacion/`}>
                                 <Button size="sm">
                                     <Activity className="w-4 h-4 mr-2" />
                                     Estimulación

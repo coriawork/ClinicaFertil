@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { User, Calendar,Ruler, Phone, Mail, MapPin, Heart, Info,Activity, Ban, X, Cigarette, Wine, Pill, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { Label } from "@/components/ui/label"
 import { Combobox } from "@/components/ui/combobox"
 import { Input } from "@/components/ui/input"
@@ -14,11 +14,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { FamilyTree } from "@/components/family-tree"
 import {Select, SelectContent, SelectGroup, SelectTrigger, SelectLabel, SelectValue, SelectItem} from "@/components/ui/select"
-
+import { SearchAntecedentes } from "@/components/ui/searchAntecedentes"
 export default function GestionHistoria() {
     const [editG, setEditG] = useState(false)
     const [editH, setEditH] = useState(false)
-
+    const [loadingPDF, setLoadingPDF] = useState(false)
+    
+    
 
     const [fenotipo, setFenotipo] = useState({
         colorOjos: '',
@@ -101,28 +103,7 @@ export default function GestionHistoria() {
 
     const [quirurgicoSelected, setQuirurgicoSelected] = useState([])
 
-    const AntQuirurgico = [
-        {value:"apendicectomía", label:"Apendicectomía"},
-        {value:"cesárea", label:"Cesárea"},
-        {value:"laparoscopía", label:"Laparoscopía"},
-        {value:"histeroscopía", label:"Histeroscopía"},
-        {value:"miomectomía", label:"Miomectomía"},
-        {value:"salpingectomía", label:"Salpingectomía"},
-        {value:"ooforectomía", label:"Ooforectomía"},
-        {value:"colecistectomía", label:"Colecistectomía"},
-        {value:"herniorrafia", label:"Herniorrafia"},
-        {value:"amigdalectomía", label:"Amigdalectomía"},
-        {value:"adenoidectomía", label:"Adenoidectomía"},
-        {value:"ligadura-trompas", label:"Ligadura de trompas"},
-        {value:"quiste-ovárico", label:"Quiste ovárico"},
-        {value:"polipectomía", label:"Polipectomía"},
-        {value:"conización-cervical", label:"Conización cervical"},
-        {value:"mastectomía", label:"Mastectomía"},
-        {value:"biopsia-mamaria", label:"Biopsia mamaria"},
-        {value:"tiroidectomía", label:"Tiroidectomía"},
-        {value:"cirugía-endometriosis", label:"Cirugía de endometriosis"},
-        {value:"cirugía-várices", label:"Cirugía de várices"}
-    ]
+    
 
     
     const calcularPackYears = () => {
@@ -173,28 +154,33 @@ export default function GestionHistoria() {
 
 
     const personalInfo = {
-    name: "María",
-    last_name:"Garcia",
-    birthDate: "1988-05-15",
-    age: 36,
-    phone: "+34 612 345 678",
-    email: "maria.garcia@email.com",
-    address: "Calle Principal 123, Madrid",
-    sexo:"Femenino",
-    obra_social:"OSDE",
-    nro_socio:'21324/6'
+        name: "María",
+        last_name:"Garcia",
+        birthDate: "1988-05-15",
+        age: 36,
+        phone: "+34 612 345 678",
+        email: "maria.garcia@email.com",
+        address: "Calle Principal 123, Madrid",
+        sexo:"Femenino",
+        obra_social:"OSDE",
+        nro_socio:'21324/6'
     }
 
 
     const handleEliminarQuirurgico = (index) => {
         setQuirurgicoSelected(prev => prev.filter((_, i) => i !== index))
     }
-    const addQuirurgico = (currentValue)=>{
-        if (!currentValue) return
+    const addQuirurgico = (item)=>{
+        if (!item) return
+        
+        // Extraer el label del item devuelto por la API
+        const termino = typeof item === "string" ? item : (item.label ?? item.value ?? item.termino)
+        
+        if (!termino) return
+        
+        // Evitar duplicados
         setQuirurgicoSelected(prev => {
-            const next = typeof currentValue === "string" ? currentValue : (currentValue.label ?? currentValue.value)
-            if (!next) return prev
-            return prev.includes(next) ? prev : [...prev, next]
+            return prev.includes(termino) ? prev : [...prev, termino]
         })
     }
 
@@ -215,8 +201,8 @@ export default function GestionHistoria() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-2 w-full">
-                            <Label className={"text-muted-foregroun/50 ml-5px"} htmlFor="antecedentesSelect">Agrega antecedentes quirurgicos</Label>
-                            <Combobox id='antecedentesSelect' datas={AntQuirurgico} title="Elegi un antecedente" action={addQuirurgico} className="w-full"/>
+                            <Label className={"text-muted-foregroun/50 ml-5px"} htmlFor="antecedentesSelect">Busca y agrega antecedentes quirúrgicos</Label>
+                            <SearchAntecedentes agregar={addQuirurgico}/>
                         </div>
                         <div className="flex flex-wrap gap-3 ">
                             {(quirurgicoSelected && quirurgicoSelected.length != 0)? (quirurgicoSelected.map((q, index) => (

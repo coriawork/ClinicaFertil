@@ -198,7 +198,7 @@ export function Ovocitos({role}){
 
     if (isLoading) {
         return (
-            <DashboardLayout role={role}>
+            <DashboardLayout role={user.role}>
                 <div className="flex items-center justify-center h-64">
                     <p>Cargando...</p>
                 </div>
@@ -207,7 +207,7 @@ export function Ovocitos({role}){
     }
 
     return(
-        <DashboardLayout role={role}>
+        <DashboardLayout role={user.role}>
             <Card className={'rounded-[5px]'}>
                 
                 {<CardHeader>
@@ -330,7 +330,7 @@ export function Ovocitos({role}){
                                         <TableCell>
                                             <Link 
                                             
-                                                to={(user.role == 'laboratorio' &&('/laboratorio/ovocito/' + ovo.idx) ||user.role == 'paciente' &&('/paciente/ovocito/' + ovo.idx) )}
+                                                to={"/ovocitos/"+ovo.idx }
                                                 className="text-blue-600 hover:underline"
                                             >
                                                 Ver detalles

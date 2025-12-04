@@ -138,24 +138,27 @@ export default function PacienteDetail() {
                         </div>
                         <div className="mt-4 flex flex-col items-stretch gap-2 md:flex-row md:items-center md:justify-start md:gap-3">
                             <div className="flex flex-wrap  gap-2">
-                                <Link to={'/medico/pacientes/historial/'+id}>
+                                <Link to={'/pacientes/'+id+'/historial'}>
                                     <Button  variant='action' className="w-full">
                                         <ClipboardList/>
                                         Gestionar Historia Clinica
                                     </Button>
                                 </Link>
-                                <Link to={'/medico/pacientes/estudios/'+id}>
+                                <Link to={'/pacientes/'+id+'/estudios/'}>
                                     <Button variant="action">
                                         <TestTube className="mr-2 h-4 w-4" />
                                         Gestion Estudio
                                     </Button>
                                 </Link>
-                                <Link to={'/medico/pacientes/tratamientos/'+id}>
+                                {
+                                paciente.tratamiento && !paciente.es_pareja &&
+                                <Link to={'/pacientes/'+id+'/tratamientos/'}>
                                     <Button variant="action">
                                         <TestTube className="mr-2 h-4 w-4" />
                                         Gestion Tratamiento
                                     </Button>
                                 </Link>
+                                }
                               
                             </div>
                         </div>
@@ -176,7 +179,7 @@ export default function PacienteDetail() {
                                     </div>
                                 </div>
                                 <Button asChild  variant="action" >
-                                    <Link to={`/medico/pacientes/${paciente.pareja.id}`}>
+                                    <Link to={`/pacientes/${paciente.pareja.id}`}>
                                         Administrar Pareja
                                     </Link>
                                 </Button>

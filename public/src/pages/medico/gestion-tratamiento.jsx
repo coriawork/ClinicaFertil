@@ -1,212 +1,240 @@
-import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "@/components/ui/card"
+import { useState } from "react"
+import { useParams, Link } from "react-router-dom"
+import { DashboardLayout } from "@/layouts/dashboard-layout"
+import { useAuth } from "@/lib/AuthContext"
+import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Objetivo } from "./objetivo"
-import { useState } from "react"
-import { XCircle, CheckCircle, RefreshCcw, PlusCircle, ArrowRight } from "lucide-react"
-import { DashboardLayout } from "@/layouts/dashboard-layout"
-import { Link } from "react-router-dom" // Asegúrate de tener react-router-dom instalado
-import { Combobox } from "@/components/ui/combobox"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Search, Plus, ArrowLeft } from "lucide-react"
+import { AccionesTratamiento } from "@/pages/acciones/Acciones_Tratamientos"
+export function ListadoTratamientosPaciente() {
+    const { id } = useParams()
+    const { user } = useAuth()
+    const [busqueda, setBusqueda] = useState("")
+    const [filtroEstado, setFiltroEstado] = useState("todos")
 
-const ESTADOS = {
-    vigente: { label: "Vigente", color: "bg-chart-1 text-white", icon: <RefreshCcw className="w-4 h-4" /> },
-    cancelado: { label: "Cancelado", color: "bg-destructive text-white", icon: <XCircle className="w-4 h-4" /> },
-    completado: { label: "Completado", color: "bg-primary text-white", icon: <CheckCircle className="w-4 h-4" /> }
-}
-const tratamientosEjemplo = [
-    {
-        id: 1,
-        estado: "cancelado",
-        objetivo: "gametos_propios",
-        estimulo: {
-            tipo: "inyectable",
-            droga: "Clomifeno",
-            dosis: "2ml cada 6h",
-            duracion: "10",
-            consentimiento: true,
-            monitoreos: [
-            { fecha: "2025-11-28 10:00", observacion: "Monitoreo inicial OK" }
-            ]
-        },
-        fechaInicio: "2025-11-25",
-        fechaFin: null,
-        causaCancelacion: null,
-        cancelacionAutomatica: false
-    },
-    {
-        id: 2,
-        estado: "cancelado",
-        objetivo: "esperma_donado",
-        estimulo: {
-            tipo: "oral",
-            droga: "Letrozol",
-            dosis: "1 pastilla diaria",
-            duracion: "7",
-            consentimiento: true,
-            monitoreos: []
-        },
-        fechaInicio: "2025-10-10",
-        fechaFin: "2025-10-20",
-        causaCancelacion: "Paciente no completó estudios previos",
-        cancelacionAutomatica: false
-    },
-
-]
-const pacienteEjemplo = {
-    id:1,
-    nombre:'Carla'
-}
-
-// NUEVO: Componente para elegir objetivo y crear tratamiento
-const OBJETIVOS_DISPONIBLES = [
-    { id: "gametos_propios", label: "Gametos propios" },
-    { id: "esperma_donado", label: "Esperma donado" },
-    { id: "ropa", label: "ROPA" },
-    { id: "preservacion", label: "Preservar Gametos" }
-]
-
-function NuevoTratamiento({ onCrear, disabled }) {
-    const [objetivo, setObjetivo] = useState("")
-    return (
-        <Card className="mb-8 border-dashed border-2 border-primary bg-chart-4/10">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-primary">
-                    <PlusCircle className="w-5 h-5 " />
-                    <p className="mt-1">
-                        Nuevo tratamiento
-                    </p>
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="space-y-2">
-                    {( disabled ) && (
-                        <CardDescription className="text-destructive/50">
-                            Ya existe un tratamiento vigente.
-                        </CardDescription>
-                    )}
-                    <select
-                        className={"w-full rounded px-2 py-2 text-foreground bg-chart-4/20 "+ (disabled ? "opacity-50 cursor-not-allowed" : "")}
-                        value={objetivo}
-                        onChange={e => setObjetivo(e.target.value)}
-                        disabled={disabled}
-                    >
-                        <option value="" className="text-black">Seleccionar objetivo...</option>
-                        {OBJETIVOS_DISPONIBLES.map(obj => (
-                            <option key={obj.id} className="text-black " value={obj.id}>{obj.label}</option>
-                        ))}
-                    </select>
-                </div>
-            </CardContent>
-            <CardFooter>
-                <Button
-                variant="action"
-                className="w-full"
-                disabled={!objetivo || disabled}
-                onClick={() => {
-                    onCrear(objetivo)
-                    setObjetivo("")
-                }}
-                >
-                    Crear tratamiento
-                </Button>
-            </CardFooter>
-        </Card>
-    )
-}
-export function ListadoTratamientosPaciente({ paciente = pacienteEjemplo, tratamientos = tratamientosEjemplo }) {
-    const [tratamientosState, setTratamientosState] = useState(tratamientos)
-    const [cancelandoId, setCancelandoId] = useState(null)
-    const [causaCancelacion, setCausaCancelacion] = useState("")
-
-    // Solo puede haber un tratamiento vigente
-    const hayVigente = tratamientosState.some(t => t.estado === "vigente")
-
-    const handleCancelar = (id) => {
-        setCancelandoId(id)
-        setCausaCancelacion("")
+    const paciente = {
+        id: id,
+        nombre: "María González",
+        dni: "35.123.456",
+        email: "maria.gonzalez@email.com"
     }
 
-    const confirmarCancelacion = (id) => {
-        setTratamientosState(tratamientosState.map(t =>
-        t.id === id
-            ? { ...t, estado: "cancelado", causaCancelacion, fechaFin: new Date().toISOString().slice(0, 10), cancelacionAutomatica: false }
-            : t
-        ))
-        setCancelandoId(null)
-        setCausaCancelacion("")
-    }
-
-    // NUEVO: Crear tratamiento al elegir objetivo
-    const crearNuevoTratamiento = (objetivo) => {
-        const nuevo = {
-            id: tratamientosState.length + 1,
+    const tratamientos = [
+        {
+            id: "1",
+            objetivo: "Embarazo con gametos propios",
             estado: "vigente",
-            objetivo,
-            estimulo: {
-                tipo: "",
-                droga: "",
-                dosis: "",
-                duracion: "",
-                consentimiento: false,
-                monitoreos: []
-            },
-            fechaInicio: new Date().toISOString().slice(0, 10),
-            fechaFin: null,
-            causaCancelacion: null,
-            cancelacionAutomatica: false
+            fechaInicio: "10/11/2024",
+            ultimaConsulta: "25/11/2024",
+            etapaActual: "Estimulación Ovárica",
+            medicoTratante: "Dr. Carlos Rodríguez",
+            proximaEtapa: "Monitoreo",
+            proximoTurno: "05/12/2024 - 10:30hs"
+        },
+        {
+            id: "2",
+            objetivo: "Preservación de ovocitos",
+            estado: "completado",
+            fechaInicio: "15/08/2024",
+            fechaFin: "20/10/2024",
+            ultimaConsulta: "20/10/2024",
+            etapaActual: "Completado",
+            medicoTratante: "Dr. Carlos Rodríguez",
+            proximaEtapa: "-",
+            proximoTurno: "-"
+        },
+        {
+            id: "3",
+            objetivo: "FIV con ICSI",
+            estado: "vigente",
+            fechaInicio: "01/10/2024",
+            ultimaConsulta: "28/11/2024",
+            etapaActual: "Segunda Consulta",
+            medicoTratante: "Dr. Juan Pérez",
+            proximaEtapa: "Estimulación",
+            proximoTurno: "10/12/2024 - 09:00hs"
+        },
+        {
+            id: "4",
+            objetivo: "Método ROPA",
+            estado: "cancelado",
+            fechaInicio: "05/06/2024",
+            fechaCancelacion: "15/09/2024",
+            ultimaConsulta: "10/09/2024",
+            motivoCancelacion: "Decisión personal de la paciente",
+            etapaActual: "Primera Consulta",
+            medicoTratante: "Dr. Carlos Rodríguez",
+            proximaEtapa: "-",
+            proximoTurno: "-"
         }
-        setTratamientosState([nuevo, ...tratamientosState])
+    ]
+
+    const handleEditarTratamiento = (tratamiento) => {
+        console.log("Editar tratamiento:", tratamiento)
     }
 
+    const handleEliminarTratamiento = (tratamiento) => {
+        console.log("Eliminar tratamiento:", tratamiento)
+    }
+
+    const getBadgeVariant = (estado) => {
+        const variants = {
+            vigente: "default",
+            completado: "secondary",
+            cancelado: "destructive"
+        }
+        return variants[estado] || "outline"
+    }
+
+    const tratamientosFiltrados = tratamientos.filter(t => {
+        const cumpleBusqueda = 
+            t.objetivo.toLowerCase().includes(busqueda.toLowerCase()) ||
+            t.id.toLowerCase().includes(busqueda.toLowerCase()) ||
+            t.etapaActual.toLowerCase().includes(busqueda.toLowerCase())
+        
+        const cumpleEstado = filtroEstado === "todos" || t.estado === filtroEstado
+
+        return cumpleBusqueda && cumpleEstado
+    })
+
     return (
-        <DashboardLayout role={'medico'}>
-        <div className="max-w-3xl mx-auto py-8">
-            <h1 className="text-3xl font-bold mb-6">Tratamientos de {paciente?.nombre || "Paciente"}</h1>
-            {/* NUEVO: Formulario para crear tratamiento */}
-            <NuevoTratamiento onCrear={crearNuevoTratamiento} disabled={hayVigente} />
-            <div className="space-y-4">
-                {tratamientosState.length === 0 && (
-                    <Card>
-                        <CardContent className="py-8 text-center text-muted-foreground">
-                            No hay tratamientos registrados para este paciente.
-                        </CardContent>
-                    </Card>
-                )}
-                {tratamientosState.map(trat => (
-                    <Card key={trat.id} className=" p-4">
-                        <CardHeader className='flex justify-between items-center'>
-                            <div className="flex items-center gap-2">
-                                <Badge className={`flex items-center font-semibold ${ESTADOS[trat.estado].color}`}>
-                                    {ESTADOS[trat.estado].icon}
-                                    {ESTADOS[trat.estado].label}
-                                </Badge>
-                                <span className="font-semibold ">#{trat.id}</span>
+        <DashboardLayout role={user?.role}>
+            <div className="space-y-6">
+
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div>
+                            <h1 className="text-3xl font-bold tracking-tight">Tratamientos</h1>
+                            <p className="text-muted-foreground">
+                                Paciente: {paciente.nombre} - DNI: {paciente.dni}
+                            </p>
+                        </div>
+                    </div>
+                    <Button asChild>
+                        <Link to={`/pacientes/${id}/tratamiento/nuevo`}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Nuevo Tratamiento
+                        </Link>
+                    </Button>
+                </div>
+
+           
+
+                {/* Filtros */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Filtros de Búsqueda</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="grid gap-4 md:grid-cols-2">
+                            <div className="relative">
+                                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                    placeholder="Buscar por ID, objetivo o etapa..."
+                                    value={busqueda}
+                                    onChange={(e) => setBusqueda(e.target.value)}
+                                    className="pl-8"
+                                />
                             </div>
-                            <div className="text-sm text-muted-foreground">
-                                <span className="font-medium">{OBJETIVOS_DISPONIBLES.find(o => o.id === trat.objetivo)?.label || "-"}</span>
-                            </div>
-                        </CardHeader>
-                        <Separator></Separator>
-                        <CardFooter className='flex justify-between items-center'>
-                            <div className="flex flex-col text-md text-muted-foreground">
-                                <p>Iniciado: {trat.fechaInicio}</p>
-                                {trat.fechaFin && <p> Finalizado: {trat.fechaFin}</p>}
-                            </div>
-                            <Link to={`/medico/pacientes/tratamiento/${trat.id}`} className="inline-flex items-center rounded bg-primary p-2 gap-2 text-white hover:bg-primary/80 transition">  
-                                Ver detalle <ArrowRight className="w-4 h-4" />
-                            </Link>
-                        </CardFooter>
-                    </Card>
-                ))}
+                            <Select value={filtroEstado} onValueChange={setFiltroEstado}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Estado del tratamiento" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="todos">Todos los estados</SelectItem>
+                                    <SelectItem value="vigente">Vigente</SelectItem>
+                                    <SelectItem value="completado">Completado</SelectItem>
+                                    <SelectItem value="cancelado">Cancelado</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </CardContent>
+                </Card>
+
+      
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Lista de Tratamientos</CardTitle>
+                        <CardDescription>
+                            Mostrando {tratamientosFiltrados.length} de {tratamientos.length} tratamientos
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>ID</TableHead>
+                                    <TableHead>Objetivo</TableHead>
+                                    <TableHead>Etapa Actual</TableHead>
+                                    <TableHead>Estado</TableHead>       
+                                    <TableHead>Fecha Inicio</TableHead>
+                                    <TableHead className="text-right">Acciones</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {tratamientosFiltrados.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={8} className="text-center text-muted-foreground">
+                                            No se encontraron tratamientos con los filtros aplicados
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    tratamientosFiltrados.map((tratamiento) => (
+                                        <TableRow key={tratamiento.id}>
+                                            <TableCell className="font-medium">
+                                                <Link to={`/pacientes/${id}/tratamiento/${tratamiento.id}`} className="hover:underline">
+                                                    {tratamiento.id}
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="font-medium">{tratamiento.objetivo}</div>
+                                            </TableCell>
+                                            
+                                            <TableCell>
+                                                <div>{tratamiento.etapaActual}</div>
+                                            </TableCell>
+
+                                            <TableCell>
+                                                <Badge variant={getBadgeVariant(tratamiento.estado)}>
+                                                    {tratamiento.estado}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>{tratamiento.fechaInicio}</TableCell>
+                                                
+                                         
+                                            <TableCell className="text-right">
+                                                <AccionesTratamiento
+                                                    tratamiento={tratamiento}
+                                                    pacienteId={id}
+                                                    onEditar={handleEditarTratamiento}
+                                                    onEliminar={handleEliminarTratamiento}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
             </div>
-            <div className="mt-8 text-xs text-muted-foreground text-center">
-            <p>
-                <b>Nota:</b> Si un paciente regresa tras un tratamiento cancelado, se debe crear un nuevo tratamiento independiente.<br />
-                El tratamiento inicia al elegir objetivo y termina cuando todos los embriones fueron transferidos o criopreservados.
-            </p>
-            </div>
-        </div>
         </DashboardLayout>
     )
 }
