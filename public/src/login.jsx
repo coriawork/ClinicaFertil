@@ -23,14 +23,17 @@ export default function LoginPage() {
         if (!isLoading && user) {
         switch (user.role) {
             case "paciente":
-            navigate("/paciente")
-            break   
+                navigate("/paciente")
+                break   
             case "medico":
-            navigate("/medico")
-            break
+                navigate("/medico")
+                break
             case "laboratorio":
-            navigate("/laboratorio")
-            break
+                navigate("/laboratorio")
+                break
+            case "director":
+                navigate("/director")
+                break
             default:
             break
         }
