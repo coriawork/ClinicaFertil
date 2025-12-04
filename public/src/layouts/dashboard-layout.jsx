@@ -18,17 +18,19 @@ import {
   ClipboardList,
 } from "lucide-react"
 import { useTheme } from "@/lib/ThemeContex"
-import { useState } from "react"
+import { useState,useEfect } from "react"
 import { useNavigate, useLocation, Link } from "react-router-dom"
 import { Volver } from "@/components/ui/volver"
 import { Menu } from "lucide-react"
+import { Toaster } from "@/components/ui/sonner"
+
 
 export function DashboardLayout({ children, role }) {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
     const { theme, setTheme } = useTheme()
-    
+    role = user?.role
     const toggleTheme = () => {
         // Solo alterna entre light y dark
         if (theme === "dark") {
@@ -67,31 +69,38 @@ export function DashboardLayout({ children, role }) {
     }
 
     const getNavigation = () => {
-    switch (role) {
-        case "paciente":
-        return [
-            { href: "/paciente", label: "Inicio", icon: Home },
-            { href: "/paciente/citas", label: "Solicitar Cita", icon: Calendar },
-            { href: "/paciente/mis-citas", label: "Mis Citas", icon: ClipboardList },
-            { href: "/paciente/ovocitos", label: "ovocitos", icon: ClipboardList },
-        ]
-        case "medico":
-        return [
-            { href: "/medico", label: "Inicio", icon: Home },
-            { href: "/medico/agenda", label: "Agenda", icon: Calendar },
-            { href: "/medico/pacientes", label: "Pacientes", icon: Users },
-        ]
-        case "laboratorio":
-        return [
-            { href: "/laboratorio", label: "Inicio", icon: Home },
-            { href: "/laboratorio/punsiones", label: "Gestion Punsion", icon: Activity },
-            { href: "/laboratorio/ovocitos/", label: "Gestion Ovocitos", icon: TestTube },
-            { href: "/laboratorio/embriones/", label: "Gestion Embriones", icon: TestTube },
-        ]
-        default:
-        return []
+        switch (role) {
+            case "paciente":
+            return [
+                { href: "/paciente", label: "Inicio", icon: Home },
+                { href: "/paciente/citas", label: "Solicitar Cita", icon: Calendar },
+                { href: "/paciente/mis-citas", label: "Mis Citas", icon: ClipboardList },
+                { href: "/ovocitos", label: "ovocitos", icon: ClipboardList },
+            ]
+            case "medico":
+                return [
+                    { href: "/medico", label: "Inicio", icon: Home },
+                    { href: "/medico/agenda", label: "Agenda", icon: Calendar },
+                    { href: "/pacientes", label: "Pacientes", icon: Users },
+                    { href: "/ovocitos", label: "ovocitos", icon: ClipboardList },
+            ]
+            case "laboratorio":
+            return [
+                { href: "/laboratorio", label: "Inicio", icon: Home },
+                { href: "/laboratorio/punsiones", label: "Gestion Punsion", icon: Activity },
+                { href: "/ovocitos/", label: "Gestion Ovocitos", icon: TestTube },
+                { href: "/embriones/", label: "Gestion Embriones", icon: TestTube },
+            ]
+            case "director":
+            return [
+                { href: "/director", label: "Inicio", icon: Home },
+                { href: "/pacientes", label: "Pacientes", icon: Users },
+            ]
+            default:
+            return []
+        }
     }
-    }
+
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [isDarkMode,setDarrkMode]=useState(false);
     const navigation = getNavigation()
@@ -100,7 +109,7 @@ export function DashboardLayout({ children, role }) {
     <div className={"min-h-screen bg-background transition-colors duration-500 ease-in-out "+(isDarkMode ? "dark" : "")}>
         <header className="sticky top-0  z-50 border-b bg-background/10 shadow-sm backdrop-blur-xl">
             <div className="container mx-auto flex h-16 items-center justify-between px-2 sm:px-4">
-                {/* Botón hamburguesa solo visible en móvil */}
+                {/* Botón hamburguesa  */}
                 <button
                     className="md:hidden mr-2 p-2 rounded hover:bg-primary/10"
                     onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -126,7 +135,7 @@ export function DashboardLayout({ children, role }) {
                         {getThemeIcon()}
                     </Button>
                     <div className="hidden xs:block text-right">
-                        <p className="text-xs  sm:text-sm font-medium text-foreground truncate max-w-[80px] sm:max-w-none">{user?.name}</p>
+                        <p className="text-xs  sm:text-sm font-medium text-foreground truncate max-w-20 sm:max-w-none">{user?.name}</p>
                         <p className="hidden sm:block text-xs text-muted-foreground">{user && getRoleLabel(user.role)}</p>
                     </div>
                     <Button
@@ -174,7 +183,7 @@ export function DashboardLayout({ children, role }) {
                                 ? "bg-primary text-background "
                                 : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
                             }`}
-                            onClick={() => setSidebarOpen(false)} // Cierra menú al navegar en móvil
+                            onClick={() => setSidebarOpen(false)} 
                         >
                             <Icon className="h-4 w-4" />
                             {item.label}
@@ -193,6 +202,7 @@ export function DashboardLayout({ children, role }) {
             )}
             
             <main className="flex-1 flex gap-5 flex-col">
+                <Toaster position="top-center" className="bg-primary"/>
                 <Volver className=""/>
                 {children}
             </main>

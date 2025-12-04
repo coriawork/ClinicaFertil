@@ -15,7 +15,7 @@ const MOCK_USERS = [
         id: "2",
         email: "medico",
         password: "1",
-        name: "Dr. Carlos Rodríguez",
+        name: "Carlos Rodríguez",
         role: "medico",
         createdAt: new Date().toISOString(),
     },
@@ -25,6 +25,14 @@ const MOCK_USERS = [
         password: "1",
         name: "Ana Martínez",
         role: "laboratorio",
+        createdAt: new Date().toISOString(),
+    },
+    {
+        id: "4",
+        email: "director",
+        password: "1",
+        name: "Ana Martínez",
+        role: "director",
         createdAt: new Date().toISOString(),
     },
 ]
