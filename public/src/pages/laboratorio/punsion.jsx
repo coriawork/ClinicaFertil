@@ -239,7 +239,7 @@ export function Punsion() {
                                                                 ));
                                                             }}
                                                             onVerDetalle={(idx) => {
-                                                                navigate(`/laboratorio/ovocito/${idx}`);
+                                                                navigate(`/ovocitos/${idx}`);
                                                             }}
                                                             mostrarVerDetalle={true}
                                                         />
