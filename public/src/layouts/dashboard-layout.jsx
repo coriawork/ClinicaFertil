@@ -31,6 +31,7 @@ export function DashboardLayout({ children, role }) {
     const location = useLocation()
     const { theme, setTheme } = useTheme()
     role = user?.role
+
     const toggleTheme = () => {
         // Solo alterna entre light y dark
         if (theme === "dark") {
@@ -72,17 +73,19 @@ export function DashboardLayout({ children, role }) {
         switch (role) {
             case "paciente":
             return [
-                { href: "/paciente", label: "Inicio", icon: Home },
-                { href: "/paciente/citas", label: "Solicitar Cita", icon: Calendar },
+                { href: `/paciente`, label: "Inicio", icon: Home },
+                { href: "citas", label: "Solicitar Cita", icon: Calendar },
                 { href: "/paciente/mis-citas", label: "Mis Citas", icon: ClipboardList },
-                { href: "/ovocitos", label: "ovocitos", icon: ClipboardList },
+                { href: "/ovocitos", label: "Ovocitos", icon: ClipboardList },
+                { href: "/chatbot", label: "Chatbot", icon: ClipboardList },
+                { href: "/paciente/ordenes", label: "Ordenes", icon: ClipboardList },
             ]
             case "medico":
                 return [
                     { href: "/medico", label: "Inicio", icon: Home },
                     { href: "/medico/agenda", label: "Agenda", icon: Calendar },
                     { href: "/pacientes", label: "Pacientes", icon: Users },
-                    { href: "/ovocitos", label: "ovocitos", icon: ClipboardList },
+                    { href: "/ovocitos", label: "Ovocitos", icon: ClipboardList },
             ]
             case "laboratorio":
             return [
@@ -95,6 +98,7 @@ export function DashboardLayout({ children, role }) {
             return [
                 { href: "/director", label: "Inicio", icon: Home },
                 { href: "/pacientes", label: "Pacientes", icon: Users },
+                { href: "/medicos", label: "Médicos", icon: Users },
             ]
             default:
             return []

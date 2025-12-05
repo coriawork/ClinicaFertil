@@ -22,7 +22,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Heart className="h-8 w-8 text-white" />
-                        <span className="text-2xl font-bold text-white">Clínica Fértil</span>
+                        <span className="text-2xl font-bold text-white">FertilCare</span>
                     </div>
                     {user && (
                         <Button
@@ -45,16 +45,13 @@ export default function HomePage() {
                         </div>
                         
                         <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
-                            Bienvenido a Clínica Fértil
+                            Bienvenido a FertilCare
                         </h1>
                         
                         <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-                          Te ofrecemos <span className="bg-white text-primary p-1 font-bold">atención personalizada</span> y tratamientos de fertilidad diseñados para ti.
+                          Da paso a una nueva vida {"<"}3
                         </p>
                     </div>
-
-              
-                    {/* Main CTA */}
                     <div className="space-y-4 max-w-2xl mx-auto">
                         <Button
                             size="lg"
