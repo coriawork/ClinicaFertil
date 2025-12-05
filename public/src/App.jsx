@@ -29,7 +29,8 @@ import {ListadoTratamientosPaciente} from '@/pages/medico/gestion-tratamiento'
 import {TratamientoDetalle} from '@/pages/medico/tratamiento'
 import {DashboardDirector} from '@/pages/director/dashboard-director'
 import { GestionPacientes } from "./pages/director/pacientes"
-
+import { MedicosCrud } from "./pages/director/gestion-medicos"
+import {Estudios_Paciente} from "./pages/pacientes/ordenes"
 function App() {
     return (
         <ThemeProvider>
@@ -53,9 +54,10 @@ function App() {
                             <Route path="citas" element={<AppointmentBooking />} />
                             <Route path="mis-citas" element={<MyAppointmentsPage />} />
                             <Route path="historia" element={<HistoriaClinicaPage />} />
-                            <Route path="chatbot" element={<ChatbotPage />} />
                             <Route path="donacion" element={<GameteDonation />} />
+                            <Route path="ordenes" element={<Estudios_Paciente/>}/>
                         </Route>
+                        <Route path="/chatbot" element={<ChatbotPage />} />
 
                         {/* Rutas generales de pacientes (accesibles por médicos y directores) */}
                         <Route
@@ -69,8 +71,9 @@ function App() {
                             <Route index element={<GestionPacientes />} />
                             <Route path=":id" element={<PacienteDetail />} />
                             <Route path=":id/historial" element={<GestionHistoria/>}/>
+                            <Route path=":id/estudios" element={<Estudios_Paciente/>}/>
                             <Route path=":id/tratamientos" element={<ListadoTratamientosPaciente/>}/>
-                            <Route path=":id/estudios" element={<StudiesRequestPage />} />
+                            <Route path=":id/estudios" element={<Estudios_Paciente/>} />
                             <Route path=":id/ovocitos" element={<Ovocitos />}/>
                             <Route path=":id/embriones" element={<Embriones />}/>
                             <Route path=":id/tratamiento/:tratamientoId" element={<TratamientoDetalle/>}/>
@@ -112,6 +115,7 @@ function App() {
                             <Route path="pacientes" element={<PacientesPage />} />
                             <Route path="agenda" element={<AgendaPage />} />
                         </Route>
+                        <Route path="/medicos" element={<MedicosCrud />} />
 
                         {/* Rutas de director */}
                         <Route path="/director" element={
