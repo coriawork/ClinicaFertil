@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { FamilyTree } from "@/components/family-tree"
 import {Select, SelectContent, SelectGroup, SelectTrigger, SelectLabel, SelectValue, SelectItem} from "@/components/ui/select"
 import { SearchAntecedentes } from "@/components/ui/searchAntecedentes"
+
 export default function GestionHistoria() {
     const [editG, setEditG] = useState(false)
     const [editH, setEditH] = useState(false)
