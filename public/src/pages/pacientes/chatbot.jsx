@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { useAuth } from "@/lib/AuthContext"
 import { DashboardLayout } from "@/layouts/dashboard-layout"
@@ -10,9 +10,61 @@ import { Input } from "@/components/ui/input"
 import { ArrowLeft, Send, Bot, User } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
+const CHATBOT_API_URL = "/chatbot/v1/fertility-chat"
+const BEARER_TOKEN = import.meta.env.VITE_CHATBOT_TOKEN || "your-bearer-token-here"
+
+// Prompt inicial para que el bot sea más conciso
+const INITIAL_SYSTEM_PROMPT = {
+  role: "user",
+  parts: [{
+    text: "Por favor, responde de forma breve, concisa y directa. Mantén tus respuestas en máximo 2 párrafos cortos. Ve al punto principal sin rodeos innecesarios. Usa lenguaje claro y simple."
+  }]
+}
+
+const INITIAL_MODEL_RESPONSE = {
+  role: "model",
+  parts: [{
+    text: "Entendido. Responderé de forma breve y directa."
+  }]
+}
+
+const formatMarkdownText = (text) => {
+  const parts = []
+  let currentIndex = 0
+  const boldRegex = /\*\*(.*?)\*\*/g
+  let match
+
+  while ((match = boldRegex.exec(text)) !== null) {
+    // Agregar texto antes del match
+    if (match.index > currentIndex) {
+      parts.push({
+        type: 'text',
+        content: text.slice(currentIndex, match.index)
+      })
+    }
+    // Agregar texto en negrita
+    parts.push({
+      type: 'primary',
+      content: match[1]
+    })
+    currentIndex = match.index + match[0].length
+  }
+
+  // Agregar el texto restante
+  if (currentIndex < text.length) {
+    parts.push({
+      type: 'text',
+      content: text.slice(currentIndex)
+    })
+  }
+
+  return parts
+}
+
 export default function ChatbotPage() {
   const { user, isLoading } = useAuth()
   const navigate = useNavigate()
+  const messagesEndRef = useRef(null)
   const [messages, setMessages] = useState([
     {
       id: "1",
@@ -24,6 +76,18 @@ export default function ChatbotPage() {
   ])
   const [inputMessage, setInputMessage] = useState("")
   const [isTyping, setIsTyping] = useState(false)
+  const [conversationHistory, setConversationHistory] = useState([
+    INITIAL_SYSTEM_PROMPT,
+    INITIAL_MODEL_RESPONSE
+  ])
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   useEffect(() => {
     if (!isLoading && (!user || user.role !== "paciente")) {
@@ -42,7 +106,7 @@ export default function ChatbotPage() {
     const userMessage = {
       id: Date.now().toString(),
       role: "user",
-      content: inputMessage,
+      content: inputMessage ,
       timestamp: new Date(),
     }
 
@@ -50,42 +114,83 @@ export default function ChatbotPage() {
     setInputMessage("")
     setIsTyping(true)
 
-    // Mock AI response
-    setTimeout(() => {
-      const responses = [
-        "Entiendo tu pregunta. Para brindarte información precisa sobre tu tratamiento, te recomiendo consultar con tu médico tratante en tu próxima cita.",
-        "Esa es una excelente pregunta. Los efectos secundarios pueden variar según el medicamento. ¿Podrías especificar qué medicamento estás tomando?",
-        "Tu próxima cita de monitoreo está programada para el 18 de enero a las 9:30 AM. ¿Necesitas hacer algún cambio?",
-        "La estimulación ovárica generalmente dura entre 8-14 días. Tu médico ajustará la duración según tu respuesta al tratamiento.",
+    try {
+      // Preparar el historial de mensajes para la API
+      const newConversationHistory = [
+        ...conversationHistory,
+        {
+          role: "user",
+          parts: [{ text: inputMessage }],
+        },
       ]
+
+      const requestBody = {
+        patientId: user.id ||  "unknown",
+        patientName: user.name || "Paciente",
+        gender: "Female",
+        birthDate: user.fecha_nacimiento || user.birthDate || "1990-01-01",
+        messages: newConversationHistory,
+      }
+
+      const response = await fetch(CHATBOT_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer sb_secret_rruAhDEpIHJKrtf6i6Qu_A_noFtw_TS`,
+        },
+        body: JSON.stringify(requestBody),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      // Extraer la respuesta del bot - el campo es "respuesta"
+      const botResponse = data.respuesta || data.response || data.message || "Lo siento, no pude procesar tu pregunta."
 
       const assistantMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: responses[Math.floor(Math.random() * responses.length)],
+        content: botResponse,
         timestamp: new Date(),
       }
 
       setMessages((prev) => [...prev, assistantMessage])
+
+      // Actualizar el historial de conversación
+      setConversationHistory([
+        ...newConversationHistory,
+        {
+          role: "model",
+          parts: [{ text: botResponse }],
+        },
+      ])
+    } catch (error) {
+      console.error("Error al comunicarse con el chatbot:", error)
+
+      const errorMessage = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content:
+          "Lo siento, ha ocurrido un error al procesar tu mensaje. Por favor, intenta nuevamente más tarde.",
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, errorMessage])
+    } finally {
       setIsTyping(false)
-    }, 1500)
+    }
   }
 
   return (
     <DashboardLayout role="paciente">
       <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/paciente">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver
-            </Link>
-          </Button>
-        </div>
+        
 
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-foreground">Asistente Virtual</h2>
-          <p className="text-muted-foreground">Haz preguntas sobre tu tratamiento y citas</p>
         </div>
 
         <Card className="h-[600px] flex flex-col">
@@ -98,37 +203,45 @@ export default function ChatbotPage() {
           </CardHeader>
           <CardContent className="flex-1 flex flex-col p-0">
             <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
+              <div className="space-y-5 px-5 w-full overflow-y-auto max-h-96">
                 {messages.map((message) => (
                   <div
                     key={message.id}
                     className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {message.role === "assistant" && (
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
-                        <Bot className="h-4 w-4 text-primary-foreground" />
+                      <div className="flex h-10 w-10  shrink-0 items-center justify-center rounded-full bg-primary">
+                        <Bot className="h-6 w-6 text-primary-foreground" />
                       </div>
                     )}
                     <div
-                      className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                      className={`max-w-[80%] rounded-lg px-5 py-2 ${
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-muted-foreground"
                       }`}
                     >
-                      <p className="text-sm">{message.content}</p>
+                      <div className="text-sm whitespace-pre-wrap">
+                        {formatMarkdownText(message.content).map((part, index) => (
+                          part.type === 'primary' ? (
+                            <strong className="text-primary/80" key={index}>{part.content}</strong>
+                          ) : (
+                            <span key={index}>{part.content}</span>
+                          )
+                        ))}
+                      </div>
                     </div>
                     {message.role === "user" && (
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary">
-                        <User className="h-4 w-4 text-secondary-foreground" />
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary">
+                        <User className="h-6 w-6 text-secondary-foreground" />
                       </div>
                     )}
                   </div>
                 ))}
                 {isTyping && (
                   <div className="flex gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
-                      <Bot className="h-4 w-4 text-primary-foreground" />
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary">
+                      <Bot className="h-6 w-6 animate-pulse text-primary-foreground" />
                     </div>
                     <div className="rounded-lg bg-muted px-4 py-2">
                       <div className="flex gap-1">
@@ -139,6 +252,7 @@ export default function ChatbotPage() {
                     </div>
                   </div>
                 )}
+                <div ref={messagesEndRef} />
               </div>
             </ScrollArea>
             <form onSubmit={handleSendMessage} className="border-t p-4">
