@@ -341,8 +341,8 @@ export function GestionPagos(){
                                             <TableCell className="font-medium">
                                                 <p>{PACIENTES_MOCK.find(p => p.id === pago.id_paciente)?.nombre || 'Desconocido'}</p>
                                             </TableCell>
-                                            <TableCell className="font-medium wrap">
-                                                <p>{pago.obra_social.sigla || pago.obra_social.nombre}</p>
+                                            <TableCell className="font-medium wrap ">
+                                                <p>{pago.obra_social.sigla || (pago.obra_social.nombre.length > 15? pago.obra_social.nombre.slice(0, 15) + "..." : pago.obra_social.nombre)}</p>
                                             </TableCell>
                                             <TableCell className="font-medium">
                                                 <p>${deudaPac(pago.monto_total, pago.obra_social.cobertura, pago.estado_paciente).toFixed(2)}</p>

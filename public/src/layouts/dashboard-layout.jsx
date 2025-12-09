@@ -137,6 +137,12 @@ export function DashboardLayout({ children, role }) {
                     </div>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-4">
+                    <div className="uppercase hidden md:block text-sm text-foreground">
+                        <span className="text-primary">
+                            {user.role} 
+                        </span>  
+                        {" "+user.name}
+                    </div>
                     <Button
                         onClick={toggleTheme}
                         variant="ghost"
@@ -173,6 +179,7 @@ export function DashboardLayout({ children, role }) {
             >
                 <nav className="space-y-1 p-4 md:p-0">
                     {/* Botón cerrar solo en móvil */}
+                    
                     <div className="flex justify-end md:hidden mb-4">
                         <button
                             className="p-2 rounded hover:bg-primary/10"
