@@ -423,7 +423,7 @@ export default function AppointmentBooking() {
                                     <Info className="h-4 w-4" />
                                     <AlertDescription>
                                         Se asignará a: <strong>{assignedDoctor.nombre}</strong> 
-                                        <span className="text-muted-foreground"> ({assignedDoctor.especialidad})</span>
+                                       
                                         <br />
                                         <span className="text-xs">Médico con mayor disponibilidad</span>
                                     </AlertDescription>

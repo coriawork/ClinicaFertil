@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectTrigger, SelectContent, SelectValue, SelectItem } from "@/components/ui/select"
 import {AccionesOvocitoMenu} from "@/pages/ovocitos/acciones"
 import { useAuth } from "@/lib/AuthContext";
+
 export function Ovocito(){
     
     const { user } = useAuth()
@@ -24,21 +25,20 @@ export function Ovocito(){
     console.log('OVOCITO',user)
     const [ovo,setOvo] = useState({
         estado_actual:'inmaduro',
-        id: "Ovo_25/11/25_Gar_Ana_1"
+        id: "Ovo_12/20/25_Gar_Ana_1"
     })
     
-    function setCrioPreservado(){
-        confirmarCambioEstado('criopreservado')
-
+    function setCrioPreservado(ovocitoId, datos){
+        confirmarCambioEstado('criopreservado', datos)
     }
 
-    function setInvitro(){
+    function setInvitro(ovocitoId){
         confirmarCambioEstado('in vitro')
     }
     
-    function confirmarCambioEstado(estado){
-        setOvo({id:"Ovo_25/11/25_Gar_Ana_1",estado_actual:estado})
-        setTransiones([...transiciones,{estado:estado,fecha:"2025/12/2" }])
+    function confirmarCambioEstado(estado, datosAdicionales = {}){
+        setOvo({...ovo, estado_actual: estado, ...datosAdicionales})
+        setTransiones([...transiciones, {estado: estado, fecha: "2025/12/2"}])
     }
 
 
@@ -56,20 +56,21 @@ export function Ovocito(){
                         </div>                            
                         <AccionesOvocitoMenu
                             ovocito={ovo}
-                            onCriopreservar={(_, datos) => {
+                            onCriopreservar={(ovocitoId, datos) => {
                                 setOvo({...ovo, estado_actual: "criopreservado", tubo: datos.tubo, rack: datos.rack});
                                 setTubo(datos.tubo);
                                 setRack(datos.rack);
+                                setTransiones([...transiciones, {estado: "criopreservado", fecha: "2025/12/2"}]);
                             }}
-                            onFecundar={(_, datos) => {
+                            onFecundar={(ovocitoId, datos) => {
                                 confirmarCambioEstado('fecundado');
                             }}
-                            onMadurarInvitro={setInvitro}
-                            onMadurar={() => confirmarCambioEstado('maduro')}
-                            onCambiarEstado={(_, nuevoEstado) => {
+                            onMadurarInvitro={(ovocitoId) => setInvitro(ovocitoId)}
+                            onMadurar={(ovocitoId) => confirmarCambioEstado('maduro')}
+                            onCambiarEstado={(ovocitoId, nuevoEstado) => {
                                 confirmarCambioEstado(nuevoEstado);
                             }}
-                            onDescartar={(_, causa) => {
+                            onDescartar={(ovocitoId, causa) => {
                                 setMotivo(causa);
                                 confirmarCambioEstado('descartado');
                             }}
@@ -130,35 +131,7 @@ export function Ovocito(){
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-        <Dialog open={openCrio } onOpenChange={()=>setOpenCrio(false)}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Criopreservar ovocito</DialogTitle>
-                </DialogHeader>
-                <div className="flex flex-col gap-2">
-                    <Input
-                        placeholder="Tubo"
-                        value={tubo}
-                        onChange={e => setTubo(e.target.value)}
-                    />
-                    <Input
-                        placeholder="Rack"
-                        value={rack}
-                        onChange={e => setRack(e.target.value)}
-                    />
-                </div>
-                <DialogFooter>
-                    <Button
-                        onClick={()=>{setCrioPreservado();setOpenCrio(false)}}
-                    >
-                        Confirmar criopreservación
-                    </Button>
-                    <Button variant="outline" onClick={()=>setOpenCrio(false)}>
-                        Cancelar
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+       
         <Dialog open={openEstado}onOpenChange={()=>setOpenEstado(false)} >
             <DialogContent>
                 <DialogHeader>

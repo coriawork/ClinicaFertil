@@ -31,6 +31,7 @@ import {DashboardDirector} from '@/pages/director/dashboard-director'
 import { GestionPacientes } from "./pages/director/pacientes"
 import { MedicosCrud } from "./pages/director/gestion-medicos"
 import {Estudios_Paciente} from "./pages/pacientes/ordenes"
+import { GestionPagos } from "./pages/director/gestion-pagos"
 function App() {
     return (
         <ThemeProvider>
@@ -123,6 +124,7 @@ function App() {
                                     <Outlet />
                                 </RouteGuard>
                         }>
+                            <Route path="pagos" element={<GestionPagos></GestionPagos>} />
                             <Route index element={<DashboardDirector />} />
                         </Route>
 

@@ -14,8 +14,13 @@ import {
   TestTube,
   Beaker,
   Package,
+    UserCircle2,
+    Stethoscope,
+    CalendarRange,
+    MessageCircle,
+    Egg,
   Sun,Moon,
-  ClipboardList,
+  ClipboardList,DollarSign
 } from "lucide-react"
 import { useTheme } from "@/lib/ThemeContex"
 import { useState,useEfect } from "react"
@@ -68,37 +73,39 @@ export function DashboardLayout({ children, role }) {
             return role
         }
     }
-
     const getNavigation = () => {
         switch (role) {
             case "paciente":
             return [
                 { href: `/paciente`, label: "Inicio", icon: Home },
-                { href: "citas", label: "Solicitar Cita", icon: Calendar },
+                { href: "/paciente/citas", label: "Solicitar Cita", icon: Calendar },
                 { href: "/paciente/mis-citas", label: "Mis Citas", icon: ClipboardList },
-                { href: "/ovocitos", label: "Ovocitos", icon: ClipboardList },
-                { href: "/chatbot", label: "Chatbot", icon: ClipboardList },
-                { href: "/paciente/ordenes", label: "Ordenes", icon: ClipboardList },
+                { href: "/ovocitos", label: "Ovocitos", icon: Egg },
+                { href: "/chatbot", label: "Chatbot", icon: MessageCircle },
+                { href: "/paciente/ordenes", label: "Ordenes", icon: FileText },
+                { href: "/pacientes/1/tratamientos", label: "Tratamientos", icon: Activity },
             ]
             case "medico":
                 return [
                     { href: "/medico", label: "Inicio", icon: Home },
-                    { href: "/medico/agenda", label: "Agenda", icon: Calendar },
+                    { href: "/medico/agenda", label: "Agenda", icon: CalendarRange },
                     { href: "/pacientes", label: "Pacientes", icon: Users },
-                    { href: "/ovocitos", label: "Ovocitos", icon: ClipboardList },
+                    { href: "/ovocitos", label: "Ovocitos", icon: Egg },
+                    { href: "/embriones/", label: "Gestion Embriones", icon: Beaker },
             ]
             case "laboratorio":
             return [
                 { href: "/laboratorio", label: "Inicio", icon: Home },
-                { href: "/laboratorio/punsiones", label: "Gestion Punsion", icon: Activity },
+                { href: "/laboratorio/punsiones", label: "Gestion Punsion", icon: Syringe },
                 { href: "/ovocitos/", label: "Gestion Ovocitos", icon: TestTube },
-                { href: "/embriones/", label: "Gestion Embriones", icon: TestTube },
+                { href: "/embriones/", label: "Gestion Embriones", icon: Beaker },
             ]
             case "director":
             return [
                 { href: "/director", label: "Inicio", icon: Home },
-                { href: "/pacientes", label: "Pacientes", icon: Users },
-                { href: "/medicos", label: "Médicos", icon: Users },
+                { href: "/pacientes", label: "Pacientes", icon: UserCircle2 },
+                { href: "/medicos", label: "Médicos", icon: Stethoscope },
+                { href: "/director/pagos", label: "Pagos", icon: DollarSign },
             ]
             default:
             return []

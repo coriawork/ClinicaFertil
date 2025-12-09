@@ -210,7 +210,7 @@ export function GestionPacientes() {
                                     <SelectItem value="cancelado">Cancelado</SelectItem>
                                 </SelectContent>
                             </Select>
-                            <Select value={filtroMedico} onValueChange={setFiltroMedico}>
+                            {/* <Select value={filtroMedico} onValueChange={setFiltroMedico}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Médico tratante" />
                                 </SelectTrigger>
@@ -221,7 +221,7 @@ export function GestionPacientes() {
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
-                            </Select>
+                            </Select> */}
                         </div>
                     </CardContent>
                 </Card>

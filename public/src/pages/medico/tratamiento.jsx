@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
+import { useAuth } from "@/lib/AuthContext"
 
 const ESTADOS = {
   vigente: { 
@@ -95,6 +96,7 @@ const tratamientosEjemplo = [
 ]
 
 export function TratamientoDetalle() {
+    const {user} = useAuth()
     const { tratamientoId,id } = useParams()
     const navigate = useNavigate()
     const [tratamiento, setTratamiento] = useState(tratamientosEjemplo.find(t => t.id === Number(tratamientoId)))
@@ -160,39 +162,42 @@ export function TratamientoDetalle() {
                                 {estadoConfig.label}
                             </Badge>
                         </div>
+                        {
+                            (user.role === 'medico' || user.role === 'laboratorio') && (
+                                <div className="flex flex-wrap gap-2 mt-4">
+                                    <Link to={`/pacientes/${id}/tratamiento/${tratamientoId}/estimulacion/`}>
+                                        <Button size="sm">
+                                            <Activity className="w-4 h-4 mr-2" />
+                                            Estimulación
+                                        </Button>
+                                    </Link>
+                                    
 
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            <Link to={`/pacientes/${id}/tratamiento/${tratamientoId}/estimulacion/`}>
-                                <Button size="sm">
-                                    <Activity className="w-4 h-4 mr-2" />
-                                    Estimulación
-                                </Button>
-                            </Link>
-                            
-
-                            {tratamiento.estado === "vigente" && (
-                                <>
-                                    <Button 
-                                        size="sm" 
-                                        variant="outline"
-                                        className="text-blue-600 border-blue-600 hover:bg-blue-50"
-                                        onClick={() => handleCambiarEstado("completado")}
-                                    >
-                                        <CheckCircle className="w-4 h-4 mr-2" />
-                                        Completar
-                                    </Button>
-                                    <Button 
-                                        size="sm" 
-                                        variant="outline"
-                                        className="text-red-600 border-red-600 hover:bg-red-50"
-                                        onClick={() => handleCambiarEstado("cancelado")}
-                                    >
-                                        <XCircle className="w-4 h-4 mr-2" />
-                                        Cancelar
-                                    </Button>
-                                </>
-                            )}
-                        </div>
+                                    {tratamiento.estado === "vigente" && (
+                                        <>
+                                            <Button 
+                                                size="sm" 
+                                                variant="outline"
+                                                className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                                                onClick={() => handleCambiarEstado("completado")}
+                                            >
+                                                <CheckCircle className="w-4 h-4 mr-2" />
+                                                Completar
+                                            </Button>
+                                            <Button 
+                                                size="sm" 
+                                                variant="outline"
+                                                className="text-red-600 border-red-600 hover:bg-red-50"
+                                                onClick={() => handleCambiarEstado("cancelado")}
+                                            >
+                                                <XCircle className="w-4 h-4 mr-2" />
+                                                Cancelar
+                                            </Button>
+                                        </>
+                                    )}
+                                </div>
+                            )
+                        }
                     </CardContent>
                 </Card>
 
@@ -205,7 +210,7 @@ export function TratamientoDetalle() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <p className="font-semibold">{objetivoInfo?.label || "No especificado"}</p>
+                        <p className="font-semibold">{tratamientosEjemplo[tratamientoId]?.objetivo || "No especificado"}</p>
                     </CardContent>
                 </Card>
 

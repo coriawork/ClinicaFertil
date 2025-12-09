@@ -290,5 +290,48 @@ export const emailService = {
       subject: `Confirmacion de monitoreo pendiente - ${fecha}`,
       htmlBody
     })
+  },
+   /**
+   * Envía un email de bienvenida al nuevo paciente
+   * @param {Object} options - Opciones del email
+   * @param {string} options.nombre - Nombre del paciente
+   * @param {string} options.email - Email del paciente
+   * @param {string[]} options.toEmails - Emails destinatarios
+   * @param {number} options.group - ID del grupo
+   * @returns {Promise} Promise con la respuesta de la API
+   */
+  sendWelcomeEmail: async ({ nombre, email, toEmails, group }) => {
+    const htmlBody = emailService.generateEmailTemplate({
+      title: '¡Bienvenido/a a FertilCare!',
+      greeting: `Hola ${nombre},`,
+      content: `
+        <p>Nos complace darte la bienvenida a nuestra clínica de fertilidad. Estamos aquí para acompañarte en cada paso de tu camino.</p>
+
+        <div class="estudios-list" style="margin-top: 20px;">
+          <strong>Próximos Pasos:</strong>
+          <ul style="margin-top: 10px;">
+            <li>Solicita tu primera consulta con nuestros especialistas</li>
+            <li>Explora las funcionalidades de la plataforma</li>
+            <li>Podes hacerle consultas a nuestro chatbot</li>
+          </ul>
+        </div>
+
+      `,
+      alertBox: `
+        <strong>Información de Acceso:</strong>
+        <p style="margin: 8px 0 0 0;">Tu cuenta ha sido activada. Puedes acceder a la plataforma en cualquier momento usando tu correo electrónico y la contraseña que estableciste durante el registro.</p>
+      `,
+      signature: `El Equipo de FertilCare`
+    })
+
+    return emailService.sendEmail({
+      group,
+      toEmails,
+      subject: 'FertilCare - Registro Exitoso',
+      htmlBody
+    })
   }
+
+
+
 }

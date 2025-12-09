@@ -5,14 +5,16 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Heart, AlertCircle, UserPlus } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import {Link} from "react-router-dom"
 import { Combobox } from "@/components/ui/combobox"
 import { Separator } from "@/components/ui/separator"
-
-
+import { useEffect } from "react"
+import {pagosApi} from "@/utils/pagos"
+import { useNavigate } from "react-router-dom"
+import { emailService } from "./utils/email"
 export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
-    const obrasSociales = [
+    /* const obrasSociales = [
         {
             'value': 'osde',
             'label': 'OSDE'
@@ -113,7 +115,10 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
             'value': 'particular',
             'label': 'Particular (sin obra social)'
         }
-    ]
+    ] */
+    
+    const navigate = useNavigate()
+
     const [formData, setFormData] = useState({
         nombre: "",
         apellido: "",
@@ -127,6 +132,23 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [errors, setErrors] = useState({})
+    const [cargandoObras, setCargandoObras] = useState(false)
+    const [obrasSociales, setObrasSociales] = useState([])
+    useEffect(()=>{
+        setCargandoObras(true)
+        pagosApi.getObrasSociales().then(data=>{
+            console.log(data)
+            const nuevasObras = data.map(os=>({
+                value: os.nombre,
+                label: os?.sigla ? os.sigla : os.nombre
+            }))
+            setObrasSociales(nuevasObras)
+        }).catch(err=>{
+            console.error("ERROR AL CARGAR OBRAS SOCIALES", err)
+        }).finally(()=>{
+            setCargandoObras(false)
+        })
+    },[])
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({
@@ -187,21 +209,21 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
         setIsSubmitting(true)
 
         try {
-            // Aca iría la llamada a la API para registrar el paciente
-            // const response = await registrarPaciente(formData)
-            
             // Simulación de registro exitoso
             await new Promise(resolve => setTimeout(resolve, 1000))
             
-            toast({
+            toast.success({
                 title: "Registro exitoso",
                 description: "El paciente ha sido registrado correctamente",
             })
-
-            // Llamar al callback de registro exitoso
-            if (onRegistroExitoso) {
-                onRegistroExitoso(formData)
-            }
+            // Al registrar un nuevo paciente
+            await emailService.sendWelcomeEmail({
+                nombre: formData.nombre + " " + formData.apellido,
+                email: formData.email,
+                toEmails: [formData.email],
+                group: 10
+            })
+            navigate("/login")
 
         } catch (error) {
             toast({
@@ -351,7 +373,7 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                                 )}
                             </div>
                         </div>
-                                
+                        {}
                         {/* Obra social */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
@@ -393,8 +415,8 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
                         </div>
 
                         <Separator/>
+ 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                           
                             <div className="space-y-2">
                                 <Label htmlFor="numeroSocioObraSocial">Número de Socio de Obra Social </Label>
                                 <Input
@@ -415,8 +437,9 @@ export default function RegistrarPaciente({ onRegistroExitoso, onCancelar }) {
 
                             <div className="space-y-2 w-full">
                                 <Label className={"text-muted-foregroun/50 ml-5px"} htmlFor="obras">Selecciona particular si no tenes obra social </Label>
-                                <Combobox id='obras' datas={obrasSociales} title="Elegi una obra social" className="w-full"/>
+                                <Combobox id='obras' datas={obrasSociales} disabled={cargandoObras} title={cargandoObras?"Cargando obras sociales...":"Elegi una obra social"} className="w-full"/>
                             </div>
+   
                         </div>
 
 

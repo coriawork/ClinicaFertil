@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Eye, Activity, CheckCircle, XCircle, MoreVertical } from "lucide-react"
-
+import {useAuth} from "@/lib/AuthContext"
 /**
  * Componente de menú de acciones para tratamientos
  * @param {Object} props
@@ -30,6 +30,7 @@ import { Eye, Activity, CheckCircle, XCircle, MoreVertical } from "lucide-react"
  */
 export function AccionesTratamiento({ tratamiento, pacienteId, onCompletar, onCancelar }) {
     const navigate = useNavigate()
+    const {user} = useAuth()
     const [dialogCancelar, setDialogCancelar] = useState(false)
     const [dialogCompletar, setDialogCompletar] = useState(false)
     const [motivoCancelacion, setMotivoCancelacion] = useState("")
@@ -62,7 +63,7 @@ export function AccionesTratamiento({ tratamiento, pacienteId, onCompletar, onCa
             setMotivoCancelacion("")
         }
     }
-
+    const tieneAcceso = ((user.role ==='laboratorio') || (user.role === 'medico'))
     const estaActivo = tratamiento.estado === "vigente"
 
     return (
@@ -80,7 +81,7 @@ export function AccionesTratamiento({ tratamiento, pacienteId, onCompletar, onCa
                         <span>Ver Detalle</span>
                     </DropdownMenuItem>
                     
-                    {estaActivo && (
+                    {estaActivo && tieneAcceso && (
                         <>
                             <DropdownMenuItem onClick={handleVerEstimulacion}>
                                 <Activity className="h-4 w-4" />

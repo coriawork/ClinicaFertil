@@ -349,7 +349,8 @@ export function Estudios_Paciente() {
             const payload = {
                 medico: { 
                     nombre: orden.medico.nombre, 
-                    dni: orden.medico.dni.toString() 
+                    dni: orden.medico.dni.toString(),
+                    firma_url:'1232323'
                 },
                 paciente: { 
                     nombre: orden.paciente.nombre, 
@@ -384,7 +385,7 @@ export function Estudios_Paciente() {
             toast.success('PDF generado exitosamente')
         } catch (error) {
             console.error('Error al descargar PDF:', error)
-            
+          /*   
             if (error.code === 'ECONNABORTED') {
                 toast.error('Tiempo de espera agotado.')
             } else if (error.response) {
@@ -402,7 +403,7 @@ export function Estudios_Paciente() {
                 toast.error('No se pudo conectar con el servidor.')
             } else {
                 toast.error('Error al procesar la solicitud.')
-            }
+            } */
         } finally {
             setDescargando(null)
         }

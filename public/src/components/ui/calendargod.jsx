@@ -13,6 +13,7 @@ import axios from 'axios'
 import { toast } from "sonner"
 import { emailService } from '@/utils/email'
 import { calendarUtils } from '@/utils/calendar'
+import { Tooltip, TooltipTrigger, TooltipContent } from './tooltip'
 
 export function Calendar() {
     // Estado para mes y año
@@ -669,22 +670,24 @@ export function Calendar() {
                             <div
                                 key={idx}
                                 className={`group relative w-full h-full flex flex-col p-1.5 max-md:min-h-22 md:p-2 cursor-pointer
-                                    border border-neutral-800
-                                    ${cell.current ? 'bg-calendar-bg hover:bg-neutral-900/50 text-foreground' : 'bg-neutral-800 hover:bg-neutral-800/80 text-foreground/40'}`}
+                                    border border-neutral-800 transition-all duration-200
+                                    ${cell.current ? 'bg-calendar-bg hover:bg-neutral-900/50 text-foreground' : 'bg-neutral-800 hover:bg-neutral-800/80 text-foreground/40'}
+                                    ${hasSlots && cell.current ? 'ring-1 ring-primary/30 hover:ring-primary/50' : ''}`}
                                 onClick={() => setSelectedDay({ day: cell.day, month: cellMonth, year: cellYear })}
                             >
                                 <div className="flex items-center justify-between mb-1">
                                     <span
-                                        className={`flex size-6 items-center justify-center rounded-full text-xs font-semibold
+                                        className={`flex size-6 items-center justify-center rounded-full text-xs font-semibold transition-all
                                             ${isToday ? 'bg-primary text-white' : ''}
-                                            ${isSelected ? 'border-3 bg-primary/30 border-primary' : ''}`}
+                                            ${isSelected ? 'border-3z bg-primary/30 border-primary' : ''}`}
                                     >
                                         {cell.day}
                                     </span>
+                                    
                                 </div>
                                 
                                 {/* Eventos */}
-                                <div className="flex-1 flex flex-col gap-2">
+                                <div className="flex-1 flex flex-col gap-1.5">
                                     {cellEvents.slice(0, 2).map((ev, i) => (
                                         <span
                                             key={i}
@@ -699,21 +702,45 @@ export function Calendar() {
                                     ))}
                                     {cellEvents.length > 2 && (
                                         <span className='text-xs text-foreground/60'>
-                                            {cellEvents.length - 2} más
+                                            +{cellEvents.length - 2} más
                                         </span>
                                     )}
                                 </div>
 
-                                {/* Contador de turnos disponibles - Parte inferior */}
+                                {/* Indicador visual de horarios - Parte inferior */}
                                 {hasSlots && cell.current && (
-                                    <div className="mt-auto pt-1 border-t border-neutral-700/30">
-                                        <div className="flex items-center justify-center gap-1.5 py-1">
-                                            <div className="size-2 rounded-full bg-primary/50"></div>
-                                            <span className="text-[11px] text-primary/70 font-medium">
-                                                {availSlots.length} {availSlots.length === 1 ? 'turno' : 'turnos'}
+                                    <div className="mt-auto pt-1.5">
+                                        <div className="flex items-center justify-center gap-1.5 py-1 px-2 rounded-md bg-primary/10 border border-primary/20 group-hover:bg-primary/15 transition-colors">
+                                            <span className="text-[11px] text-primary font-semibold">
+                                                    {availSlots.length}{availSlots.length === 1 ? ' Turno Disponible' : ' Turnos Disponibles'}
                                             </span>
                                         </div>
                                     </div>
+                                )}
+
+                                {/* Tooltip con horarios disponibles al hacer hover */}
+                                {hasSlots && cell.current && availSlots.length > 0 && (
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <div className="absolute inset-0 z-40" />
+                                        </TooltipTrigger>
+                                        <TooltipContent 
+                                            side="top" 
+                                            className="bg-neutral-800 border border-primary/30 shadow-xl p-3 min-w-[160px]"
+                                            sideOffset={5}
+                                        >
+                                            <p className="text-xs font-semibold text-primary mb-2">Horarios disponibles:</p>
+                                            <div className="flex flex-col gap-1 max-h-32 overflow-y-auto">
+                                                {availSlots.map((slot, idx) => (
+                                                    <div key={idx} className="text-[11px] text-foreground/80 flex items-center gap-1.5">
+                                                        <div className="size-1 rounded-full bg-primary/60"></div>
+                                                        {slot.horario_inicio}
+                                                    </div>
+                                                ))}
+                                                
+                                            </div>
+                                        </TooltipContent>
+                                    </Tooltip>
                                 )}
                             </div>
                         );
@@ -1030,7 +1057,7 @@ export function Calendar() {
                         )}
 
                         <DialogFooter className="flex justify-end gap-2 mt-2">
-                            <DialogClose asChild>
+                            <DialogClose asChild>   
                                 <Button type="button" variant="secondary">
                                     Cancelar
                                 </Button>

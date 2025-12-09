@@ -14,70 +14,7 @@ export default function DoctorDashboard() {
     const { user} = useAuth()
     
     const quickActions = [
-        {
-        title: "Mis Pacientes",
-        description: "Ver lista de pacientes",
-        icon: Users,
-        href: "/medico/pacientes",
-        color: "text-blue-600",
-        bgColor: "bg-blue-50",
-        },
-        {
-        title: "Historia Clínica",
-        description: "Registrar historia clínica",
-        icon: FileText,
-        href: "/medico/historia-clinica",
-        color: "text-purple-600",
-        bgColor: "bg-purple-50",
-        },
-        {
-        title: "Solicitar Estudios",
-        description: "Pedir análisis y estudios",
-        icon: ClipboardList,
-        href: "/medico/estudios",
-        color: "text-green-600",
-        bgColor: "bg-green-50",
-        },
-        {
-        title: "Objetivos de Tratamiento",
-        description: "Definir plan terapéutico",
-        icon: TrendingUp,
-        href: "/medico/objetivos",
-        color: "text-orange-600",
-        bgColor: "bg-orange-50",
-        },
-        {
-        title: "Tratamientos",
-        description: "Gestionar tratamientos",
-        icon: Syringe,
-        href: "/medico/tratamientos",
-        color: "text-red-600",
-        bgColor: "bg-red-50",
-        },
-        {
-        title: "Monitoreo",
-        description: "Seguimiento de pacientes",
-        icon: Activity,
-        href: "/medico/monitoreo",
-        color: "text-pink-600",
-        bgColor: "bg-pink-50",
-        },
-        {
-        title: "Punciones",
-        description: "Registrar punciones",
-        icon: FileCheck,
-        href: "/medico/punciones",
-        color: "text-indigo-600",
-        bgColor: "bg-indigo-50",
-        },
-        {
-        title: "Agenda",
-        description: "Ver citas programadas",
-        icon: Calendar,
-        href: "/medico/agenda",
-        color: "text-teal-600",
-        bgColor: "bg-teal-50",
-        },
+       
     ]
 
     return (
@@ -90,17 +27,17 @@ export default function DoctorDashboard() {
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Link to="/medico/agenda">
-                        <CardInfo title="Citas Agendadas" cant="24" desc="Próximas citas programadas">
+                        <CardInfo title="Citas Agendadas" cant="24" >
                             <Calendar className="text-chart-4 h-4 w-6"/>
                         </CardInfo>
                     </Link>
                     <Link to="/medico/tratamientos">
-                        <CardInfo title="Tratamientos en Curso" cant="12" desc="8 estimulación, 4 FIV">
+                        <CardInfo title="Tratamientos en Curso" cant="12" >
                             <Activity className="h-4 w-6 text-chart-4" />
                         </CardInfo>
                     </Link>
                     <Link to="/medico/estudios" className="">
-                        <CardInfo title="Estudios Pendientes" cant="5" desc="Resultados por revisar">
+                        <CardInfo title="Estudios Pendientes" cant="5" >
                             <ClipboardList className="h-4 w-6 text-chart-4" />
                         </CardInfo>
                     </Link>

@@ -29,12 +29,24 @@ export default defineConfig({
                 secure: true,
                 rewrite: (path) => path.replace(/^\/turnos\/v1/, '/v1')
             },
-             '/chatbot/v1': {
+            '/chatbot/v1': {
                 target: 'https://talfxkyomlmfzbumscdm.supabase.co/functions',
                 changeOrigin: true,
                 secure: true,
                 rewrite: (path) => path.replace(/^\/chatbot\/v1/, '/v1')
             },
+            '/ovocitos/v1': {
+                target: 'https://ssewaxrnlmnyizqsbzxe.supabase.co/functions',
+                changeOrigin: true,
+                secure: true,
+                rewrite: (path) => path.replace(/^\/ovocitos\/v1/, '/v1')
+            },
+            '/pagos/v1': {
+                target: 'https://ueozxvwsckonkqypfasa.supabase.co/functions',
+                changeOrigin: true,
+                secure: true,
+                rewrite: (path) => path.replace(/^\/pagos\/v1/, '/v1')
+            },
         },
-        }
+    }
 })

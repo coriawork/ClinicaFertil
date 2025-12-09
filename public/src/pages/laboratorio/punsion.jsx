@@ -1,4 +1,4 @@
-import { use, useState,useMemo } from "react";
+import { use, useState, useMemo, useEffect } from "react";
 import { DashboardLayout } from "@/layouts/dashboard-layout"
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/tabs"
 import { AccionesOvocitoMenu } from "../ovocitos/acciones";
 import { useNavigate } from "react-router-dom";
+import { OvoManage } from "@/utils/ovoCrio";
+
 const nombrePaciente = "Ana";
 const apellidoPaciente = "García";
 export function Punsion() {
@@ -104,31 +106,55 @@ export function Punsion() {
         return `Ovo_${yy}/${mm}/${dd}_${apellidoPaciente.slice(0, 3)}_${nombrePaciente.slice(0, 3)}_${index + 1}`;
     };
 
-    const handleAgregarOvocito = () => {
+    const handleAgregarOvocito = async () => {
+        const nuevoCodigo = generarCodigoOvocito(ovocitos.length);
+        
+        // Verificar si ya está criopreservado
+        let estadoInicial = nuevoOvocito.estado;
+        let datosAdicionales = {};
+        
+        try {
+            const resultado = await OvoManage.buscarOvocitoPorId(nuevoCodigo);
+            
+            if (resultado.encontrado) {
+                estadoInicial = "criopreservado";
+                datosAdicionales = {
+                    criodata: {
+                        tubo: resultado.tubo,
+                        rack: resultado.rack
+                    }
+                };
+            }
+        } catch (error) {
+            console.error('Error al verificar ovocito:', error);
+        }
+        
         setOvocitos([
             ...ovocitos,
             {
-                estado: nuevoOvocito.estado,
-                codigo: generarCodigoOvocito(ovocitos.length),
+                id: nuevoCodigo,
+                estado: estadoInicial,
+                codigo: nuevoCodigo,
                 decision: "",
                 descartado: false,
                 causaDescarte: "",
-                criopreservado: false,
-                criodata:{tubo:'',rack:''}
+                criopreservado: estadoInicial === "criopreservado",
+                ...datosAdicionales
             }
         ]);
         setNuevoOvocito({ estado: "" });
     };
 
    
-    const madurarInVitro = (idx) => {
-        setOvocitos(ovocitos.map((ovo, i) =>
-            i === idx ? { ...ovo, estado: "in vitro" } : ovo
+    const madurarInVitro = (ovocitoId) => {
+        setOvocitos(ovocitos.map((ovo) =>
+            ovo.id === ovocitoId ? { ...ovo, estado: "in vitro" } : ovo
         ));
     };
-    const madurar = (idx) => {
-        setOvocitos(ovocitos.map((ovo, i) =>
-            i === idx ? { ...ovo, estado: "maduro" } : ovo
+    
+    const madurar = (ovocitoId) => {
+        setOvocitos(ovocitos.map((ovo) =>
+            ovo.id === ovocitoId ? { ...ovo, estado: "maduro" } : ovo
         ));
     };
 
@@ -216,30 +242,30 @@ export function Punsion() {
                                                         <AccionesOvocitoMenu
                                                             ovocito={ovo}
                                                             index={idx}
-                                                            onCriopreservar={(idx, datos) => {
-                                                                setOvocitos(ovocitos.map((ovo, i) =>
-                                                                    i === idx ? { ...ovo, estado: "criopreservado", criodata: datos } : ovo
+                                                            onCriopreservar={(ovocitoId, datos) => {
+                                                                setOvocitos(ovocitos.map((o) =>
+                                                                    o.id === ovocitoId ? { ...o, estado: "criopreservado", criodata: datos } : o
                                                                 ));
                                                             }}
-                                                            onFecundar={(idx, datos) => {
-                                                                setOvocitos(ovocitos.map((ovo, i) =>
-                                                                    i === idx ? { ...ovo, estado: "fecundado", ...datos } : ovo
+                                                            onFecundar={(ovocitoId, datos) => {
+                                                                setOvocitos(ovocitos.map((o) =>
+                                                                    o.id === ovocitoId ? { ...o, estado: "fecundado", ...datos } : o
                                                                 ));
                                                             }}
                                                             onMadurarInvitro={madurarInVitro}
                                                             onMadurar={madurar}
-                                                            onCambiarEstado={(idx, nuevoEstado) => {
-                                                                setOvocitos(ovocitos.map((ovo, i) =>
-                                                                    i === idx ? { ...ovo, estado: nuevoEstado } : ovo
+                                                            onCambiarEstado={(ovocitoId, nuevoEstado) => {
+                                                                setOvocitos(ovocitos.map((o) =>
+                                                                    o.id === ovocitoId ? { ...o, estado: nuevoEstado } : o
                                                                 ));
                                                             }}
-                                                            onDescartar={(idx, causa) => {
-                                                                setOvocitos(ovocitos.map((ovo, i) =>
-                                                                    i === idx ? { ...ovo, estado: "descartado", causaDescarte: causa } : ovo
+                                                            onDescartar={(ovocitoId, causa) => {
+                                                                setOvocitos(ovocitos.map((o) =>
+                                                                    o.id === ovocitoId ? { ...o, estado: "descartado", causaDescarte: causa } : o
                                                                 ));
                                                             }}
-                                                            onVerDetalle={(idx) => {
-                                                                navigate(`/ovocitos/${idx}`);
+                                                            onVerDetalle={(ovocitoId) => {
+                                                                navigate(`/ovocitos/${ovocitoId}`);
                                                             }}
                                                             mostrarVerDetalle={true}
                                                         />

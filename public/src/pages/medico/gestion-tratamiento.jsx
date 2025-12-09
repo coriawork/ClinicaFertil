@@ -21,22 +21,17 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search, Plus, ArrowLeft } from "lucide-react"
+import { Search, Plus } from "lucide-react"
 import { AccionesTratamiento } from "@/pages/acciones/Acciones_Tratamientos"
+import { DialogNuevoTratamiento } from "@/components/nuevoTratamiento"
+
 export function ListadoTratamientosPaciente() {
     const { id } = useParams()
     const { user } = useAuth()
     const [busqueda, setBusqueda] = useState("")
     const [filtroEstado, setFiltroEstado] = useState("todos")
-
-    const paciente = {
-        id: id,
-        nombre: "María González",
-        dni: "35.123.456",
-        email: "maria.gonzalez@email.com"
-    }
-
-    const tratamientos = [
+    const [dialogNuevoAbierto, setDialogNuevoAbierto] = useState(false)
+    const [tratamientos, setTratamientos] = useState([
         {
             id: "1",
             objetivo: "Embarazo con gametos propios",
@@ -63,7 +58,7 @@ export function ListadoTratamientosPaciente() {
         {
             id: "3",
             objetivo: "FIV con ICSI",
-            estado: "vigente",
+            estado: "completado",
             fechaInicio: "01/10/2024",
             ultimaConsulta: "28/11/2024",
             etapaActual: "Segunda Consulta",
@@ -84,15 +79,17 @@ export function ListadoTratamientosPaciente() {
             proximaEtapa: "-",
             proximoTurno: "-"
         }
-    ]
+    ])
 
-    const handleEditarTratamiento = (tratamiento) => {
-        console.log("Editar tratamiento:", tratamiento)
+    const paciente = {
+        id: id,
+        nombre: "María González",
+        dni: "35.123.456",
+        email: "maria.gonzalez@email.com"
     }
 
-    const handleEliminarTratamiento = (tratamiento) => {
-        console.log("Eliminar tratamiento:", tratamiento)
-    }
+    // Verificar si existe un tratamiento vigente
+    const tieneTratamientoVigente = tratamientos.some(t => t.estado === "vigente")
 
     const getBadgeVariant = (estado) => {
         const variants = {
@@ -101,6 +98,77 @@ export function ListadoTratamientosPaciente() {
             cancelado: "destructive"
         }
         return variants[estado] || "outline"
+    }
+
+    const handleCompletarTratamiento = (tratamiento) => {
+        const fechaActual = new Date().toLocaleDateString('es-AR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        })
+
+        setTratamientos(prev => prev.map(t => 
+            t.id === tratamiento.id 
+                ? {
+                    ...t,
+                    estado: "completado",
+                    fechaFin: fechaActual,
+                    etapaActual: "Completado",
+                    proximaEtapa: "-",
+                    proximoTurno: "-"
+                }
+                : t
+        ))
+
+        console.log("Tratamiento completado:", tratamiento.id)
+        // Aquí puedes agregar una llamada a la API para actualizar en el backend
+    }
+
+    const handleCancelarTratamiento = (tratamiento, motivo) => {
+        const fechaActual = new Date().toLocaleDateString('es-AR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        })
+
+        setTratamientos(prev => prev.map(t => 
+            t.id === tratamiento.id 
+                ? {
+                    ...t,
+                    estado: "cancelado",
+                    fechaCancelacion: fechaActual,
+                    motivoCancelacion: motivo,
+                    proximaEtapa: "-",
+                    proximoTurno: "-"
+                }
+                : t
+        ))
+
+        console.log("Tratamiento cancelado:", tratamiento.id, "Motivo:", motivo)
+        // Aquí puedes agregar una llamada a la API para actualizar en el backend
+    }
+
+    const handleNuevoTratamiento = (nuevoTratamiento) => {
+        const tratamientoConId = {
+            ...nuevoTratamiento,
+            id: (tratamientos.length + 1).toString(),
+            estado: "vigente",
+            fechaInicio: new Date().toLocaleDateString('es-AR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }),
+            ultimaConsulta: new Date().toLocaleDateString('es-AR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }),
+            medicoTratante: user?.name || "Dr. Asignado"
+        }
+
+        setTratamientos(prev => [tratamientoConId, ...prev])
+        console.log("Nuevo tratamiento agregado:", tratamientoConId)
+        // Aquí puedes agregar una llamada a la API para guardar en el backend
     }
 
     const tratamientosFiltrados = tratamientos.filter(t => {
@@ -115,9 +183,8 @@ export function ListadoTratamientosPaciente() {
     })
 
     return (
-        <DashboardLayout role={user?.role}>
+        <DashboardLayout>
             <div className="space-y-6">
-
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div>
@@ -127,15 +194,16 @@ export function ListadoTratamientosPaciente() {
                             </p>
                         </div>
                     </div>
-                    <Button asChild>
-                        <Link to={`/pacientes/${id}/tratamiento/nuevo`}>
-                            <Plus className="h-4 w-4 mr-2" />
-                            Nuevo Tratamiento
-                        </Link>
-                    </Button>
-                </div>
+                    {
+                        (user.role === 'paciente' ) ? null : (
+                            <Button onClick={() => setDialogNuevoAbierto(true)}>
+                                <Plus className="h-4 w-4 mr-2" />
+                                Nuevo Tratamiento
+                            </Button>
 
-           
+                        )
+                    }
+                </div>
 
                 {/* Filtros */}
                 <Card>
@@ -168,7 +236,7 @@ export function ListadoTratamientosPaciente() {
                     </CardContent>
                 </Card>
 
-      
+                {/* Tabla de tratamientos */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Lista de Tratamientos</CardTitle>
@@ -191,7 +259,7 @@ export function ListadoTratamientosPaciente() {
                             <TableBody>
                                 {tratamientosFiltrados.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} className="text-center text-muted-foreground">
+                                        <TableCell colSpan={6} className="text-center text-muted-foreground">
                                             No se encontraron tratamientos con los filtros aplicados
                                         </TableCell>
                                     </TableRow>
@@ -218,13 +286,12 @@ export function ListadoTratamientosPaciente() {
                                             </TableCell>
                                             <TableCell>{tratamiento.fechaInicio}</TableCell>
                                                 
-                                         
                                             <TableCell className="text-right">
                                                 <AccionesTratamiento
                                                     tratamiento={tratamiento}
                                                     pacienteId={id}
-                                                    onEditar={handleEditarTratamiento}
-                                                    onEliminar={handleEliminarTratamiento}
+                                                    onCompletar={handleCompletarTratamiento}
+                                                    onCancelar={handleCancelarTratamiento}
                                                 />
                                             </TableCell>
                                         </TableRow>
@@ -234,6 +301,14 @@ export function ListadoTratamientosPaciente() {
                         </Table>
                     </CardContent>
                 </Card>
+
+                {/* Diálogo para nuevo tratamiento */}
+                <DialogNuevoTratamiento
+                    open={dialogNuevoAbierto}
+                    onOpenChange={setDialogNuevoAbierto}
+                    onCrear={handleNuevoTratamiento}
+                    tieneTratamientoVigente={tieneTratamientoVigente}
+                />
             </div>
         </DashboardLayout>
     )
