@@ -1,11 +1,19 @@
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/lib/AuthContext"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Calendar, UserPlus, LogIn, Heart, Shield, Clock } from "lucide-react"
 
 export default function HomePage() {
     const { user } = useAuth()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if(user?.role){
+            navigate(`/${user.role}`)
+        }
+    }, [user])
+
 
     const handleReservarTurno = () => {
         if (user) {

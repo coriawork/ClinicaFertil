@@ -317,7 +317,7 @@ export function Calendar() {
                 <div className='bg-accent font-bold w-full items-center flex justify-center text-foreground/60 uppercase'>
                     {month}
                 </div> 
-                <div className='py-1'>
+                <div className='py-1 text-white'>
                     {day}
                 </div> 
             </div>
@@ -470,7 +470,7 @@ export function Calendar() {
                     <div className="mb-4 p-3 bg-primary/10 border border-primary/30 rounded-lg flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <div className="size-3 rounded-full bg-primary/50"></div>
-                            <span className="text-sm font-medium text-foreground">
+                            <span className="text-sm font-medium text-white">
                                 Horario de atención disponible
                             </span>
                         </div>
@@ -494,7 +494,7 @@ export function Calendar() {
                                     className={`relative border-b border-neutral-800 ${isInRange ? 'bg-primary/5' : ''}`}
                                     style={{ height: hourHeight }}
                                 >
-                                    <span className={`absolute left-0 top-2 text-xs w-12 text-right pr-2 select-none ${isInRange ? 'text-primary/70 font-semibold' : 'text-foreground/40'}`}>
+                                    <span className={`absolute left-0 top-2 text-xs w-12 text-right pr-2 select-none ${isInRange ? 'text-primary/70 font-semibold' : 'text-white/40'}`}>
                                         {hour}:00
                                     </span>
                                     {isInRange && (
@@ -671,7 +671,7 @@ export function Calendar() {
                                 key={idx}
                                 className={`group relative w-full h-full flex flex-col p-1.5 max-md:min-h-22 md:p-2 cursor-pointer
                                     border border-neutral-800 transition-all duration-200
-                                    ${cell.current ? 'bg-calendar-bg hover:bg-neutral-900/50 text-foreground' : 'bg-neutral-800 hover:bg-neutral-800/80 text-foreground/40'}
+                                    ${cell.current ? 'bg-calendar-bg hover:bg-neutral-900/50 text-white' : 'bg-neutral-800 hover:bg-neutral-800/80 text-white/40'}
                                     ${hasSlots && cell.current ? 'ring-1 ring-primary/30 hover:ring-primary/50' : ''}`}
                                 onClick={() => setSelectedDay({ day: cell.day, month: cellMonth, year: cellYear })}
                             >
@@ -729,10 +729,10 @@ export function Calendar() {
                                             className="bg-neutral-800 border border-primary/30 shadow-xl p-3 min-w-[160px]"
                                             sideOffset={5}
                                         >
-                                            <p className="text-xs font-semibold text-primary mb-2">Horarios disponibles:</p>
+                                            <p className="text-xs font-semibold text-white mb-2">Horarios disponibles:</p>
                                             <div className="flex flex-col gap-1 max-h-32 overflow-y-auto">
                                                 {availSlots.map((slot, idx) => (
-                                                    <div key={idx} className="text-[11px] text-foreground/80 flex items-center gap-1.5">
+                                                    <div key={idx} className="text-[11px] text-white/80 flex items-center gap-1.5">
                                                         <div className="size-1 rounded-full bg-primary/60"></div>
                                                         {slot.horario_inicio}
                                                     </div>
@@ -822,7 +822,7 @@ export function Calendar() {
     return (
         <Card className=" h-1/2 bg-stone-950 w-full rounded-2xl">
             <CardHeader className="bg-stone-950 w-full items-center flex-wrap justify-between flex ">
-                <div className='flex gap-3'>
+                <div className='flex gap-3 '>
                     <IconCalendar
                         month={
                             view === 'day'
@@ -841,10 +841,10 @@ export function Calendar() {
                     />
                     <div className='flex flex-col gap-1'>
                         <div className='flex gap-2 items-center'>
-                            <p className='text-xl'>
+                            <p className='text-xl text-white'>
                                 {monthNames[currentMonth]} {currentYear}
                             </p>
-                           <span className='border px-1 text-foreground/70 rounded-[5px]'>
+                           <span className='border px-1 text-white/70 rounded-[5px]'>
                                 {view === 'day' && selectedDay
                                     ? `Week ${getWeekOfMonth(new Date(selectedDay.year, selectedDay.month, selectedDay.day))}`
                                     : (() => {
@@ -861,7 +861,7 @@ export function Calendar() {
                                 }
                             </span>
                         </div>
-                        <div className='font-thin text-foreground/70'>
+                        <div className='font-thin text-white/70'>
                             {view === 'day'
                                 ? (
                                     selectedDay
@@ -877,7 +877,7 @@ export function Calendar() {
                 <div className=' flex flex-wrap items-center gap-5'>
                     
 
-                    <div className='flex border rounded-[5px] items-center'>
+                    <div className='flex border rounded-[5px] text-white items-center'>
                         <button className='p-2 border-r rounded-l-[5px] cursor-pointer hover:bg-neutral-900 bg-right' onClick={goToPrev}>
                             <ArrowLeft size={22}/>
                         </button>
@@ -888,7 +888,7 @@ export function Calendar() {
                     </div>
                    
                     {/* Esto puedo agregarlo mas adelante */}
-                    <div className=' '>
+                    <div className='text-white'>
                         <Select
                             value={view}
                             onValueChange={setView}

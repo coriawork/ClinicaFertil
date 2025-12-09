@@ -46,7 +46,7 @@ function App() {
                         <Route
                             path="/paciente"
                             element={
-                                <RouteGuard role={'paciente'}>
+                                <RouteGuard roles={['paciente']}>
                                     <Outlet />
                                 </RouteGuard>
                             }
@@ -64,7 +64,7 @@ function App() {
                         <Route
                             path="/pacientes"
                             element={
-                                <RouteGuard allowedRoles={['medico', 'director']}>
+                                <RouteGuard roles={['medico', 'director']}>
                                     <Outlet />
                                 </RouteGuard>
                             }
@@ -85,7 +85,7 @@ function App() {
                         <Route
                             path="/ovocitos"
                             element={
-                                <RouteGuard allowedRoles={['laboratorio', 'medico', 'director']}>
+                                <RouteGuard roles={['laboratorio', 'medico', 'director','paciente']}>
                                     <Outlet />
                                 </RouteGuard>
                             }
@@ -98,7 +98,7 @@ function App() {
                         <Route
                             path="/embriones"
                             element={
-                                <RouteGuard allowedRoles={['laboratorio', 'medico', 'director']}>
+                                <RouteGuard roles={['laboratorio', 'medico', 'director']}>
                                     <Outlet />
                                 </RouteGuard>
                             }
@@ -108,7 +108,7 @@ function App() {
 
                         {/* Rutas de médico */}
                         <Route path="/medico" element={
-                                <RouteGuard role={'medico'}>
+                                <RouteGuard roles={['medico']}>
                                     <Outlet />
                                 </RouteGuard>
                         }>
@@ -120,7 +120,7 @@ function App() {
 
                         {/* Rutas de director */}
                         <Route path="/director" element={
-                                <RouteGuard role={"director"}>
+                                <RouteGuard roles={['director']}>
                                     <Outlet />
                                 </RouteGuard>
                         }>
@@ -130,7 +130,7 @@ function App() {
 
                         {/* Rutas de laboratorio */}
                         <Route path="/laboratorio" element={
-                                <RouteGuard role={"laboratorio"}>
+                                <RouteGuard roles={['laboratorio']}>
                                     <Outlet />
                                 </RouteGuard>}>
                             <Route index element={<LaboratorioDashboard />} />
