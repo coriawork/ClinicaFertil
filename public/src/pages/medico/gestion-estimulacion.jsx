@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { RotateCcw } from "lucide-react"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 export function Estimulacion(){
+    const navigate = useNavigate()
 
     const drogas = [
         { value: '', label: '' },
@@ -64,6 +65,11 @@ export function Estimulacion(){
         { value: 'hidrocortisona', label: 'Hidrocortisona' }
     ]
 
+    const irCalendario = ()=>{
+        localStorage.setItem('usePac',1)
+        navigate('/medico/agenda')
+    }
+
     const Tiposmedicaciones = [
         {value:'inyectable',label:'Inyectable'},
         {value:'oral',label:'Oral'},
@@ -103,6 +109,9 @@ export function Estimulacion(){
     return(
         <DashboardLayout role={"medico"}>
             <h1 className="text-2xl font-bold">GESTION DE ESTIMULACION</h1>
+            <Button onClick={()=>irCalendario()} >
+                Pedir monitoreo
+            </Button>
             <Card>
                 <CardTitle className={'px-5 flex items-center justify-between'}>
                     <h2 className="text-2xl font-bold">REGISTRAR DROGA</h2>
@@ -190,9 +199,7 @@ export function Estimulacion(){
                     )}
                 </CardContent>
             </Card>
-            <Button asChild>
-                <Link to={'/medico/agenda'}>Pedir monitoreo</Link>
-            </Button>
+            
             <Card className="mt-8">
                 <CardHeader>
                     <CardTitle>Monitoreo</CardTitle>

@@ -20,10 +20,14 @@ import {
 } from "@/components/ui/popover"
 
 
-export function Combobox({datas,title='elegi alguna opcion',disabled = false,action=()=>{},className}) {
+export function Combobox({datas,title='elegi alguna opcion',disabled = false,action=()=>{},className,initialValue=""}) {
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
+    const [value, setValue] = React.useState(initialValue)
 
+    // Actualizar el valor cuando cambia initialValue
+    React.useEffect(() => {
+        setValue(initialValue)
+    }, [initialValue])
 
     return (
         <Popover open={open} className='' onOpenChange={setOpen}>

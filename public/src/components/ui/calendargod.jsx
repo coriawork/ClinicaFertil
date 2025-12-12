@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react'
+import { useState,useEffect, use } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './card'
 import { ArrowLeft, ArrowRight, Plus } from 'lucide-react'
 import { Select, SelectTrigger, SelectValue, SelectGroup, SelectLabel, SelectItem, SelectContent } from './select'
@@ -72,6 +72,22 @@ export function Calendar() {
         }
     }, [user?.id]);
     
+
+    useEffect(() => {
+        let userID = localStorage.getItem('usePac')
+        if (userID){
+            localStorage.removeItem('usePac')
+            const today = new Date()
+            setNewEvent(ev => ({ 
+                ...ev, 
+                paciente: userID,
+                type: 'monitoreo',
+                month: today.getMonth(), // Mes actual (0-11)
+                year: today.getFullYear() // Año actual
+            }))
+            setShowModal(true)
+        }
+    },[])
    
     const fetchAvailableSlots = () => {
         setLoadingSlots(true)
@@ -1008,12 +1024,13 @@ export function Calendar() {
                             />
                         </div>
                         <Separator/>
-                        <Combobox
+                         <Combobox
                             datas={pacientes}
                             title="Seleccionar paciente"
                             action={val => setNewEvent(ev => ({ ...ev, paciente: val }))}
                             className="w-full rounded-[5px]"
                             disabled={false}
+                            initialValue={newEvent.paciente}
                         />
                         <Select
                             value={newEvent.type}
