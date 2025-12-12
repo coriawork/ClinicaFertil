@@ -8,11 +8,13 @@ export function RouteGuard({ roles, children }) {
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         setIsLoading(true);
+        console.log(roles)
+        console.log(user.role)
         if (!user || !user.role || roles.includes(user.role) === false) {
             navigate('/');
         }
         setIsLoading(false);
-    }, [user]);
+    }, []);
 
     if (isLoading) {
         <Loader2 className="animate-spin mx-auto my-20" size={48}>
